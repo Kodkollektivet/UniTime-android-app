@@ -1,4 +1,5 @@
 .gradle
 .DS_Store
 /build
+/.idea/workspace.xml
 /captures
