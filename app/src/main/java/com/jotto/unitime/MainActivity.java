@@ -1,9 +1,13 @@
 package com.jotto.unitime;
 
+import android.graphics.Color;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.astuetz.PagerSlidingTabStrip;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +16,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(new MyPageAdapter(getSupportFragmentManager()));
+
+        // Bind the tabs to the ViewPager
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs.setShouldExpand(true);
+        tabs.setIndicatorColor(Color.rgb(22, 132, 202));
+        tabs.setUnderlineColor(Color.rgb(22, 132, 202));
+        tabs.setViewPager(pager);
     }
 
     @Override
