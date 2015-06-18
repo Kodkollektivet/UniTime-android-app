@@ -14,14 +14,31 @@ public class MyPageAdapter extends FragmentPagerAdapter{
     }
     @Override
     public CharSequence getPageTitle(int position) {
-        return (position == 0)? "List View" : "Calendar" ;
+        if (position == 0) {
+            return "Course List";
+        }
+        else if (position == 1) {
+            return "Schedule";
+        }
+        else if (position == 2){
+            return "Calendar";
+        }
+        return null;
     }
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
     @Override
     public Fragment getItem(int position) {
-        return (position == 0) ? new FragmentA() : new FragmentB();
+        if (position == 0) {
+            return new FragmentA();
+        }
+        else if (position == 1) {
+            return new FragmentC();
+        }
+        else {
+            return new FragmentB();
+        }
     }
 }
