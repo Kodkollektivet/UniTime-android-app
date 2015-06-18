@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.0 rc2"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-5d17e3cd06d439ba5793ce0407eb254f94f73b80.jar" />
-    </item>
-    <item
-        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/com.astuetz/pagerslidingtabstrip/1.0.1/jars/classes.jar"
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.astuetz/pagerslidingtabstrip/1.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
         sha1="7912610ed96381c25c36d986eba422731b9641b6">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-97597f598fc97f6df12e17205b51bf94d31a601a.jar" />
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-015c43465ae610108eeeadf277dd5cd768455a46.jar" />
     </item>
     <item
-        jar="/opt/android_sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="23.0.0 rc2"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-27a2afcd35154327ed9e07bd976bf67db0b97ae2.jar" />
-    </item>
-    <item
-        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
-        jumboMode="false"
-        revision="23.0.0 rc2"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-d4071e262d3133d29667f0ecdbba865d00751929.jar" />
-    </item>
-    <item
-        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
         sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-6605c6040ca8290b8a12ac538fe409627684e4d7.jar" />
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-d0c045ee6dce5bee4daa5f87f2a46d636b65dce7.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-b91e96b38704c48623eeaecb7b8287976ce64136.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-82d3bf979a45b0f4be79691b11f7e611eba64eda.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-0e9922915024bbdf5d5152fb1b4b02e895be52bf.jar" />
     </item>
 
 </items>

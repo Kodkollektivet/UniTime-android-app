@@ -23,8 +23,8 @@ public class MainActivity extends ActionBarActivity {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setShouldExpand(true);
-        tabs.setIndicatorColor(Color.rgb(22, 132, 202));
-        tabs.setUnderlineColor(Color.rgb(22, 132, 202));
+        tabs.setIndicatorColor(Color.argb(255, 0, 153, 204));
+        tabs.setUnderlineColor(Color.argb(255, 0, 153, 204));
         tabs.setViewPager(pager);
     }
 
