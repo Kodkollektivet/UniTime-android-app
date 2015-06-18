@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.astuetz/pagerslidingtabstrip/1.0.1/jars/classes.jar"
+        jar="/home/otto/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.6.0-rc2/331582aaaa6096e05beb7dda13a726b0984a9d4c/jackson-core-2.6.0-rc2.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
-        sha1="7912610ed96381c25c36d986eba422731b9641b6">
-        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-015c43465ae610108eeeadf277dd5cd768455a46.jar" />
+        sha1="331582aaaa6096e05beb7dda13a726b0984a9d4c">
+        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/jackson-core-2.6.0-rc2-96df79c72fb4ab67af2f9069b4dbd564d8b85ae0.jar" />
     </item>
     <item
-        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/com.github.satyan/sugar/1.3/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-d0c045ee6dce5bee4daa5f87f2a46d636b65dce7.jar" />
+        sha1="07e07903922250dabf50c7d131d6fa069a050305">
+        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-7cb3420306dd97fbff89d2b62e4296312539e80a.jar" />
     </item>
     <item
-        jar="/Users/johanrovala/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jar="/home/otto/.gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.8.1/f5bfc718c95a7b1d3c371bb02a188a4df18361a9/joda-time-2.8.1.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-b91e96b38704c48623eeaecb7b8287976ce64136.jar" />
+        sha1="f5bfc718c95a7b1d3c371bb02a188a4df18361a9">
+        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/joda-time-2.8.1-2f94e2602bdf993d5e0720884858a7b650f1af9d.jar" />
     </item>
     <item
-        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jar="/home/otto/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.6.0-rc2/8df00d55ee4f8798cb9511853872da820abbddd/jackson-databind-2.6.0-rc2.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-82d3bf979a45b0f4be79691b11f7e611eba64eda.jar" />
+        sha1="08df00d55ee4f8798cb9511853872da820abbddd">
+        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/jackson-databind-2.6.0-rc2-d81bfe153b117851ccd1c4029e2bfda9d9a6dff5.jar" />
     </item>
     <item
-        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jar="/home/otto/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.6.0-rc2/16bee8a2be14c3d7b33d0cd826f96acb3ca2ee3/jackson-annotations-2.6.0-rc2.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-0e9922915024bbdf5d5152fb1b4b02e895be52bf.jar" />
+        sha1="016bee8a2be14c3d7b33d0cd826f96acb3ca2ee3">
+        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/jackson-annotations-2.6.0-rc2-05ef420a1e41b09dee8835bfc9f6da0b604d1110.jar" />
     </item>
 
 </items>
