@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jotto.unitime.models.Event;
@@ -24,9 +25,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (doesDatabaseExist(this, "unitime.db")) {
+        /*if (doesDatabaseExist(this, "unitime.db")) {
             events = Event.listAll(Event.class);
-        }
+        }*/
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new MyPageAdapter(getSupportFragmentManager()));
