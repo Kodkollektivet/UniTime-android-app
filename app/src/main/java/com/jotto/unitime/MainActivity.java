@@ -1,7 +1,10 @@
 package com.jotto.unitime;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.ContextWrapper;
 import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,8 +14,10 @@ import android.widget.ListView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jotto.unitime.models.Event;
+import com.roomorama.caldroid.CaldroidFragment;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -40,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
         tabs.setViewPager(pager);
         pager.setCurrentItem(1);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

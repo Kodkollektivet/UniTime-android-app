@@ -2,39 +2,60 @@
 <items version="2" >
 
     <item
-        jar="/home/otto/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.6.0-rc2/331582aaaa6096e05beb7dda13a726b0984a9d4c/jackson-core-2.6.0-rc2.jar"
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.roomorama/caldroid/2.0.0/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
-        sha1="331582aaaa6096e05beb7dda13a726b0984a9d4c">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/jackson-core-2.6.0-rc2-96df79c72fb4ab67af2f9069b4dbd564d8b85ae0.jar" />
+        sha1="3e51d1ca9153cbcec83221e355d070233572df85">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-37d2d14019f8f1c6006483671896294c3b37d8ac.jar" />
     </item>
     <item
-        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/com.github.satyan/sugar/1.3/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.0 rc2"
-        sha1="07e07903922250dabf50c7d131d6fa069a050305">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-7cb3420306dd97fbff89d2b62e4296312539e80a.jar" />
-    </item>
-    <item
-        jar="/home/otto/.gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.8.1/f5bfc718c95a7b1d3c371bb02a188a4df18361a9/joda-time-2.8.1.jar"
-        jumboMode="false"
-        revision="23.0.0 rc2"
-        sha1="f5bfc718c95a7b1d3c371bb02a188a4df18361a9">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/joda-time-2.8.1-2f94e2602bdf993d5e0720884858a7b650f1af9d.jar" />
-    </item>
-    <item
-        jar="/home/otto/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.6.0-rc2/8df00d55ee4f8798cb9511853872da820abbddd/jackson-databind-2.6.0-rc2.jar"
-        jumboMode="false"
-        revision="23.0.0 rc2"
-        sha1="08df00d55ee4f8798cb9511853872da820abbddd">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/jackson-databind-2.6.0-rc2-d81bfe153b117851ccd1c4029e2bfda9d9a6dff5.jar" />
-    </item>
-    <item
-        jar="/home/otto/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.6.0-rc2/16bee8a2be14c3d7b33d0cd826f96acb3ca2ee3/jackson-annotations-2.6.0-rc2.jar"
+        jar="/Users/johanrovala/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.6.0-rc2/16bee8a2be14c3d7b33d0cd826f96acb3ca2ee3/jackson-annotations-2.6.0-rc2.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
         sha1="016bee8a2be14c3d7b33d0cd826f96acb3ca2ee3">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/jackson-annotations-2.6.0-rc2-05ef420a1e41b09dee8835bfc9f6da0b604d1110.jar" />
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/jackson-annotations-2.6.0-rc2-ce8e03f9388a5a5da43cd1cb1a1c76ff39e57e93.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/.gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.8.1/f5bfc718c95a7b1d3c371bb02a188a4df18361a9/joda-time-2.8.1.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="f5bfc718c95a7b1d3c371bb02a188a4df18361a9">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/joda-time-2.8.1-2613c9a973271c8a4809d7ed091ddf43d060316e.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.github.sundeepk/compact-calendar-view/1.4/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="a7612d0ed1fe881c5d390b5b397b18e34d93561b">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-569243cc19452c1da3097533b7438f5711be4855.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.6.0-rc2/8df00d55ee4f8798cb9511853872da820abbddd/jackson-databind-2.6.0-rc2.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="08df00d55ee4f8798cb9511853872da820abbddd">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/jackson-databind-2.6.0-rc2-760c4eefa4d89d5a19c642740b4df091525b018a.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.github.satyan/sugar/1.3/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="07e07903922250dabf50c7d131d6fa069a050305">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-5ee127c7feedcae582001c571e48cbc517868870.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/.gradle/caches/modules-2/files-2.1/com.darwinsys/hirondelle-date4j/1.5.1/7b52de513f87ae4d9ff5d17518def0a1e9bc3df0/hirondelle-date4j-1.5.1.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="7b52de513f87ae4d9ff5d17518def0a1e9bc3df0">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/hirondelle-date4j-1.5.1-88e166754f75127bc4dc9b0bb0a27eae7d8934f9.jar" />
+    </item>
+    <item
+        jar="/Users/johanrovala/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.6.0-rc2/331582aaaa6096e05beb7dda13a726b0984a9d4c/jackson-core-2.6.0-rc2.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="331582aaaa6096e05beb7dda13a726b0984a9d4c">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/jackson-core-2.6.0-rc2-c918d9d9b1e5d6dc28e1992d98a9ac40e0f08a0a.jar" />
     </item>
 
 </items>
