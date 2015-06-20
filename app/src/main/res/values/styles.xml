@@ -13,4 +13,12 @@
         <item name="background">@color/darkturcoise</item>
     </style>
 
+    <style name="CaldroidDefaultCustom" parent="CaldroidDefault">
+        <item name="styleCaldroidLeftArrow">@style/CaldroidDefaultCustomArrowButton</item>
+    </style>
+
+    <style name="CaldroidDefaultCustomArrowButton" parent="CaldroidDefaultArrowButton">
+        <item name="android:background">@color/darkturcoise</item>
+    </style>
+
 </resources>

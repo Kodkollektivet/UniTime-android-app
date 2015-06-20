@@ -30,43 +30,55 @@ public class SessionHandler {
 
     public void getAllCourses() {
 
+        Runnable runnable = new Runnable() {
 
-        try {
-            Course[] courseList;
-            String urlName = "http://unitime.se/api/course/";
-            URL url = new URL(urlName);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            @Override
+            public void run() {
 
-            ObjectMapper mapper = new ObjectMapper();
+                try {
 
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setRequestProperty("User-Agent", "UniTime-Android-Client");
+                    Course[] courseList;
+                    String urlName = "http://unitime.se/api/course/";
+                    URL url = new URL(urlName);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
-            int responseCore = httpURLConnection.getResponseCode();
+                    ObjectMapper mapper = new ObjectMapper();
 
-            //System.out.println("Sending 'GET' request to UTL : " + url.toString());
-            System.out.println("Responsecode : " + responseCore);
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setRequestProperty("User-Agent", "UniTime-Android-Client");
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+                    int responseCore = httpURLConnection.getResponseCode();
 
-            while ((inputLine = bufferedReader.readLine()) != null) {
-                response.append(inputLine);
+                    //System.out.println("Sending 'GET' request to UTL : " + url.toString());
+                    System.out.println("Responsecode : " + responseCore);
+
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+
+                    while ((inputLine = bufferedReader.readLine()) != null)
+
+                    {
+                        response.append(inputLine);
+                    }
+
+                    courseList = mapper.readValue(response.toString(), Course[].class);
+                    for (Course c : courseList)
+
+                    {
+                        c.save();
+                    }
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException ev) {
+                    ev.printStackTrace();
+                }
+
+
             }
-
-            courseList = mapper.readValue(response.toString(), Course[].class);
-            for (Course c : courseList) {
-                c.save();
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException ev) {
-            ev.printStackTrace();
-        }
-
-
+        };
     }
 
     public void getEventsFromCourse(String courseCode) {
