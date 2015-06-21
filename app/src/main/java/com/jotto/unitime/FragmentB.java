@@ -6,7 +6,9 @@ package com.jotto.unitime;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,29 +17,41 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jotto.unitime.models.Event;
+import com.jotto.unitime.sessionhandler.SessionHandler;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import org.joda.time.DateTime;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class FragmentB extends Fragment {
 
+
+    // Comment this list of fields later and declare all of their uses
     private FragmentActivity myContext;
     private Calendar cal;
     private Date date1;
     private Date clickedDate;
     private PopupWindow popupWindow;
+    ArrayList<Event> events;
+    ArrayAdapter<Event> adapter;
+    CaldroidFragment calDroid;
 
+    // i dont know how to describe what this does yet
     @Override
     public void onAttach(Activity activity) {
         myContext = (FragmentActivity) activity;
@@ -82,6 +96,27 @@ public class FragmentB extends Fragment {
     }
 
 
+    // If there is a database, fetch all of the events stored in event objects and add to arraylist
+    private void getEventsFromDatabase() {
+        if (doesDatabaseExist(myContext, "unitime.db")) {
+            List<Event> retrievedEvents = Event.listAll(Event.class);
+            events = new ArrayList<>(retrievedEvents);
+            if(events.size() != 0){
+                for (int i = 0; i < events.size(); i++) {
+                    DateTime dateTime = new DateTime(events.get(i).getStartdate());
+                    calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
+                }
+            }
+        }
+    }
+
+    // Check if database exists
+    private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
+        File dbFile = context.getDatabasePath(dbName);
+        return dbFile.exists();
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_b, container, false);
@@ -93,9 +128,24 @@ public class FragmentB extends Fragment {
         clickedDate = date;
     }
 
+    private class GetCourseInfoTask extends AsyncTask {
+        protected void onPostExecute() {
+            getEventsFromDatabase();
+            adapter.notifyDataSetChanged();
+        }
+        @Override
+        protected Object doInBackground(Object[] params) {
+            SessionHandler sessionHandler = new SessionHandler();
+            sessionHandler.getEventsFromCourse(params[0].toString());
+            return null;
+        }
+    }
+
+
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        CaldroidFragment calDroid = new CaldroidFragment();
+
+        calDroid = new CaldroidFragment();
         Bundle args = new Bundle();
         cal = Calendar.getInstance();
         date1 = new Date(System.currentTimeMillis());
@@ -109,7 +159,7 @@ public class FragmentB extends Fragment {
         Testing different colored cells
          */
 
-
+        /*
         // first date
         DateTime dateTime = new DateTime(System.currentTimeMillis());
         dateTime = dateTime.plusDays(3);
@@ -126,6 +176,7 @@ public class FragmentB extends Fragment {
         calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
         calDroid.setBackgroundResourceForDate(R.color.darkgreen, secondDateTime.toDate());
         calDroid.setBackgroundResourceForDate(R.color.blue, thirdDateTime.toDate());
+        */
 
 
         // testing cell touch
@@ -142,5 +193,12 @@ public class FragmentB extends Fragment {
                 .getSupportFragmentManager().beginTransaction();
         t.replace(R.id.llCalendar, calDroid);
         t.commit();
+
+        if (doesDatabaseExist(myContext, "unitime.db")) {
+            getEventsFromDatabase();
+        }
+        else {
+            new GetCourseInfoTask().execute("1BD105");
+        }
     }
 }

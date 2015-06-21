@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.jotto.unitime.models.Event;
 import com.jotto.unitime.sessionhandler.SessionHandler;
 
+import org.joda.time.DateTime;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +77,20 @@ public class FragmentA extends Fragment {
         list.setAdapter(adapter);
     }
 
+    // Check if current event is past the current time
+    private boolean getCurrentTime(Event event){
+
+        DateTime dateTime = new DateTime(System.currentTimeMillis());
+        dateTime = dateTime.plusDays(10);
+        String beforeCut = event.getEndtime();
+        // cut the string to get the hour of day
+        String[] str = beforeCut.split(":");
+        String hourOfDay = str[0];
+        // make another datetime object to compare the day values
+        DateTime dateTime1 = new DateTime(event.getStartdate());
+        return Integer.parseInt(hourOfDay) < dateTime.getHourOfDay() || dateTime1.isBeforeNow();
+    }
+
     private class MyListAdapter extends ArrayAdapter<Event> {
         public MyListAdapter() {
             super(myContext, R.layout.event_view, events);
@@ -90,7 +106,7 @@ public class FragmentA extends Fragment {
             }
 
             Event currentEvent = events.get(position);
-
+            /*
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
             imageView.setImageResource(R.drawable.ic_action_view_as_list);
 
@@ -105,6 +121,42 @@ public class FragmentA extends Fragment {
 
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
+            */
+
+            if(getCurrentTime(currentEvent)){
+                System.out.println("DET ÄR SANT IAF");
+                ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
+                imageView.setImageResource(R.drawable.ic_action_view_as_list);
+
+                TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
+                teacherText.setTextColor(getResources().getColor(R.color.blue));
+                teacherText.setText(currentEvent.getTeacher());
+
+                TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
+                roomText.setText(currentEvent.getRoom());
+
+                TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
+                infoText.setText(currentEvent.getInfo());
+
+                TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
+                timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
+            }else{
+
+                ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
+                imageView.setImageResource(R.drawable.ic_action_view_as_list);
+
+                TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
+                teacherText.setText(currentEvent.getTeacher());
+
+                TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
+                roomText.setText(currentEvent.getRoom());
+
+                TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
+                infoText.setText(currentEvent.getInfo());
+
+                TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
+                timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
+            }
 
             return itemView;
         }
