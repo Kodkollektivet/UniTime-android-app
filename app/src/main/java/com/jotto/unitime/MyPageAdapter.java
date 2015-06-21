@@ -32,10 +32,10 @@ public class MyPageAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new FragmentA();
+            return new FragmentC();
         }
         else if (position == 1) {
-            return new FragmentC();
+            return new FragmentA();
         }
         else {
             return new FragmentB();
