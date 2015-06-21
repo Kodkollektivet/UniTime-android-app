@@ -231,20 +231,20 @@ public class FragmentA extends Fragment {
             LocalDate localDate = getGroup(groupPosition);
 
             //Fill view with date data
-            DateTimeFormatter dtf = DateTimeFormat.forPattern("E");
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE");
             TextView dateText = (TextView) headerView.findViewById(R.id.event_date);
             TextView dayText = (TextView) headerView.findViewById(R.id.event_date_day);
             if (localDate.equals(LocalDate.now())) {
+                dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
                 dateText.setText("Today");
-                dayText.setText(dtf.print(localDate));
             }
             else if (localDate.equals(LocalDate.now().plusDays(1))) {
+                dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
                 dateText.setText("Tomorrow");
-                dayText.setText(dtf.print(localDate));
             }
             else {
-                dateText.setText(localDate.getMonthOfYear() + "/" + localDate.getDayOfMonth());
-                dayText.setText(dtf.print(localDate));
+                dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
+                dateText.setText(dtf.print(localDate));
             }
             return headerView;
         }
