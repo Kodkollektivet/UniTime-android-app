@@ -4,9 +4,28 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#ffffff">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/course_code_text"
+        android:enabled="true"
+        android:hint="Course Code"
+        android:clickable="false"
+        android:textColor="@color/grey" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/get_course_btn"
+        android:layout_below="@+id/course_code_text"
+        android:text="Add Course"
+        android:textColor="@color/grey" />
+
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView" />
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/get_course_btn"
+        android:id="@+id/listView"
+        android:layout_marginTop="10dp" />
 </RelativeLayout>
 
