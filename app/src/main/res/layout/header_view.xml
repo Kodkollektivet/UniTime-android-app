@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="45dp"
+    android:background="@color/lightturcoise"
+    android:id="@+id/header_view"
+    android:minHeight="100dp">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Date"
+        android:id="@+id/event_date"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:textSize="25sp"
+        android:textColor="@color/grey" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Day"
+        android:id="@+id/event_date_day"
+        android:layout_centerVertical="true"
+        android:textColor="@color/grey"
+        android:textSize="20sp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginStart="300dp"/>
+</RelativeLayout>

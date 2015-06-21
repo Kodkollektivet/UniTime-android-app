@@ -14,17 +14,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jotto.unitime.models.Event;
 import com.jotto.unitime.sessionhandler.SessionHandler;
+import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,9 +79,14 @@ public class FragmentA extends Fragment {
     }
 
     private void populateListView() {
-        adapter = new MyListAdapter();
+        /*adapter = new MyListAdapter();
         ListView list = (ListView) myContext.findViewById(R.id.listView2);
         list.setAdapter(adapter);
+        */
+
+        ExpandableListView expandableListView = (ExpandableListView) myContext.findViewById(R.id.listView2);
+        EventDateAdapter adapter = new EventDateAdapter(myContext, events);
+        expandableListView.setAdapter(adapter);
     }
 
     // Check if current event is past the current time
@@ -91,7 +103,7 @@ public class FragmentA extends Fragment {
         return Integer.parseInt(hourOfDay) < dateTime.getHourOfDay() || dateTime1.isBeforeNow();
     }
 
-    private class MyListAdapter extends ArrayAdapter<Event> {
+    /*private class MyListAdapter extends ArrayAdapter<Event> {
         public MyListAdapter() {
             super(myContext, R.layout.event_view, events);
         }
@@ -123,7 +135,7 @@ public class FragmentA extends Fragment {
             timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
             */
 
-            if(getCurrentTime(currentEvent)){
+            /*if(getCurrentTime(currentEvent)){
                 System.out.println("DET ÄR SANT IAF");
                 ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
                 imageView.setImageResource(R.drawable.ic_action_view_as_list);
@@ -159,6 +171,95 @@ public class FragmentA extends Fragment {
             }
 
             return itemView;
+        }
+    }*/
+
+    private class EventDateAdapter extends NFRolodexArrayAdapter<LocalDate, Event> {
+
+        public EventDateAdapter(Context activity, Collection<Event> items) {
+            super(activity, items);
+        }
+
+        @Override
+        public LocalDate createGroupFor(Event childItem) {
+            //This is how the adapter determines what the headers are and what child items belong to it
+            return LocalDate.parse(childItem.getStartdate());
+        }
+
+        @Override
+        public View getChildView(LayoutInflater inflater, int groupPosition, int childPosition,
+                                 boolean isLastChild, View convertView, ViewGroup parent) {
+            //Inflate your view
+            View itemView = convertView;
+            if (itemView == null) {
+                inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                itemView = inflater.inflate(R.layout.event_view, parent, false);
+            }
+
+            //Gets the Event data for this view
+            Event event = getChild(groupPosition, childPosition);
+
+            //Fill view with event data
+                ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
+                imageView.setImageResource(R.drawable.ic_action_view_as_list);
+
+                TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
+                teacherText.setText(event.getTeacher());
+
+                TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
+                roomText.setText(event.getRoom());
+
+                TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
+                infoText.setText(event.getInfo());
+
+                TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
+                timeText.setText(event.getStarttime() + "-" + event.getEndtime());
+
+            return itemView;
+        }
+
+        @Override
+        public View getGroupView(LayoutInflater inflater, int groupPosition, boolean isExpanded,
+                                 View convertView, ViewGroup parent) {
+            //Inflate your header view
+            View headerView = convertView;
+            if (headerView == null) {
+                inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                headerView = inflater.inflate(R.layout.header_view, parent, false);
+            }
+            //Gets the Date for this view
+            LocalDate localDate = getGroup(groupPosition);
+
+            //Fill view with date data
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("E");
+            TextView dateText = (TextView) headerView.findViewById(R.id.event_date);
+            TextView dayText = (TextView) headerView.findViewById(R.id.event_date_day);
+            if (localDate.equals(LocalDate.now())) {
+                dateText.setText("Today");
+                dayText.setText(dtf.print(localDate));
+            }
+            else if (localDate.equals(LocalDate.now().plusDays(1))) {
+                dateText.setText("Tomorrow");
+                dayText.setText(dtf.print(localDate));
+            }
+            else {
+                dateText.setText(localDate.getMonthOfYear() + "/" + localDate.getDayOfMonth());
+                dayText.setText(dtf.print(localDate));
+            }
+            return headerView;
+        }
+
+        @Override
+        public boolean hasAutoExpandingGroups() {
+            //This forces our group views (headers) to always render expanded.
+            //Even attempting to programmatically collapse a group will not work.
+            return true;
+        }
+
+        @Override
+        public boolean isGroupSelectable(int groupPosition) {
+            //This prevents a user from seeing any touch feedback when a group (header) is clicked.
+            return false;
         }
     }
 
