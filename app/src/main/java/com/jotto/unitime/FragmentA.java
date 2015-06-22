@@ -39,8 +39,10 @@ import java.util.List;
  */
 public class FragmentA extends Fragment {
 
+    public static FragmentA fragmentA;
+    ExpandableListView expandableListView;
     ArrayList<Event> events;
-    ArrayAdapter<Event> adapter;
+    EventDateAdapter adapter;
 
     private FragmentActivity myContext;
 
@@ -59,33 +61,26 @@ public class FragmentA extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        fragmentA = this;
+        events = new ArrayList<>();
+        getEventsFromDatabase();
+        populateListView();
+    }
 
-        if (doesDatabaseExist(myContext, "unitime.db")) {
-            getEventsFromDatabase();
-            populateListView();
-        }
-        else {
-            new GetCourseInfoTask().execute("1BD105");
-        }
-
-
+    public void getEventsForCourse(String courseCode) {
+        new GetCourseInfoTask().execute(courseCode);
     }
 
     private void getEventsFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
-            events = new ArrayList<>(retrievedEvents);
+            events.addAll(retrievedEvents);
         }
     }
 
     private void populateListView() {
-        /*adapter = new MyListAdapter();
-        ListView list = (ListView) myContext.findViewById(R.id.listView2);
-        list.setAdapter(adapter);
-        */
-
-        ExpandableListView expandableListView = (ExpandableListView) myContext.findViewById(R.id.listView2);
-        EventDateAdapter adapter = new EventDateAdapter(myContext, events);
+        expandableListView = (ExpandableListView) myContext.findViewById(R.id.listView2);
+        adapter = new EventDateAdapter(myContext, events);
         expandableListView.setAdapter(adapter);
     }
 
@@ -200,9 +195,11 @@ public class FragmentA extends Fragment {
 
     private class GetCourseInfoTask extends AsyncTask {
 
-        protected void onPostExecute() {
+        @Override
+        protected void onPostExecute(Object o) {
             getEventsFromDatabase();
-            populateListView();
+            adapter.clear();
+            adapter.addAll(events);
             adapter.notifyDataSetChanged();
         }
 

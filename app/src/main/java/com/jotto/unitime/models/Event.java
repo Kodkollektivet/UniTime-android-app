@@ -75,6 +75,7 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
     public void setRoom(String room) {
         this.room = room;
     }
+
     @Override
     public int compareTo(Event event) {
         return LocalDate.parse(this.startdate).compareTo(LocalDate.parse(event.startdate));

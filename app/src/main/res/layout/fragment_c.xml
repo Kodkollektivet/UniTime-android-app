@@ -21,11 +21,15 @@
         android:text="Add Course"
         android:textColor="@color/grey" />
 
-    <ListView
+    <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/get_course_btn"
         android:id="@+id/listView"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:childDivider="#FFBDBDBD"
+        android:dividerHeight="1dp"
+        android:groupIndicator="@null" />
+
 </RelativeLayout>
 

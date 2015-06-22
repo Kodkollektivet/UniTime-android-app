@@ -128,19 +128,6 @@ public class FragmentB extends Fragment {
         clickedDate = date;
     }
 
-    private class GetCourseInfoTask extends AsyncTask {
-        protected void onPostExecute() {
-            getEventsFromDatabase();
-            adapter.notifyDataSetChanged();
-        }
-        @Override
-        protected Object doInBackground(Object[] params) {
-            SessionHandler sessionHandler = new SessionHandler();
-            sessionHandler.getEventsFromCourse(params[0].toString());
-            return null;
-        }
-    }
-
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -197,8 +184,9 @@ public class FragmentB extends Fragment {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             getEventsFromDatabase();
         }
+        /*
         else {
             new GetCourseInfoTask().execute("1BD105");
-        }
+        }*/
     }
 }

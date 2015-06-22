@@ -1,42 +1,20 @@
 package com.jotto.unitime;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-
 import com.astuetz.PagerSlidingTabStrip;
-import com.jotto.unitime.models.Event;
-import com.roomorama.caldroid.CaldroidFragment;
-
-import java.io.File;
-import java.util.Calendar;
-import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
-
-    List<Event> events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /*if (doesDatabaseExist(this, "unitime.db")) {
-            events = Event.listAll(Event.class);
-        }*/
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new MyPageAdapter(getSupportFragmentManager()));
@@ -71,10 +49,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
-        File dbFile = context.getDatabasePath(dbName);
-        return dbFile.exists();
     }
 }
