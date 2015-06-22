@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/com.jaysoyer.lib/advanced-adapters/15.3/jars/classes.jar"
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.jaysoyer.lib/advanced-adapters/15.3/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0 rc2"
         sha1="c6859607b69c0782f6638116faa5b4eae78a8d9f">
-        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-45f10c62191ab02adc46b769989b80f061f03fd6.jar" />
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-85ba153011e7ac9494b7070d85a0e5d8fe4f7d5c.jar" />
     </item>
 
 </items>

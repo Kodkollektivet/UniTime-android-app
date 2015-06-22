@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,17 +65,23 @@ public class FragmentB extends Fragment {
     PopupWindow to show information of events.
      */
     public void onShowPopup(View v) {
+        ArrayList<Event> currentDateList = new ArrayList<>();
+        for (Event e : events){
+            DateTime dateTime = new DateTime(e.getStartdate());
+            if(dateTime.toDate().equals(clickedDate)){
+                currentDateList.add(e);
+            }
+        }
+
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // inflate the custom popup layout
         final View inflatedView = layoutInflater.inflate(R.layout.calendar_popup, null,false);
 
-        // find the ListView in the popup layout
-        TextView textView = (TextView)inflatedView.findViewById(R.id.popup_textview);
-
-        // set temporary text for popup
-        textView.setText("Sadly this event has no content yet, but we can find the date which " +
-                "I know realized is completly useless. " +clickedDate.toString());
+        ListView listView = (ListView)inflatedView.findViewById(R.id.popup_listview);
+        MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
+        System.out.println("LIST VIEW" + listView);
+        listView.setAdapter(myListAdapter);
 
         // get device size
         Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -89,6 +97,7 @@ public class FragmentB extends Fragment {
         popupWindow.setFocusable(true);
         // make it outside touchable to dismiss the popup window
         popupWindow.setOutsideTouchable(false);
+
 
         // show the popup at bottom of the screen and set some margin at bottom ie,
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 100);
@@ -140,32 +149,7 @@ public class FragmentB extends Fragment {
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         calDroid.setArguments(args);
-
-
-        /*
-        Testing different colored cells
-         */
-
-        /*
-        // first date
-        DateTime dateTime = new DateTime(System.currentTimeMillis());
-        dateTime = dateTime.plusDays(3);
-
-        // second date
-        DateTime secondDateTime = new DateTime(System.currentTimeMillis());
-        secondDateTime = secondDateTime.plusDays(5);
-
-        // third date
-        DateTime thirdDateTime = new DateTime(System.currentTimeMillis());
-        thirdDateTime = thirdDateTime.plusDays(6);
-
-        // assigning new backgroundresorces for three cells (dates)
-        calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
-        calDroid.setBackgroundResourceForDate(R.color.darkgreen, secondDateTime.toDate());
-        calDroid.setBackgroundResourceForDate(R.color.blue, thirdDateTime.toDate());
-        */
-
-
+        
         // testing cell touch
         final CaldroidListener caldroidListener = new CaldroidListener() {
             @Override
@@ -189,4 +173,39 @@ public class FragmentB extends Fragment {
             new GetCourseInfoTask().execute("1BD105");
         }*/
     }
+    private class MyListAdapter extends ArrayAdapter<Event> {
+        public MyListAdapter(ArrayList list) {
+            super(myContext, R.layout.calendar_popup, list);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Make sure we have a view to work with (may have been given null)
+            View itemView = convertView;
+            if (itemView == null) {
+                LayoutInflater inflater = (LayoutInflater) myContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                itemView = inflater.inflate(R.layout.event_view, parent, false);
+            }
+
+            Event currentEvent = events.get(position);
+
+            ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
+            imageView.setImageResource(R.drawable.ic_action_view_as_list);
+
+            TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
+            teacherText.setText(currentEvent.getTeacher());
+
+            TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
+            roomText.setText(currentEvent.getRoom());
+
+            TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
+            infoText.setText(currentEvent.getInfo());
+
+            TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
+            timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
+
+            return itemView;
+        }
+    }
+
 }

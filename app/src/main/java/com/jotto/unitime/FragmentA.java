@@ -86,16 +86,20 @@ public class FragmentA extends Fragment {
 
     // Check if current event is past the current time
     private boolean getCurrentTime(Event event){
-
-        DateTime dateTime = new DateTime(System.currentTimeMillis());
-        dateTime = dateTime.plusDays(10);
         String beforeCut = event.getEndtime();
         // cut the string to get the hour of day
         String[] str = beforeCut.split(":");
         String hourOfDay = str[0];
+        String minuteOfDay = str[1];
+
+        // Create new datetime object with our event start date
+        DateTime compareDate = new DateTime(event.getStartdate());
+        // add the hour of day
+        compareDate = compareDate.withHourOfDay(Integer.parseInt(hourOfDay));
+        // add the minute of hour
+        compareDate = compareDate.withMinuteOfHour(Integer.parseInt(minuteOfDay));
         // make another datetime object to compare the day values
-        DateTime dateTime1 = new DateTime(event.getStartdate());
-        return Integer.parseInt(hourOfDay) < dateTime.getHourOfDay() || dateTime1.isBeforeNow();
+        return compareDate.isBeforeNow();
     }
 
 
@@ -125,6 +129,25 @@ public class FragmentA extends Fragment {
             Event event = getChild(groupPosition, childPosition);
 
             //Fill view with event data
+            if(getCurrentTime(event)) {
+                ImageView imageView = (ImageView) itemView.findViewById(R.id.image_icon);
+                imageView.setImageResource(R.drawable.ic_action_view_as_list);
+
+                TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
+                teacherText.setText(event.getTeacher());
+                teacherText.setTextColor(getResources().getColor(R.color.darkturcoise));
+
+                TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
+                roomText.setText(event.getRoom());
+
+                TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
+                infoText.setText(event.getInfo());
+
+                TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
+                timeText.setText(event.getStarttime() + "-" + event.getEndtime());
+
+                return itemView;
+            }else{
                 ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
                 imageView.setImageResource(R.drawable.ic_action_view_as_list);
 
@@ -140,7 +163,8 @@ public class FragmentA extends Fragment {
                 TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
                 timeText.setText(event.getStarttime() + "-" + event.getEndtime());
 
-            return itemView;
+                return itemView;
+            }
         }
 
         @Override
