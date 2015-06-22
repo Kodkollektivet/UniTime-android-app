@@ -24,6 +24,7 @@ import com.jotto.unitime.sessionhandler.SessionHandler;
 import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -86,25 +87,6 @@ public class FragmentA extends Fragment {
         expandableListView.setAdapter(adapter);
     }
 
-    // Check if current event is past the current time
-    private boolean getCurrentTime(Event event){
-        String beforeCut = event.getEndtime();
-        // cut the string to get the hour of day
-        String[] str = beforeCut.split(":");
-        String hourOfDay = str[0];
-        String minuteOfDay = str[1];
-
-        // Create new datetime object with our event start date
-        DateTime compareDate = new DateTime(event.getStartdate());
-        // add the hour of day
-        compareDate = compareDate.withHourOfDay(Integer.parseInt(hourOfDay));
-        // add the minute of hour
-        compareDate = compareDate.withMinuteOfHour(Integer.parseInt(minuteOfDay));
-        // make another datetime object to compare the day values
-        return compareDate.isBeforeNow();
-    }
-
-
     private class EventDateAdapter extends NFRolodexArrayAdapter<LocalDate, Event> {
 
         public EventDateAdapter(Context activity, Collection<Event> items) {
@@ -130,43 +112,22 @@ public class FragmentA extends Fragment {
             //Gets the Event data for this view
             Event event = getChild(groupPosition, childPosition);
 
-            //Fill view with event data
-            if(getCurrentTime(event)) {
-                ImageView imageView = (ImageView) itemView.findViewById(R.id.image_icon);
-                imageView.setImageResource(R.drawable.ic_action_view_as_list);
+            ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
+            imageView.setImageResource(R.drawable.ic_action_view_as_list);
 
-                TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
-                teacherText.setText(event.getTeacher());
-                teacherText.setTextColor(getResources().getColor(R.color.darkturcoise));
+            TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
+            teacherText.setText(event.getTeacher());
 
-                TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
-                roomText.setText(event.getRoom());
+            TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
+            roomText.setText(event.getRoom());
 
-                TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-                infoText.setText(event.getInfo());
+            TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
+            infoText.setText(event.getInfo());
 
-                TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
-                timeText.setText(event.getStarttime() + "-" + event.getEndtime());
+            TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
+            timeText.setText(event.getStarttime() + "-" + event.getEndtime());
 
-                return itemView;
-            }else{
-                ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-                imageView.setImageResource(R.drawable.ic_action_view_as_list);
-
-                TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
-                teacherText.setText(event.getTeacher());
-
-                TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
-                roomText.setText(event.getRoom());
-
-                TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-                infoText.setText(event.getInfo());
-
-                TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
-                timeText.setText(event.getStarttime() + "-" + event.getEndtime());
-
-                return itemView;
-            }
+            return itemView;
         }
 
         @Override

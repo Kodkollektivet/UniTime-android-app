@@ -46,6 +46,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
     private CourseAdapter adapter;
     private FragmentActivity myContext;
     private List<Course> courses;
+    private Button courseBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button courseBtn = (Button) myContext.findViewById(R.id.get_course_btn);
+        courseBtn = (Button) myContext.findViewById(R.id.get_course_btn);
         courseBtn.setOnClickListener(this);
         courses = new ArrayList<>();
         getCoursesFromDatabase();
@@ -70,6 +71,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        courseBtn.setEnabled(false);
         EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
         String courseCode = editText.getText().toString();
         if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
@@ -78,7 +80,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         else {
             Toast.makeText(myContext, "Course already added!", Toast.LENGTH_LONG).show();
         }
-
+    courseBtn.setEnabled(true);
     }
 
     private void populateListView() {
