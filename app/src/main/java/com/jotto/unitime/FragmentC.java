@@ -6,17 +6,23 @@ package com.jotto.unitime;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +32,7 @@ import com.jotto.unitime.sessionhandler.SessionHandler;
 import com.orm.StringUtil;
 import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -43,6 +50,7 @@ import java.util.List;
 public class FragmentC extends Fragment implements View.OnClickListener {
 
     private ExpandableListView expandableListView;
+    private PopupWindow popupWindow;
     private CourseAdapter adapter;
     private FragmentActivity myContext;
     private List<Course> courses;
@@ -67,6 +75,14 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         courses = new ArrayList<>();
         getCoursesFromDatabase();
         populateListView();
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Course tempCourse = ((Course) parent.getItemAtPosition(position));
+                onShowPopup(view, tempCourse);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -94,10 +110,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Object[] o) {
             if ((boolean) o[0]) {
-                getCoursesFromDatabase();
-                adapter.clear();
-                adapter.addAll(courses);
-                adapter.notifyDataSetChanged();
+                refreshAdapter();
                 FragmentA.fragmentA.getEventsForCourse((String) o[1]);
             }
             else {
@@ -202,6 +215,59 @@ public class FragmentC extends Fragment implements View.OnClickListener {
             courses.clear();
             courses.addAll(retrievedEvents);
         }
+    }
+
+    /*
+    PopupWindow to show information of events.
+     */
+    public void onShowPopup(View v, final Course course) {
+
+        LayoutInflater layoutInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // inflate the custom popup layout
+        final View inflatedView = layoutInflater.inflate(R.layout.delete_popup, null, false);
+
+        // get device size
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        final Point size = new Point();
+        display.getSize(size);
+
+
+        TextView deleteText = (TextView) inflatedView.findViewById(R.id.delete_popup_text);
+        deleteText.setText("Do you want to delete the course: " + course.getName());
+
+        Button deleteBtn = (Button) inflatedView.findViewById(R.id.delete_popup_btn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentA.fragmentA.deleteEventsCourseRemoved(course);
+                course.delete();
+                courses.remove(course);
+                refreshAdapter();
+                popupWindow.dismiss();
+            }
+        });
+
+        // set height depends on the device size
+        popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 4, true );
+        // set a background drawable with rounders corners
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background));
+        // make it focusable to show the keyboard to enter in `EditText`
+        popupWindow.setFocusable(true);
+        // make it outside touchable to dismiss the popup window
+        popupWindow.setOutsideTouchable(false);
+
+
+        // show the popup at bottom of the screen and set some margin at bottom ie,
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 100);
+
+    }
+
+    private void refreshAdapter() {
+        getCoursesFromDatabase();
+        adapter.clear();
+        adapter.addAll(courses);
+        adapter.notifyDataSetChanged();
     }
 
 }

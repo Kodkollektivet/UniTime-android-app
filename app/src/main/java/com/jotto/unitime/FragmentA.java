@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jotto.unitime.models.Course;
 import com.jotto.unitime.models.Event;
 import com.jotto.unitime.sessionhandler.SessionHandler;
 import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -184,10 +186,7 @@ public class FragmentA extends Fragment {
 
         @Override
         protected void onPostExecute(Object o) {
-            getEventsFromDatabase();
-            adapter.clear();
-            adapter.addAll(events);
-            adapter.notifyDataSetChanged();
+            refreshAdapter();
         }
 
         @Override
@@ -196,5 +195,23 @@ public class FragmentA extends Fragment {
             sessionHandler.getEventsFromCourse(params[0].toString());
             return null;
         }
+    }
+
+    public void deleteEventsCourseRemoved(Course course){
+        for (Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
+            Event event = iterator.next();
+            if (event.getCourse_code().equals(course.getCourse_code())) {
+                event.delete();
+                iterator.remove();
+            }
+        }
+        refreshAdapter();
+    }
+
+    private void refreshAdapter() {
+        getEventsFromDatabase();
+        adapter.clear();
+        adapter.addAll(events);
+        adapter.notifyDataSetChanged();
     }
 }

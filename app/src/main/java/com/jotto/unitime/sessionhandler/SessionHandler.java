@@ -115,6 +115,7 @@ public class SessionHandler {
 
             eventList = mapper.readValue(content, Event[].class);
             for (Event e : eventList) {
+                e.setCourse_code(courseCode.toUpperCase());
                 e.save();
             }
         } catch (IOException ev) {

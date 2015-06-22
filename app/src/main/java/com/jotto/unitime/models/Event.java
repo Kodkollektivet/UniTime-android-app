@@ -14,18 +14,21 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
     private String info;
     private String room;
     private String teacher;
+    private String course_code;
 
 
     public Event() {
     }
 
-    public Event(String startdate, String starttime, String endtime, String info, String room, String teacher) {
+    public Event(String startdate, String starttime, String endtime, String info, String room,
+                 String teacher, String course_code) {
         this.startdate = startdate;
         this.starttime = starttime;
         this.endtime = endtime;
         this.info = info;
         this.room = room;
         this.teacher = teacher;
+        this.course_code = course_code;
     }
 
     public String getStartdate() {
@@ -74,6 +77,14 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
 
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public String getCourse_code() {
+        return course_code;
+    }
+
+    public void setCourse_code(String course_code) {
+        this.course_code = course_code;
     }
 
     @Override
