@@ -175,6 +175,12 @@ public class FragmentA extends Fragment {
             //This prevents a user from seeing any touch feedback when a group (header) is clicked.
             return false;
         }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return false;
+        }
+
     }
 
     private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {

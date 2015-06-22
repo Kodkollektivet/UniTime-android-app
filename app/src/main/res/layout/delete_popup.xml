@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:textAlignment="center" />
+        android:gravity="center" />
 
     <Button
         android:layout_width="match_parent"
