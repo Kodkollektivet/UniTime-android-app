@@ -52,6 +52,7 @@ public class FragmentB extends Fragment {
     private PopupWindow popupWindow;
     ArrayList<Event> events;
     ArrayAdapter<Event> adapter;
+    String[] importantEvents = {"Redovisning", "Tentamen", "Omtentamen"};
     CaldroidFragment calDroid;
 
     // i dont know how to describe what this does yet
@@ -106,14 +107,26 @@ public class FragmentB extends Fragment {
 
 
     // If there is a database, fetch all of the events stored in event objects and add to arraylist
+    // At first glance this method does a lot more than just getting events from the database
+    // It first colors ALL events blue, then it iterates over the events again to check if any
+    // Event includes info matching any string in importantEvents[]. In that case it colors it red.
     private void getEventsFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
             events = new ArrayList<>(retrievedEvents);
             if(events.size() != 0){
-                for (int i = 0; i < events.size(); i++) {
+                for (int i = 0; i < events.size(); i++){
                     DateTime dateTime = new DateTime(events.get(i).getStartdate());
                     calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
+                }
+                for (int i = 0; i < events.size(); i++) {
+                    DateTime dateTime = new DateTime(events.get(i).getStartdate());
+                    for(int j = 0; j < importantEvents.length; j++){
+                        if(events.get(i).getInfo().equals(importantEvents[j])){
+                            System.out.println("TRUE");
+                            calDroid.setBackgroundResourceForDate(R.color.caldroid_light_red, dateTime.toDate());
+                        }
+                    }
                 }
             }
         }
@@ -138,7 +151,6 @@ public class FragmentB extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         fragmentB = this;
         calDroid = new CaldroidFragment();
         Bundle args = new Bundle();
