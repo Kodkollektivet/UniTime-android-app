@@ -64,6 +64,7 @@ public class Course extends SugarRecord<Course> implements Comparable<Course> {
         this.course_code = course_code;
     }
 
+
     @Override
     public int compareTo(Course course) {
         return this.course_code.compareTo(course.course_code);
