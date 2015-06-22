@@ -45,6 +45,7 @@ public class FragmentB extends Fragment {
 
     // Comment this list of fields later and declare all of their uses
     private FragmentActivity myContext;
+    public static FragmentB fragmentB;
     private Calendar cal;
     private Date date1;
     private Date clickedDate;
@@ -73,14 +74,13 @@ public class FragmentB extends Fragment {
             }
         }
 
-        LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // inflate the custom popup layout
         final View inflatedView = layoutInflater.inflate(R.layout.calendar_popup, null,false);
 
         ListView listView = (ListView)inflatedView.findViewById(R.id.popup_listview);
         MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
-        System.out.println("LIST VIEW" + listView);
         listView.setAdapter(myListAdapter);
 
         // get device size
@@ -128,8 +128,6 @@ public class FragmentB extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_b, container, false);
-
         return inflater.inflate(R.layout.fragment_b,container,false);
     }
 
@@ -141,6 +139,7 @@ public class FragmentB extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        fragmentB = this;
         calDroid = new CaldroidFragment();
         Bundle args = new Bundle();
         cal = Calendar.getInstance();
@@ -165,29 +164,32 @@ public class FragmentB extends Fragment {
         t.replace(R.id.llCalendar, calDroid);
         t.commit();
 
-        if (doesDatabaseExist(myContext, "unitime.db")) {
-            getEventsFromDatabase();
-        }
+        getEventsFromDatabase();
+
         /*
         else {
             new GetCourseInfoTask().execute("1BD105");
         }*/
     }
     private class MyListAdapter extends ArrayAdapter<Event> {
-        public MyListAdapter(ArrayList list) {
+
+        ArrayList<Event> list;
+
+        public MyListAdapter(ArrayList<Event> list) {
             super(myContext, R.layout.calendar_popup, list);
+            this.list = list;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Make sure we have a view to work with (may have been given null)
+
+            Event currentEvent = list.get(position);
             View itemView = convertView;
             if (itemView == null) {
                 LayoutInflater inflater = (LayoutInflater) myContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
                 itemView = inflater.inflate(R.layout.event_view, parent, false);
             }
-
-            Event currentEvent = events.get(position);
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
             imageView.setImageResource(R.drawable.ic_action_view_as_list);
@@ -206,6 +208,10 @@ public class FragmentB extends Fragment {
 
             return itemView;
         }
+    }
+
+    public void updateList(ArrayList<Event> list) {
+        this.events = list;
     }
 
 }

@@ -69,11 +69,13 @@ public class FragmentA extends Fragment {
 
     public void getEventsForCourse(String courseCode) {
         new GetCourseInfoTask().execute(courseCode);
+        FragmentB.fragmentB.updateList(events);
     }
 
     private void getEventsFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
+            events.clear();
             events.addAll(retrievedEvents);
         }
     }

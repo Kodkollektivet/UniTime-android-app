@@ -115,16 +115,16 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         }
     }
 
-    private class CourseAdapter extends NFRolodexArrayAdapter<Course, Course> {
+    private class CourseAdapter extends NFRolodexArrayAdapter<String, Course> {
 
         public CourseAdapter(Context activity, Collection<Course> items) {
             super(activity, items);
         }
 
         @Override
-        public Course createGroupFor(Course childItem) {
+        public String createGroupFor(Course childItem) {
             //This is how the adapter determines what the headers are and what child items belong to it
-            return childItem;
+            return "";
         }
 
         @Override
@@ -197,6 +197,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
     private void getCoursesFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Course> retrievedEvents = Course.listAll(Course.class);
+            courses.clear();
             courses.addAll(retrievedEvents);
         }
     }
