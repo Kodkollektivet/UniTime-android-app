@@ -24,6 +24,7 @@ public class MainActivity extends ActionBarActivity {
         tabs.setShouldExpand(true);
         tabs.setIndicatorColor(Color.argb(255, 0, 153, 204));
         tabs.setUnderlineColor(Color.argb(255, 0, 153, 204));
+        tabs.setTextColor(getResources().getColor(R.color.caldroid_black));
         tabs.setViewPager(pager);
         pager.setCurrentItem(1);
     }

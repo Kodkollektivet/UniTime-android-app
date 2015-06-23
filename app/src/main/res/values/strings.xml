@@ -4,8 +4,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <!-- Important event string resources for coloring certain dates different -->
-    <string name="important_event_1">Redovisning</string>
-    <string name="important_event_2">Tentamen</string>
-    <string name="important_event_3">Omtentamen</string>
+    <string name="course_code">Course Code</string>
+    <string name="add_course">Add</string>
 </resources>

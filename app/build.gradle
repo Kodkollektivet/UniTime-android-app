@@ -41,4 +41,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0-rc2'
     compile 'com.roomorama:caldroid:2.0.0'
     compile 'com.jaysoyer.lib:advanced-adapters:15.3'
+    compile 'com.github.markushi:circlebutton:1.1'
 }

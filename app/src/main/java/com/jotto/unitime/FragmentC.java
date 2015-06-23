@@ -75,12 +75,11 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         courses = new ArrayList<>();
         getCoursesFromDatabase();
         populateListView();
-        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Course tempCourse = ((Course) parent.getItemAtPosition(position));
-                onShowPopup(view, tempCourse);
-                return true;
+                System.out.println("BÖG");
             }
         });
     }
@@ -154,19 +153,22 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 
             //Gets the Event data for this view
             Course course = getChild(groupPosition, childPosition);
-
             //Fill view with event data
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
             imageView.setImageResource(R.drawable.ic_action_view_as_list);
+            imageView.setFocusable(false);
 
             TextView nameText = (TextView) itemView.findViewById(R.id.course_name);
             nameText.setText(course.getName());
+            nameText.setFocusable(false);
 
             TextView courseCodeText = (TextView) itemView.findViewById(R.id.course_code);
             courseCodeText.setText(course.getCourse_code());
+            courseCodeText.setFocusable(false);
 
             TextView semesterText = (TextView) itemView.findViewById(R.id.course_semester);
             semesterText.setText(course.getSemester() + "-" + course.getYear());
+            semesterText.setFocusable(false);
 
             return itemView;
         }
@@ -180,7 +182,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
                 inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 headerView = inflater.inflate(R.layout.header_view, parent, false);
             }
-
+            expandableListView.setClickable(true);
             //Fill view with date data
             TextView dateText = (TextView) headerView.findViewById(R.id.event_date);
             TextView dayText = (TextView) headerView.findViewById(R.id.event_date_day);
@@ -248,7 +250,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
             }
         });
 
-        // set height depends on the device size
+       /* // set height depends on the device size
         popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 4, true );
         // set a background drawable with rounders corners
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background));
@@ -260,7 +262,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 
         // show the popup at bottom of the screen and set some margin at bottom ie,
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 100);
-
+        */
     }
 
     private void refreshAdapter() {

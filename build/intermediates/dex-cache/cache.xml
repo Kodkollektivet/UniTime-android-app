@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.github.markushi/circlebutton/1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0 rc2"
+        sha1="ebe3b1f14fa79ba3cd1588acda4e6517ee9fe611">
+        <dex dex="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/pre-dexed/debug/classes-621d70ba670d34cc8e6c2effb0a7cb62c99d2d35.jar" />
+    </item>
+    <item
         jar="/Users/johanrovala/AndroidStudioProjects/Timeedit-app-android/app/build/intermediates/exploded-aar/com.jaysoyer.lib/advanced-adapters/15.3/jars/classes.jar"
         jumboMode="false"
         revision="23.0.0 rc2"

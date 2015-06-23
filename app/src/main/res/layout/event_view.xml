@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/event_view">
+    android:id="@+id/event_view" android:focusable="false" android:focusableInTouchMode="false">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -15,7 +15,9 @@
         android:maxWidth="60dp"
         android:minHeight="30dp"
         android:minWidth="30dp"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +29,9 @@
         android:layout_toRightOf="@+id/image_icon"
         android:layout_toEndOf="@+id/image_icon"
         android:textSize="16sp"
-        android:layout_marginBottom="6dp" />
+        android:layout_marginBottom="6dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,7 +43,9 @@
         android:layout_toRightOf="@+id/image_icon"
         android:layout_toEndOf="@+id/image_icon"
         android:layout_marginTop="5dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,7 +58,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginRight="15dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,7 +71,9 @@
         android:textSize="16sp"
         android:layout_alignTop="@+id/event_room"
         android:layout_alignRight="@+id/event_info"
-        android:layout_alignEnd="@+id/event_info" />
+        android:layout_alignEnd="@+id/event_info"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
 
 </RelativeLayout>
