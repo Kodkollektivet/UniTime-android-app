@@ -15,8 +15,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -171,7 +175,6 @@ public class FragmentB extends Fragment {
             }
         };
         calDroid.setCaldroidListener(caldroidListener);
-
         android.support.v4.app.FragmentTransaction t = myContext
                 .getSupportFragmentManager().beginTransaction();
         t.replace(R.id.llCalendar, calDroid);
