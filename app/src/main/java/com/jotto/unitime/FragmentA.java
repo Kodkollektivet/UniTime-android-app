@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by johanrovala on 18/06/15.
@@ -145,12 +146,13 @@ public class FragmentA extends Fragment {
             LocalDate localDate = getGroup(groupPosition);
 
             //Fill view with date data
-            DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE");
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE").withLocale(Locale.US);
             TextView dateText = (TextView) headerView.findViewById(R.id.event_date);
             TextView dayText = (TextView) headerView.findViewById(R.id.event_date_day);
             if (localDate.equals(LocalDate.now())) {
                 dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
                 dateText.setText("Today");
+                headerView.setBackgroundColor(getResources().getColor(R.color.darkturcoise));
             }
             else if (localDate.equals(LocalDate.now().plusDays(1))) {
                 dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
