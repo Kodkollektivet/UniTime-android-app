@@ -91,7 +91,7 @@ public class FragmentB extends Fragment {
 
 
         // set height depends on the device size
-        popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 4, true );
+        popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 2, true );
         // set a background drawable with rounders corners
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background));
         // make it focusable to show the keyboard to enter in `EditText`
@@ -99,6 +99,7 @@ public class FragmentB extends Fragment {
         // make it outside touchable to dismiss the popup window
         popupWindow.setOutsideTouchable(false);
 
+        popupWindow.setAnimationStyle(R.style.PopupAnimation);
 
         // show the popup at bottom of the screen and set some margin at bottom ie,
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 100);

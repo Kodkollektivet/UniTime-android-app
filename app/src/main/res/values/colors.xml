@@ -16,6 +16,7 @@
     <item name="darkblue" type="color">#FF0000FF</item>
     <item name="white" type="color">#FFFFFFFF</item>
     <item name="grey" type="color">#FF565656</item>
+    <item name="todayblue" type="color">#FF7E88A4</item>
 
     <integer-array name="androidcolors">
         <item>@color/blue</item>
