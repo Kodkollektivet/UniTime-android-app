@@ -83,8 +83,7 @@ public class FragmentC extends Fragment {
                 String courseCode = editText.getText().toString();
                 if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
                     new GetCourseTask().execute(courseCode);
-                }
-                else {
+                } else {
                     Toast.makeText(myContext, "Course already added!", Toast.LENGTH_LONG).show();
                 }
                 courseBtn.setEnabled(true);
@@ -197,11 +196,18 @@ public class FragmentC extends Fragment {
                     }
                     else if (!oldSelected.getCourse_code().equals(course.getCourse_code())) {
                         selectedCourse = course;
-                        System.out.println("This is a big test");
                         v.setBackgroundColor(getResources().getColor(R.color.lightgrey));
                         oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
+                        oldView = v;
                         oldSelected = course;
                     }
+                    else{
+                        v.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
+                        selectedCourse = null;
+                        oldSelected = null;
+                        oldView = null;
+                    }
+
 
 
                 }

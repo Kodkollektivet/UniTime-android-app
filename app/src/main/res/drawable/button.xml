@@ -3,4 +3,5 @@
     <solid android:color="@color/green"/>
     <corners android:radius="40dp"  />
     <stroke android:width="2dp" android:color="@color/caldroid_transparent"/>
+    <corners android:radius="25dp"/>
 </shape>
