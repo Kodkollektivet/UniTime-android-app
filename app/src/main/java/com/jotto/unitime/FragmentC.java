@@ -93,7 +93,7 @@ public class FragmentC extends Fragment {
         getCoursesFromDatabase();
         populateListView();
 
-        Button deleteBtn = (Button) myContext.findViewById(R.id.delete_course_btn);
+        final Button deleteBtn = (Button) myContext.findViewById(R.id.delete_course_btn);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
