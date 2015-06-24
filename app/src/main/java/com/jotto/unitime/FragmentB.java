@@ -128,7 +128,6 @@ public class FragmentB extends Fragment {
                     DateTime dateTime = new DateTime(e.getStartdate());
                     for(String i : importantEvents){
                         if(e.getInfo().equals(i)){
-                            System.out.println("TRUE");
                             calDroid.setBackgroundResourceForDate(R.color.red, dateTime.toDate());
                         }
                     }
