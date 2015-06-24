@@ -87,6 +87,7 @@ public class FragmentB extends Fragment {
         ListView listView = (ListView)inflatedView.findViewById(R.id.popup_listview);
         MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
         listView.setAdapter(myListAdapter);
+
         // get device size
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         final Point size = new Point();
@@ -119,15 +120,16 @@ public class FragmentB extends Fragment {
             List<Event> retrievedEvents = Event.listAll(Event.class);
             events = new ArrayList<>(retrievedEvents);
             if(events.size() != 0){
-                for (int i = 0; i < events.size(); i++){
-                    DateTime dateTime = new DateTime(events.get(i).getStartdate());
+                for (Event e : events){
+                    DateTime dateTime = new DateTime(e.getStartdate());
                     calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
                 }
-                for (int i = 0; i < events.size(); i++) {
-                    DateTime dateTime = new DateTime(events.get(i).getStartdate());
-                    for(int j = 0; j < importantEvents.length; j++){
-                        if(events.get(i).getInfo().equals(importantEvents[j])){
-                            calDroid.setBackgroundResourceForDate(R.color.caldroid_light_red, dateTime.toDate());
+                for (Event e : events) {
+                    DateTime dateTime = new DateTime(e.getStartdate());
+                    for(String i : importantEvents){
+                        if(e.getInfo().equals(i)){
+                            System.out.println("TRUE");
+                            calDroid.setBackgroundResourceForDate(R.color.red, dateTime.toDate());
                         }
                     }
                 }
@@ -169,8 +171,10 @@ public class FragmentB extends Fragment {
         final CaldroidListener caldroidListener = new CaldroidListener() {
             @Override
             public void onSelectDate(Date date, View view) {
-                getDate(date);
-                onShowPopup(view);
+                if(doesDatabaseExist(myContext, "unitime.db")) {
+                    getDate(date);
+                    onShowPopup(view);
+                }
             }
         };
         calDroid.setCaldroidListener(caldroidListener);
