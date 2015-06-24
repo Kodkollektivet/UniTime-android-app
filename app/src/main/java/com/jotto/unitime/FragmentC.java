@@ -16,9 +16,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -31,6 +33,7 @@ import com.jotto.unitime.models.Event;
 import com.jotto.unitime.sessionhandler.SessionHandler;
 import com.orm.StringUtil;
 import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
+import com.sawyer.advadapters.widget.PatchedExpandableListAdapter;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -47,7 +50,7 @@ import java.util.List;
 /**
  * Created by johanrovala on 18/06/15.
  */
-public class FragmentC extends Fragment implements View.OnClickListener {
+public class FragmentC extends Fragment {
 
     private ExpandableListView expandableListView;
     private PopupWindow popupWindow;
@@ -55,6 +58,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
     private FragmentActivity myContext;
     private List<Course> courses;
     private Button courseBtn;
+    private Course selectedCourse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,31 +75,40 @@ public class FragmentC extends Fragment implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         courseBtn = (Button) myContext.findViewById(R.id.get_course_btn);
-        courseBtn.setOnClickListener(this);
+        courseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseBtn.setEnabled(false);
+                EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
+                String courseCode = editText.getText().toString();
+                if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
+                    new GetCourseTask().execute(courseCode);
+                }
+                else {
+                    Toast.makeText(myContext, "Course already added!", Toast.LENGTH_LONG).show();
+                }
+                courseBtn.setEnabled(true);
+            }
+        });
         courses = new ArrayList<>();
         getCoursesFromDatabase();
         populateListView();
-        expandableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        Button deleteBtn = (Button) myContext.findViewById(R.id.delete_course_btn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Course tempCourse = ((Course) parent.getItemAtPosition(position));
-                System.out.println("BÖG");
+            public void onClick(View v) {
+                if (selectedCourse != null) {
+                    FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
+                    selectedCourse.delete();
+                    courses.remove(selectedCourse);
+                    refreshAdapter();
+                } else {
+                    Toast.makeText(myContext, "Course is null!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-    }
 
-    @Override
-    public void onClick(View v) {
-        courseBtn.setEnabled(false);
-        EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
-        String courseCode = editText.getText().toString();
-        if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
-            new GetCourseTask().execute(courseCode);
-        }
-        else {
-            Toast.makeText(myContext, "Course already added!", Toast.LENGTH_LONG).show();
-        }
-    courseBtn.setEnabled(true);
     }
 
     private void populateListView() {
@@ -131,6 +144,9 @@ public class FragmentC extends Fragment implements View.OnClickListener {
 
     private class CourseAdapter extends NFRolodexArrayAdapter<String, Course> {
 
+        Course oldSelected;
+        View oldView;
+
         public CourseAdapter(Context activity, Collection<Course> items) {
             super(activity, items);
         }
@@ -142,7 +158,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         }
 
         @Override
-        public View getChildView(LayoutInflater inflater, int groupPosition, int childPosition,
+        public View getChildView(LayoutInflater inflater, int groupPosition, final int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
             //Inflate your view
             View itemView = convertView;
@@ -152,7 +168,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
             }
 
             //Gets the Event data for this view
-            Course course = getChild(groupPosition, childPosition);
+            final Course course = getChild(groupPosition, childPosition);
             //Fill view with event data
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
             imageView.setImageResource(R.drawable.ic_action_view_as_list);
@@ -162,7 +178,7 @@ public class FragmentC extends Fragment implements View.OnClickListener {
             nameText.setText(course.getName());
             nameText.setFocusable(false);
 
-            TextView courseCodeText = (TextView) itemView.findViewById(R.id.course_code);
+            final TextView courseCodeText = (TextView) itemView.findViewById(R.id.course_code);
             courseCodeText.setText(course.getCourse_code());
             courseCodeText.setFocusable(false);
 
@@ -170,8 +186,31 @@ public class FragmentC extends Fragment implements View.OnClickListener {
             semesterText.setText(course.getSemester() + "-" + course.getYear());
             semesterText.setFocusable(false);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (oldSelected == null) {
+                        selectedCourse = course;
+                        v.setBackgroundColor(getResources().getColor(R.color.lightgrey));
+                        oldView = v;
+                        oldSelected = course;
+                    }
+                    else if (!oldSelected.getCourse_code().equals(course.getCourse_code())) {
+                        selectedCourse = course;
+                        System.out.println("This is a big test");
+                        v.setBackgroundColor(getResources().getColor(R.color.lightgrey));
+                        oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
+                        oldSelected = course;
+                    }
+
+
+                }
+            });
+
             return itemView;
         }
+
+
 
         @Override
         public View getGroupView(LayoutInflater inflater, int groupPosition, boolean isExpanded,
@@ -196,6 +235,11 @@ public class FragmentC extends Fragment implements View.OnClickListener {
         public boolean hasAutoExpandingGroups() {
             //This forces our group views (headers) to always render expanded.
             //Even attempting to programmatically collapse a group will not work.
+            return true;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
         }
 

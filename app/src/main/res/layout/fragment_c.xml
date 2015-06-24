@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#ffffff" android:paddingTop="10dp">
+    android:background="#ffffff" android:paddingTop="10dp" >
 
     <EditText
         android:layout_width="match_parent"
@@ -10,7 +10,6 @@
         android:id="@+id/course_code_text"
         android:enabled="true"
         android:hint="@string/course_code"
-        android:clickable="false"
         android:background="@drawable/search_field"
         android:textColor="@color/grey" />
 
@@ -21,16 +20,18 @@
         android:layout_below="@+id/course_code_text"
         android:text="@string/add_course"
         android:background="@drawable/button"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:focusable="false"/>
     <Button
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:text="Delete"
-        android:id="@+id/delete_popup_btn"
+        android:id="@+id/delete_course_btn"
         android:layout_below="@id/course_code_text"
         android:layout_toRightOf="@id/get_course_btn"
         android:textColor="@color/white"
-        android:background="@drawable/button1" />
+        android:background="@drawable/button1"
+        android:focusable="false"/>
 
     <ExpandableListView
         android:layout_width="match_parent"
@@ -40,8 +41,7 @@
         android:layout_marginTop="10dp"
         android:childDivider="#FFBDBDBD"
         android:dividerHeight="1dp"
-        android:groupIndicator="@null"
-        />
+        android:groupIndicator="@null"/>
 
 </RelativeLayout>
 
