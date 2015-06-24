@@ -6,4 +6,5 @@
 
     <string name="course_code">Course Code</string>
     <string name="add_course">Add</string>
+    <string name="delete">Delete</string>
 </resources>
