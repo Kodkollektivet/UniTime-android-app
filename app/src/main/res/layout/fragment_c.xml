@@ -13,30 +13,51 @@
         android:background="@drawable/search_field"
         android:textColor="@color/grey" />
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/grid_for_btns"
+        android:layout_below="@+id/course_code_text"
+        android:layout_marginTop="5dp">
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
     <Button
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_height="match_parent"
         android:id="@+id/get_course_btn"
         android:layout_below="@+id/course_code_text"
         android:text="@string/add_course"
         android:background="@drawable/button"
         android:textColor="@color/white"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:layout_column="0"
+        android:layout_columnWeight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
     <Button
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_gravity="fill_horizontal"
+        android:layout_height="match_parent"
         android:text="Delete"
         android:id="@+id/delete_course_btn"
         android:layout_below="@id/course_code_text"
         android:layout_toRightOf="@id/get_course_btn"
         android:textColor="@color/white"
         android:background="@drawable/button1"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    </GridLayout>
 
     <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/get_course_btn"
+        android:layout_below="@+id/grid_for_btns"
         android:id="@+id/listView"
         android:layout_marginTop="10dp"
         android:childDivider="#FFBDBDBD"
