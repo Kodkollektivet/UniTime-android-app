@@ -226,6 +226,14 @@ public class FragmentB extends Fragment {
 
             return itemView;
         }
+
+        @Override
+        public boolean isEnabled(int position) {
+            // TODO Auto-generated method stub
+
+            return false;
+        }
+
     }
 
     public void updateList(ArrayList<Event> list) {
