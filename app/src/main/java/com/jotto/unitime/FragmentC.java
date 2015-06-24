@@ -53,7 +53,6 @@ import java.util.List;
 public class FragmentC extends Fragment {
 
     private ExpandableListView expandableListView;
-    private PopupWindow popupWindow;
     private CourseAdapter adapter;
     private FragmentActivity myContext;
     private List<Course> courses;
@@ -86,6 +85,7 @@ public class FragmentC extends Fragment {
                 } else {
                     Toast.makeText(myContext, "Course already added!", Toast.LENGTH_LONG).show();
                 }
+                courseBtn.setText("");
                 courseBtn.setEnabled(true);
             }
         });
@@ -120,12 +120,12 @@ public class FragmentC extends Fragment {
 
         @Override
         protected void onPostExecute(Object[] o) {
-            if ((boolean) o[0]) {
+            if (o[0].equals("true")) {
                 refreshAdapter();
                 FragmentA.fragmentA.getEventsForCourse((String) o[1]);
             }
             else {
-                Toast.makeText(myContext, "Invalid course code!", Toast.LENGTH_LONG).show();
+                Toast.makeText(myContext, (String) o[0], Toast.LENGTH_LONG).show();
             }
 
         }
@@ -136,8 +136,8 @@ public class FragmentC extends Fragment {
             String url = "http://unitime.se/api/course/";
             HashMap<String, String> map = new HashMap<>();
             map.put("course", params[0]);
-            boolean succeeded = sessionHandler.getCourse(url, map);
-            return new Object[]{ succeeded, params[0] };
+            String message = sessionHandler.getCourse(url, map, myContext);
+            return new Object[]{ message, params[0] };
         }
     }
 
@@ -267,52 +267,6 @@ public class FragmentC extends Fragment {
             courses.clear();
             courses.addAll(retrievedEvents);
         }
-    }
-
-    /*
-    PopupWindow to show information of events.
-     */
-    public void onShowPopup(View v, final Course course) {
-
-        LayoutInflater layoutInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // inflate the custom popup layout
-        final View inflatedView = layoutInflater.inflate(R.layout.delete_popup, null, false);
-
-        // get device size
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        final Point size = new Point();
-        display.getSize(size);
-
-
-        TextView deleteText = (TextView) inflatedView.findViewById(R.id.delete_popup_text);
-        deleteText.setText("Do you want to delete the course: " + course.getName());
-
-        Button deleteBtn = (Button) inflatedView.findViewById(R.id.delete_popup_btn);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentA.fragmentA.deleteEventsCourseRemoved(course);
-                course.delete();
-                courses.remove(course);
-                refreshAdapter();
-                popupWindow.dismiss();
-            }
-        });
-
-       /* // set height depends on the device size
-        popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 4, true );
-        // set a background drawable with rounders corners
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background));
-        // make it focusable to show the keyboard to enter in `EditText`
-        popupWindow.setFocusable(true);
-        // make it outside touchable to dismiss the popup window
-        popupWindow.setOutsideTouchable(false);
-
-
-        // show the popup at bottom of the screen and set some margin at bottom ie,
-        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 100);
-        */
     }
 
     private void refreshAdapter() {

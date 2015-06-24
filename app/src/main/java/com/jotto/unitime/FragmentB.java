@@ -164,6 +164,7 @@ public class FragmentB extends Fragment {
         calDroid.setMinDate(date1);
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+        args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY);
         calDroid.setArguments(args);
         
         // testing cell touch

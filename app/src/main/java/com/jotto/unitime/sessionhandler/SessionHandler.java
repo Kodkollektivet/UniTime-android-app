@@ -1,8 +1,12 @@
 package com.jotto.unitime.sessionhandler;
 
+import android.app.Application;
+import android.content.Context;
+import android.widget.Toast;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jotto.unitime.models.Course;
-import com.jotto.unitime.models.Event;
+import com.jotto.unitime.models.*;
+import com.jotto.unitime.models.Error;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
@@ -40,7 +44,7 @@ public class SessionHandler {
     public SessionHandler() {
     }
 
-    public boolean getCourse(String requestURL, HashMap<String, String> postDataParams) {
+    public String getCourse(String requestURL, HashMap<String, String> postDataParams, Context context) {
 
         URL url;
         StringBuilder response = new StringBuilder();
@@ -66,28 +70,36 @@ public class SessionHandler {
             writer.close();
             os.close();
             int responseCode=conn.getResponseCode();
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 while ((line=br.readLine()) != null) {
                     response.append(line);
                 }
+                courseList = mapper.readValue(response.toString(), Course[].class);
+                for (Course c : courseList) {
+                    c.save();
+                }
+                return "true";
             }
+            else if (responseCode == HttpsURLConnection.HTTP_NOT_ACCEPTABLE) {
+                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                while ((line=br.readLine()) != null) {
+                    response.append(line);
+                }
+                JSONObject error = new JSONObject(response.toString());
+                return error.getString("message");
+            }
+            // Should not be able to reach this state
             else {
-                throw new HttpException(responseCode+"");
-            }
-
-            if (response.toString().equals("{\"message\": \"Invalid search format!\"}")) {
-                return false;
-            }
-            courseList = mapper.readValue(response.toString(), Course[].class);
-            for (Course c : courseList) {
-                c.save();
+                return "false";
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        // Should not be able to reach this state
+        return "false";
     }
 
     public void getEventsFromCourse(String courseCode) {
