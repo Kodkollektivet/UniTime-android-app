@@ -216,6 +216,7 @@ public class FragmentA extends Fragment {
     public void deleteEventsCourseRemoved(Course course){
         for (Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
             Event event = iterator.next();
+            System.out.print("I iteratorn: "+event.getCourse_code());
             if (event.getCourse_code().equals(course.getCourse_code())) {
                 event.delete();
                 iterator.remove();
