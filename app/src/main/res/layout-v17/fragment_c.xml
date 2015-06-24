@@ -14,8 +14,7 @@
         android:textColor="@color/grey"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:paddingLeft="10dp"
-        android:paddingStart="10dp"
+        android:paddingStart="20dp"
         android:singleLine="true" />
 
     <GridLayout

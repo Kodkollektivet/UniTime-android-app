@@ -85,7 +85,7 @@ public class FragmentC extends Fragment {
                 } else {
                     Toast.makeText(myContext, "Course already added!", Toast.LENGTH_LONG).show();
                 }
-                courseBtn.setText("");
+                editText.clearComposingText();
                 courseBtn.setEnabled(true);
             }
         });

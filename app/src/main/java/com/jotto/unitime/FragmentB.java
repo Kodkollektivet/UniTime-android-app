@@ -87,7 +87,6 @@ public class FragmentB extends Fragment {
         ListView listView = (ListView)inflatedView.findViewById(R.id.popup_listview);
         MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
         listView.setAdapter(myListAdapter);
-
         // get device size
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         final Point size = new Point();
@@ -128,7 +127,6 @@ public class FragmentB extends Fragment {
                     DateTime dateTime = new DateTime(events.get(i).getStartdate());
                     for(int j = 0; j < importantEvents.length; j++){
                         if(events.get(i).getInfo().equals(importantEvents[j])){
-                            System.out.println("TRUE");
                             calDroid.setBackgroundResourceForDate(R.color.caldroid_light_red, dateTime.toDate());
                         }
                     }
