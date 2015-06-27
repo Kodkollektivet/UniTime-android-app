@@ -228,8 +228,8 @@ public class FragmentB extends Fragment {
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
 
-            TextView courseCodeText = (TextView) itemView.findViewById(R.id.event_course_code);
-            courseCodeText.setText(currentEvent.getCourse_code());
+            //TextView courseCodeText = (TextView) itemView.findViewById(R.id.event_course_code);
+            //courseCodeText.setText(currentEvent.getCourse_code());
 
             return itemView;
         }

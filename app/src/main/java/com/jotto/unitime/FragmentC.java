@@ -145,10 +145,9 @@ public class FragmentC extends Fragment {
         @Override
         protected Object[] doInBackground(String... params) {
             SessionHandler sessionHandler = new SessionHandler();
-            String url = "http://unitime.se/api/course/";
             HashMap<String, String> map = new HashMap<>();
             map.put("course", params[0]);
-            String message = sessionHandler.getCourse(url, map, myContext);
+            String message = sessionHandler.getCourse(map);
             return new Object[]{ message, params[0] };
         }
     }

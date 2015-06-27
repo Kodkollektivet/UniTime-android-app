@@ -119,19 +119,20 @@ public class FragmentA extends Fragment {
             imageView.setImageResource(R.drawable.ic_action_view_as_list);
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
-            teacherText.setText(event.getTeacher());
+            teacherText.setText(event.getTeacher().length() == 0 ? "No teacher available" : event.getTeacher());
 
             TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
-            roomText.setText(event.getRoom());
+            roomText.setText(event.getRoom().length() == 0 ? "No room available" : event.getRoom());
 
             TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-            infoText.setText(event.getInfo());
+            infoText.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo()+"( "+event.getDesc()+" )");
 
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(event.getStarttime() + "-" + event.getEndtime());
 
-            TextView courseCodeText = (TextView) itemView.findViewById(R.id.event_course_code);
-            courseCodeText.setText(event.getCourse_code());
+            TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
+            courseText.setText(event.getCourse_name());
+
 
             itemView.setEnabled(false);
             itemView.setFocusable(false);
