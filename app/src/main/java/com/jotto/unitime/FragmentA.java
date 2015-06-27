@@ -130,6 +130,15 @@ public class FragmentA extends Fragment {
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(event.getStarttime() + "-" + event.getEndtime());
 
+            TextView courseCodeText = (TextView) itemView.findViewById(R.id.event_course_code);
+            courseCodeText.setText(event.getCourse_code());
+
+            itemView.setEnabled(false);
+            itemView.setFocusable(false);
+            itemView.setSelected(false);
+            itemView.setClickable(false);
+            itemView.setFocusableInTouchMode(false);
+
             return itemView;
         }
 
@@ -186,10 +195,7 @@ public class FragmentA extends Fragment {
             return false;
         }
 
-        @Override
-        public boolean isChildSelectable(int groupPosition, int childPosition) {
-            return false;
-        }
+
 
     }
 

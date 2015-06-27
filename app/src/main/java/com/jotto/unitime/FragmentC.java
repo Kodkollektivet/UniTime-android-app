@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,12 +74,12 @@ public class FragmentC extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        final EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
         courseBtn = (Button) myContext.findViewById(R.id.get_course_btn);
         courseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 courseBtn.setEnabled(false);
-                EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
                 String courseCode = editText.getText().toString();
                 if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
                     new GetCourseTask().execute(courseCode);
@@ -87,6 +88,15 @@ public class FragmentC extends Fragment {
                 }
                 editText.clearComposingText();
                 courseBtn.setEnabled(true);
+            }
+        });
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    courseBtn.performClick();
+                    return true;
+                }
+                return false;
             }
         });
         courses = new ArrayList<>();
@@ -102,6 +112,7 @@ public class FragmentC extends Fragment {
                     selectedCourse.delete();
                     courses.remove(selectedCourse);
                     refreshAdapter();
+                    adapter.oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
                 } else {
                     Toast.makeText(myContext, "Course is null!", Toast.LENGTH_SHORT).show();
                 }
@@ -114,6 +125,7 @@ public class FragmentC extends Fragment {
         expandableListView = (ExpandableListView) myContext.findViewById(R.id.listView);
         adapter = new CourseAdapter(myContext, courses);
         expandableListView.setAdapter(adapter);
+        expandableListView.setChildDivider(getResources().getDrawable(R.drawable.child_divider));
     }
 
     private class GetCourseTask extends AsyncTask<String, Object[], Object[]> {
@@ -190,13 +202,13 @@ public class FragmentC extends Fragment {
                 public void onClick(View v) {
                     if (oldSelected == null) {
                         selectedCourse = course;
-                        v.setBackgroundColor(getResources().getColor(R.color.lightgrey));
+                        v.setBackgroundColor(getResources().getColor(R.color.darkerlightgrey));
                         oldView = v;
                         oldSelected = course;
                     }
                     else if (!oldSelected.getCourse_code().equals(course.getCourse_code())) {
                         selectedCourse = course;
-                        v.setBackgroundColor(getResources().getColor(R.color.lightgrey));
+                        v.setBackgroundColor(getResources().getColor(R.color.darkerlightgrey));
                         oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
                         oldView = v;
                         oldSelected = course;

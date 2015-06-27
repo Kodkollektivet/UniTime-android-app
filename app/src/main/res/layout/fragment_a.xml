@@ -8,8 +8,12 @@ android:background="@android:color/transparent">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/listView2"
-    android:childDivider="#FFBDBDBD"
     android:dividerHeight="1dp"
+    android:divider="@color/dividergrey"
+    android:childDivider="@color/dividergrey"
+    android:footerDividersEnabled="false"
+    android:headerDividersEnabled="false"
     android:groupIndicator="@null"/>
+
 
 </RelativeLayout>

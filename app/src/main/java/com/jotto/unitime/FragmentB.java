@@ -36,9 +36,11 @@ import com.roomorama.caldroid.CaldroidListener;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +58,7 @@ public class FragmentB extends Fragment {
     private PopupWindow popupWindow;
     ArrayList<Event> events;
     ArrayAdapter<Event> adapter;
-    String[] importantEvents = {"Redovisning", "Tentamen", "Omtentamen"};
+    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen"));
     CaldroidFragment calDroid;
 
     // i dont know how to describe what this does yet
@@ -97,7 +99,7 @@ public class FragmentB extends Fragment {
         // set height depends on the device size
         popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 2, true );
         // set a background drawable with rounders corners
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background));
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background_textview));
         // make it focusable to show the keyboard to enter in `EditText`
         popupWindow.setFocusable(true);
         // make it outside touchable to dismiss the popup window
@@ -119,17 +121,18 @@ public class FragmentB extends Fragment {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
             events = new ArrayList<>(retrievedEvents);
-            if(events.size() != 0){
+            if(!events.isEmpty()){
                 for (Event e : events){
                     DateTime dateTime = new DateTime(e.getStartdate());
-                    calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
-                }
-                for (Event e : events) {
-                    DateTime dateTime = new DateTime(e.getStartdate());
-                    for(String i : importantEvents){
-                        if(e.getInfo().equals(i)){
-                            calDroid.setBackgroundResourceForDate(R.color.red, dateTime.toDate());
-                        }
+                    LocalDate today = LocalDate.now();
+                    if (importantEvents.contains(e.getInfo())) {
+                        calDroid.setBackgroundResourceForDate(R.color.red, dateTime.toDate());
+                    }
+                    else if (today.equals(dateTime.toLocalDate())) {
+                        calDroid.setBackgroundResourceForDate(R.color.todaygreen, dateTime.toDate());
+                    }
+                    else {
+                        calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
                     }
                 }
             }
@@ -155,6 +158,7 @@ public class FragmentB extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         fragmentB = this;
         calDroid = new CaldroidFragment();
         Bundle args = new Bundle();
@@ -224,13 +228,14 @@ public class FragmentB extends Fragment {
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
 
+            TextView courseCodeText = (TextView) itemView.findViewById(R.id.event_course_code);
+            courseCodeText.setText(currentEvent.getCourse_code());
+
             return itemView;
         }
 
         @Override
         public boolean isEnabled(int position) {
-            // TODO Auto-generated method stub
-
             return false;
         }
 

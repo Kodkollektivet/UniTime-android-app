@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/event_view" android:focusable="false" android:focusableInTouchMode="false">
+    android:id="@+id/event_view" android:focusable="false" android:focusableInTouchMode="false"
+    android:clickable="false">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -13,11 +14,12 @@
         android:src="@drawable/ic_action_view_as_list"
         android:maxHeight="60dp"
         android:maxWidth="60dp"
-        android:minHeight="30dp"
-        android:minWidth="30dp"
+        android:minHeight="20dp"
+        android:minWidth="20dp"
         android:adjustViewBounds="true"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:layout_marginLeft="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,13 +27,14 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Teacher"
         android:id="@+id/event_teacher"
-        android:layout_alignBottom="@+id/image_icon"
         android:layout_toRightOf="@+id/image_icon"
         android:layout_toEndOf="@+id/image_icon"
         android:textSize="16sp"
         android:layout_marginBottom="6dp"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="9dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,13 +42,13 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Room"
         android:id="@+id/event_room"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/image_icon"
-        android:layout_toEndOf="@+id/image_icon"
-        android:layout_marginTop="5dp"
         android:textSize="16sp"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:layout_toRightOf="@+id/image_icon"
+        android:layout_toEndOf="@+id/image_icon"
+        android:layout_marginTop="38dp"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,5 +78,18 @@
         android:focusable="false"
         android:focusableInTouchMode="false"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="1DV008"
+        android:id="@+id/event_course_code"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="10sp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="53dp"
+        android:textStyle="bold"
+        android:typeface="normal" />
 
 </RelativeLayout>
