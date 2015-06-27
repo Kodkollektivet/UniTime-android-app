@@ -125,7 +125,7 @@ public class FragmentA extends Fragment {
             roomText.setText(event.getRoom());
 
             TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-            infoText.setText(event.getInfo()+"( "+event.getDesc()+" )");
+            infoText.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo()+"( "+event.getDesc()+" )");
 
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(event.getStarttime() + "-" + event.getEndtime());
