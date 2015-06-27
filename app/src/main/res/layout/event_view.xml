@@ -12,29 +12,46 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_action_view_as_list"
-        android:maxHeight="60dp"
-        android:maxWidth="60dp"
+        android:maxHeight="85dp"
+        android:maxWidth="85dp"
         android:minHeight="20dp"
         android:minWidth="20dp"
         android:adjustViewBounds="true"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_marginLeft="2dp" />
+        android:layout_marginLeft="-45dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Teacher"
+        android:text="Ieacher"
         android:id="@+id/event_teacher"
         android:layout_toRightOf="@+id/image_icon"
         android:layout_toEndOf="@+id/image_icon"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:layout_marginBottom="6dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="9dp" />
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="41dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Course"
+        android:id="@+id/event_course"
+        android:layout_toRightOf="@+id/image_icon"
+        android:layout_toEndOf="@+id/image_icon"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="4dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,13 +59,13 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Room"
         android:id="@+id/event_room"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:layout_toRightOf="@+id/image_icon"
         android:layout_toEndOf="@+id/image_icon"
-        android:layout_marginTop="38dp"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginTop="23dp"
+        android:layout_marginLeft="-10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,12 +73,11 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Info"
         android:id="@+id/event_info"
-        android:textSize="16sp"
-        android:layout_alignBottom="@+id/event_teacher"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
+        android:textSize="12sp"
+        android:layout_toRightOf="@+id/image_icon"
+        android:layout_toEndOf="@+id/image_icon"
+        android:layout_marginLeft="-10dp"
+        android:layout_marginTop="58dp"
         android:focusable="false"
         android:focusableInTouchMode="false"/>
 
@@ -72,24 +88,12 @@
         android:text="08:00-10:00"
         android:id="@+id/event_time"
         android:textSize="16sp"
-        android:layout_alignTop="@+id/event_room"
-        android:layout_alignRight="@+id/event_info"
-        android:layout_alignEnd="@+id/event_info"
+        android:layout_alignTop="@+id/event_course"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="1DV008"
-        android:id="@+id/event_course_code"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="10sp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="53dp"
-        android:textStyle="bold"
-        android:typeface="normal" />
+        android:focusableInTouchMode="false"
+        android:layout_marginRight="5dp"
+        />
 
 </RelativeLayout>
