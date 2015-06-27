@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jotto.unitime.models.*;
+import com.jotto.unitime.util.ServerConstants;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -24,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -37,14 +40,14 @@ public class SessionHandler {
     public SessionHandler() {
     }
 
-    public String getCourse(String requestURL, HashMap<String, String> postDataParams, Context context) {
+    public String getCourse(HashMap<String, String> postDataParams) {
 
         URL url;
         StringBuilder response = new StringBuilder();
         try {
             Course[] courseList;
             ObjectMapper mapper = new ObjectMapper();
-            url = new URL(requestURL);
+            url = new URL(ServerConstants.SERVER_REST_URL+ServerConstants.COURSE_PATH);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
@@ -63,7 +66,7 @@ public class SessionHandler {
             writer.close();
             os.close();
             int responseCode=conn.getResponseCode();
-                String line;
+            String line;
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -101,7 +104,7 @@ public class SessionHandler {
 
         try {
             Event[] eventList;
-            String urlName = "http://unitime.se/api/event/";
+            String urlName = ServerConstants.SERVER_REST_URL+ServerConstants.EVENT_PATH;
             ObjectMapper mapper = new ObjectMapper();
             String params = "course=" + courseCode;
 
@@ -118,9 +121,13 @@ public class SessionHandler {
             //String content = EntityUtils.toString(entity);
             //System.out.println(content);
 
+            List<Course> c = Course.findWithQuery(Course.class, "Select * from COURSE where COURSECODE = ?", courseCode.toUpperCase());
+
             eventList = mapper.readValue(content, Event[].class);
+
             for (Event e : eventList) {
                 e.setCourse_code(courseCode.toUpperCase());
+                e.setCourse_name(c.get(0).getName());
                 e.save();
             }
         } catch (IOException ev) {
