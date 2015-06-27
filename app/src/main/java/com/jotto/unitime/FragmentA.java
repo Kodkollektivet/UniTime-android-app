@@ -125,13 +125,14 @@ public class FragmentA extends Fragment {
             roomText.setText(event.getRoom());
 
             TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-            infoText.setText(event.getInfo());
+            infoText.setText(event.getInfo()+"( "+event.getDesc()+" )");
 
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(event.getStarttime() + "-" + event.getEndtime());
 
-            TextView courseCodeText = (TextView) itemView.findViewById(R.id.event_course_code);
-            courseCodeText.setText(event.getCourse_code());
+            TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
+            courseText.setText(event.getCourse_name());
+
 
             itemView.setEnabled(false);
             itemView.setFocusable(false);
