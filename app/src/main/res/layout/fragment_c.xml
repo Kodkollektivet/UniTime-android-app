@@ -52,15 +52,25 @@
 
     </LinearLayout>
 
-    <ExpandableListView
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/course_header"
+        android:layout_below="@+id/grid_for_btns"
+        android:layout_marginTop="10dp"
+        android:background="@color/lightturcoise"
+        android:text="Added courses"
+        android:gravity="center"
+        android:textColor="@color/grey"
+        android:textSize="25sp" />
+
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/grid_for_btns"
+        android:layout_below="@+id/course_header"
         android:id="@+id/listView"
-        android:layout_marginTop="10dp"
         android:childDivider="#FFBDBDBD"
-        android:dividerHeight="1dp"
-        android:groupIndicator="@null"/>
+        android:dividerHeight="1dp" />
 
 </RelativeLayout>
 

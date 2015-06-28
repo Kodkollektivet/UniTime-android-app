@@ -121,13 +121,13 @@ public class SessionHandler {
             //String content = EntityUtils.toString(entity);
             //System.out.println(content);
 
-            List<Course> c = Course.findWithQuery(Course.class, "Select * from COURSE where COURSECODE = ?", courseCode.toUpperCase());
+            Course course = Course.find(Course.class, "COURSECODE = ?", courseCode.toUpperCase()).get(0);
 
             eventList = mapper.readValue(content, Event[].class);
 
             for (Event e : eventList) {
                 e.setCourse_code(courseCode.toUpperCase());
-                e.setCourse_name(c.get(0).getName());
+                e.setCourse_name(course.getName_sv());
                 e.save();
             }
         } catch (IOException ev) {

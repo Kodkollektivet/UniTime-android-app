@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
@@ -53,10 +55,10 @@ import java.util.List;
  */
 public class FragmentC extends Fragment {
 
-    private ExpandableListView expandableListView;
+    private ListView listView;
     private CourseAdapter adapter;
     private FragmentActivity myContext;
-    private List<Course> courses;
+    private ArrayList<Course> courses;
     private Button courseBtn;
     private Course selectedCourse;
 
@@ -84,10 +86,11 @@ public class FragmentC extends Fragment {
                 if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
                     new GetCourseTask().execute(courseCode);
                 } else {
-                    Toast.makeText(myContext, "Course already added!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(myContext, "Course already added!", Toast.LENGTH_SHORT).show();
+                    courseBtn.setEnabled(true);
                 }
-                editText.clearComposingText();
-                courseBtn.setEnabled(true);
+                editText.setText("");
+                adapter.notifyDataSetChanged();
             }
         });
         editText.setOnKeyListener(new View.OnKeyListener() {
@@ -111,21 +114,37 @@ public class FragmentC extends Fragment {
                     FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
                     selectedCourse.delete();
                     courses.remove(selectedCourse);
-                    refreshAdapter();
-                    adapter.oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
+                    adapter.notifyDataSetChanged();
+                    //adapter.oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
                 } else {
                     Toast.makeText(myContext, "Course is null!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (selectedCourse == null) {
+                    selectedCourse = courses.get(position);
+                    adapter.notifyDataSetChanged();
+                }
+                else if(selectedCourse == courses.get(position)) {
+                    selectedCourse = null;
+                    adapter.notifyDataSetChanged();
+                }
+                else {
+                    selectedCourse = courses.get(position);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private void populateListView() {
-        expandableListView = (ExpandableListView) myContext.findViewById(R.id.listView);
-        adapter = new CourseAdapter(myContext, courses);
-        expandableListView.setAdapter(adapter);
-        expandableListView.setChildDivider(getResources().getDrawable(R.drawable.child_divider));
+        listView = (ListView) myContext.findViewById(R.id.listView);
+        adapter = new CourseAdapter(courses);
+        listView.setAdapter(adapter);
+        //listView.setChildDivider(getResources().getDrawable(R.drawable.child_divider));
     }
 
     private class GetCourseTask extends AsyncTask<String, Object[], Object[]> {
@@ -133,13 +152,14 @@ public class FragmentC extends Fragment {
         @Override
         protected void onPostExecute(Object[] o) {
             if (o[0].equals("true")) {
-                refreshAdapter();
+                getCoursesFromDatabase();
+                adapter.notifyDataSetChanged();
                 FragmentA.fragmentA.getEventsForCourse((String) o[1]);
             }
             else {
-                Toast.makeText(myContext, (String) o[0], Toast.LENGTH_LONG).show();
+                Toast.makeText(myContext, (String) o[0], Toast.LENGTH_SHORT).show();
             }
-
+            courseBtn.setEnabled(true);
         }
 
         @Override
@@ -152,120 +172,7 @@ public class FragmentC extends Fragment {
         }
     }
 
-    private class CourseAdapter extends NFRolodexArrayAdapter<String, Course> {
 
-        Course oldSelected;
-        View oldView;
-
-        public CourseAdapter(Context activity, Collection<Course> items) {
-            super(activity, items);
-        }
-
-        @Override
-        public String createGroupFor(Course childItem) {
-            //This is how the adapter determines what the headers are and what child items belong to it
-            return "";
-        }
-
-        @Override
-        public View getChildView(LayoutInflater inflater, int groupPosition, final int childPosition,
-                                 boolean isLastChild, View convertView, ViewGroup parent) {
-            //Inflate your view
-            View itemView = convertView;
-            if (itemView == null) {
-                inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                itemView = inflater.inflate(R.layout.course_view, parent, false);
-            }
-
-            //Gets the Event data for this view
-            final Course course = getChild(groupPosition, childPosition);
-            //Fill view with event data
-            ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-            imageView.setImageResource(R.drawable.ic_action_view_as_list);
-            imageView.setFocusable(false);
-
-            TextView nameText = (TextView) itemView.findViewById(R.id.course_name);
-            nameText.setText(course.getName());
-            nameText.setFocusable(false);
-
-            final TextView courseCodeText = (TextView) itemView.findViewById(R.id.course_code);
-            courseCodeText.setText(course.getCourse_code());
-            courseCodeText.setFocusable(false);
-
-            TextView semesterText = (TextView) itemView.findViewById(R.id.course_semester);
-            semesterText.setText(course.getSemester() + "-" + course.getYear());
-            semesterText.setFocusable(false);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (oldSelected == null) {
-                        selectedCourse = course;
-                        v.setBackgroundColor(getResources().getColor(R.color.darkerlightgrey));
-                        oldView = v;
-                        oldSelected = course;
-                    }
-                    else if (!oldSelected.getCourse_code().equals(course.getCourse_code())) {
-                        selectedCourse = course;
-                        v.setBackgroundColor(getResources().getColor(R.color.darkerlightgrey));
-                        oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
-                        oldView = v;
-                        oldSelected = course;
-                    }
-                    else{
-                        v.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
-                        selectedCourse = null;
-                        oldSelected = null;
-                        oldView = null;
-                    }
-
-
-
-                }
-            });
-
-            return itemView;
-        }
-
-
-
-        @Override
-        public View getGroupView(LayoutInflater inflater, int groupPosition, boolean isExpanded,
-                                 View convertView, ViewGroup parent) {
-            //Inflate your header view
-            View headerView = convertView;
-            if (headerView == null) {
-                inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                headerView = inflater.inflate(R.layout.header_view, parent, false);
-            }
-            expandableListView.setClickable(true);
-            //Fill view with date data
-            TextView dateText = (TextView) headerView.findViewById(R.id.event_date);
-            TextView dayText = (TextView) headerView.findViewById(R.id.event_date_day);
-
-            dateText.setText("Added Courses");
-            dayText.setText("");
-            return headerView;
-        }
-
-        @Override
-        public boolean hasAutoExpandingGroups() {
-            //This forces our group views (headers) to always render expanded.
-            //Even attempting to programmatically collapse a group will not work.
-            return true;
-        }
-
-        @Override
-        public boolean isChildSelectable(int groupPosition, int childPosition) {
-            return true;
-        }
-
-        @Override
-        public boolean isGroupSelectable(int groupPosition) {
-            //This prevents a user from seeing any touch feedback when a group (header) is clicked.
-            return false;
-        }
-    }
 
     private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
         File dbFile = context.getDatabasePath(dbName);
@@ -280,11 +187,44 @@ public class FragmentC extends Fragment {
         }
     }
 
-    private void refreshAdapter() {
-        getCoursesFromDatabase();
-        adapter.clear();
-        adapter.addAll(courses);
-        adapter.notifyDataSetChanged();
+    private class CourseAdapter extends ArrayAdapter<Course> {
+
+        public CourseAdapter(ArrayList<Course> list) {
+            super(myContext, R.layout.course_view, list);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Make sure we have a view to work with (may have been given null)
+
+            Course course = this.getItem(position);
+            View itemView = convertView;
+            if (itemView == null) {
+                LayoutInflater inflater = (LayoutInflater) myContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                itemView = inflater.inflate(R.layout.course_view, parent, false);
+            }
+
+            ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
+            imageView.setImageResource(R.drawable.ic_action_view_as_list);
+
+            TextView nameText = (TextView) itemView.findViewById(R.id.course_name);
+            nameText.setText(course.getName_sv());
+
+            TextView codeText = (TextView) itemView.findViewById(R.id.course_code);
+            codeText.setText(course.getCourse_code());
+
+            TextView semesterText = (TextView) itemView.findViewById(R.id.course_semester);
+            semesterText.setText(course.getSemester() + "-" + course.getYear());
+
+            if (course == selectedCourse) {
+                itemView.setBackgroundColor(getResources().getColor(R.color.darkerlightgrey));
+            }
+            else {
+                itemView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
+            }
+            return itemView;
+        }
+
     }
 
 }
