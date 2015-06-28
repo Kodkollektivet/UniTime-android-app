@@ -6,6 +6,7 @@ package com.jotto.unitime;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +21,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jotto.unitime.models.Course;
+import com.jotto.unitime.models.CourseDataAC;
 import com.jotto.unitime.models.Event;
+import com.jotto.unitime.models.Settings;
 import com.jotto.unitime.sessionhandler.SessionHandler;
+import com.orm.SugarApp;
+import com.orm.SugarCursorFactory;
+import com.orm.SugarDb;
 import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
 
 import org.joda.time.DateTime;
@@ -47,6 +53,7 @@ public class FragmentA extends Fragment {
     ExpandableListView expandableListView;
     ArrayList<Event> events;
     EventDateAdapter adapter;
+    private Settings settings;
 
     private FragmentActivity myContext;
 
@@ -69,11 +76,24 @@ public class FragmentA extends Fragment {
         events = new ArrayList<>();
         getEventsFromDatabase();
         populateListView();
+        settings = Settings.findById(Settings.class, (long) 1);
+
+        if (settings == null) {
+            settings = new Settings();
+            settings.setDate(LocalDate.now().toString());
+            settings.setContentLength(0);
+            settings.save();
+            new GetHeadinfo().execute();
+            new RefreshEvents().execute();
+        }
+        else if (LocalDate.now().isAfter(LocalDate.parse(settings.getDate()))) {
+            new GetHeadinfo().execute();
+            new RefreshEvents().execute();
+        }
     }
 
     public void getEventsForCourse(String courseCode) {
         new GetCourseInfoTask().execute(courseCode);
-        FragmentB.fragmentB.updateList(events);
     }
 
     private void getEventsFromDatabase() {
@@ -204,6 +224,7 @@ public class FragmentA extends Fragment {
         @Override
         protected void onPostExecute(Object o) {
             refreshAdapter();
+            FragmentB.fragmentB.updateList(events);
         }
 
         @Override
@@ -211,6 +232,38 @@ public class FragmentA extends Fragment {
             SessionHandler sessionHandler = new SessionHandler();
             sessionHandler.getEventsFromCourse(params[0].toString());
             return null;
+        }
+    }
+
+    private class GetHeadinfo extends AsyncTask {
+
+        @Override
+        protected void onPostExecute(Object o) {
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            SessionHandler sh = new SessionHandler();
+            sh.getHeadInfo();
+            return true;
+        }
+    }
+
+    private class RefreshEvents extends AsyncTask {
+
+        @Override
+        protected void onPostExecute(Object o) {
+            getEventsFromDatabase();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            Event.deleteAll(Event.class);
+            List<Course> addedCourses = Course.listAll(Course.class);
+            for (Course course : addedCourses) {
+                getEventsForCourse(course.getCourse_code().toUpperCase());
+            }
+            return true;
         }
     }
 
@@ -223,6 +276,7 @@ public class FragmentA extends Fragment {
             }
         }
         refreshAdapter();
+        FragmentB.fragmentB.updateList(events);
     }
 
     private void refreshAdapter() {

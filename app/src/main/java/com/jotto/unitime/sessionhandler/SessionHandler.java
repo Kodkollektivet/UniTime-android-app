@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.joda.time.LocalDate;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -23,6 +24,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -135,6 +137,70 @@ public class SessionHandler {
         }
 
 
+    }
+
+    public void getDataForAutocomplete() {
+
+        URL url;
+        StringBuilder response = new StringBuilder();
+        try {
+            CourseDataAC[] courseDataList;
+            ObjectMapper mapper = new ObjectMapper();
+            url = new URL(ServerConstants.SERVER_REST_URL+ServerConstants.COURSE_PATH);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+
+            int responseCode=conn.getResponseCode();
+            String line;
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line=br.readLine()) != null) {
+                    response.append(line);
+                }
+                courseDataList = mapper.readValue(response.toString(), CourseDataAC[].class);
+                for (CourseDataAC cda : courseDataList) {
+                    cda.save();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getHeadInfo() {
+        HttpURLConnection urlConnection = null;
+        System.setProperty("http.keepAlive", "false");
+        try {
+            URL url = new URL(ServerConstants.SERVER_REST_URL + ServerConstants.COURSE_PATH);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("HEAD");
+            int length = urlConnection.getContentLength();
+            Settings settings = Settings.findById(Settings.class, 1L);
+            if (length != settings.getContentLength()){
+                // If no connection to server
+                if (length == -1) {
+                    return -1;
+                }
+                else {
+                    settings.setContentLength(length);
+                    settings.save();
+                    getDataForAutocomplete();
+                }
+                return length;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return -1;
     }
 
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {

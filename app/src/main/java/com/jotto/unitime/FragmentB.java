@@ -195,18 +195,16 @@ public class FragmentB extends Fragment {
     }
     private class MyListAdapter extends ArrayAdapter<Event> {
 
-        ArrayList<Event> list;
 
         public MyListAdapter(ArrayList<Event> list) {
             super(myContext, R.layout.calendar_popup, list);
-            this.list = list;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Make sure we have a view to work with (may have been given null)
 
-            Event currentEvent = list.get(position);
+            Event currentEvent = this.getItem(position);
             View itemView = convertView;
             if (itemView == null) {
                 LayoutInflater inflater = (LayoutInflater) myContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -243,7 +241,7 @@ public class FragmentB extends Fragment {
     }
 
     public void updateList(ArrayList<Event> list) {
-        this.events = list;
+        events = list;
     }
 
 }
