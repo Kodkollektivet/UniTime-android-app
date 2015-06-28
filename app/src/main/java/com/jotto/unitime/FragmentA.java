@@ -119,13 +119,13 @@ public class FragmentA extends Fragment {
             imageView.setImageResource(R.drawable.ic_action_view_as_list);
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
-            teacherText.setText(event.getTeacher().length() == 0 ? "No teacher available" : event.getTeacher());
+            teacherText.setText(event.getTeacher().length() == 0 ? "No teacher" : event.getTeacher());
 
             TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
-            roomText.setText(event.getRoom().length() == 0 ? "No room available" : event.getRoom());
+            roomText.setText(event.getRoom().length() == 0 ? "No room" : event.getRoom());
 
             TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-            infoText.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo()+"( "+event.getDesc()+" )");
+            infoText.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo() + "( " + event.getDesc() + " )");
 
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(event.getStarttime() + "-" + event.getEndtime());
@@ -133,12 +133,6 @@ public class FragmentA extends Fragment {
             TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
             courseText.setText(event.getCourse_name());
 
-
-            itemView.setEnabled(false);
-            itemView.setFocusable(false);
-            itemView.setSelected(false);
-            itemView.setClickable(false);
-            itemView.setFocusableInTouchMode(false);
 
             return itemView;
         }

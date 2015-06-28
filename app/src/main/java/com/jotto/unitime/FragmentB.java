@@ -217,19 +217,20 @@ public class FragmentB extends Fragment {
             imageView.setImageResource(R.drawable.ic_action_view_as_list);
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
-            teacherText.setText(currentEvent.getTeacher());
+            teacherText.setText(currentEvent.getTeacher().length() == 0 ? "No teacher" : currentEvent.getTeacher());
 
             TextView roomText = (TextView) itemView.findViewById(R.id.event_room);
-            roomText.setText(currentEvent.getRoom());
+            roomText.setText(currentEvent.getRoom().length() == 0 ? "No room" : currentEvent.getRoom());
 
             TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-            infoText.setText(currentEvent.getInfo());
+            infoText.setText(currentEvent.getDesc().length() < 2 ? currentEvent.getInfo() :
+                    currentEvent.getInfo() + "( " + currentEvent.getDesc() + " )");
 
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
 
-            //TextView courseCodeText = (TextView) itemView.findViewById(R.id.event_course_code);
-            //courseCodeText.setText(currentEvent.getCourse_code());
+            TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
+            courseText.setText(currentEvent.getCourse_name());
 
             return itemView;
         }
