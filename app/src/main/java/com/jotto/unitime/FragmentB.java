@@ -121,21 +121,7 @@ public class FragmentB extends Fragment {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
             events = new ArrayList<>(retrievedEvents);
-            if(!events.isEmpty()){
-                for (Event e : events){
-                    DateTime dateTime = new DateTime(e.getStartdate());
-                    LocalDate today = LocalDate.now();
-                    if (importantEvents.contains(e.getInfo())) {
-                        calDroid.setBackgroundResourceForDate(R.color.red, dateTime.toDate());
-                    }
-                    else if (today.equals(dateTime.toLocalDate())) {
-                        calDroid.setBackgroundResourceForDate(R.color.todaygreen, dateTime.toDate());
-                    }
-                    else {
-                        calDroid.setBackgroundResourceForDate(R.color.blue, dateTime.toDate());
-                    }
-                }
-            }
+            recolorCalendar();
         }
     }
 
@@ -240,8 +226,29 @@ public class FragmentB extends Fragment {
 
     }
 
-    public void updateList(ArrayList<Event> list) {
-        events = list;
+    public void updateList() {
+        calDroid.getBackgroundForDateTimeMap().clear();
+        getEventsFromDatabase();
+        recolorCalendar();
+    }
+
+    private void recolorCalendar() {
+        if(!events.isEmpty()){
+            for (Event e : events){
+                DateTime dateTime = new DateTime(e.getStartdate());
+                LocalDate today = LocalDate.now();
+                if (importantEvents.contains(e.getInfo())) {
+                    calDroid.setBackgroundResourceForDate(R.color.red, dateTime.toDate());
+                }
+                else if (today.equals(dateTime.toLocalDate())) {
+                    calDroid.setBackgroundResourceForDate(R.color.todaygreen, dateTime.toDate());
+                }
+                else {
+                    calDroid.setBackgroundResourceForDate(R.color.lightturcoise, dateTime.toDate());
+                }
+            }
+        }
+        calDroid.refreshView();
     }
 
 }

@@ -224,7 +224,7 @@ public class FragmentA extends Fragment {
         @Override
         protected void onPostExecute(Object o) {
             refreshAdapter();
-            FragmentB.fragmentB.updateList(events);
+            FragmentB.fragmentB.updateList();
         }
 
         @Override
@@ -276,7 +276,7 @@ public class FragmentA extends Fragment {
             }
         }
         refreshAdapter();
-        FragmentB.fragmentB.updateList(events);
+        FragmentB.fragmentB.updateList();
     }
 
     private void refreshAdapter() {

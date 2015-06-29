@@ -12,7 +12,6 @@ public class Course extends SugarRecord<Course> implements Comparable<Course> {
     private String syllabus_en;
     private String course_code;
     private String course_id;
-    private String course_reg;
     private String course_points;
     private String course_location;
     private String course_language;
@@ -38,14 +37,6 @@ public class Course extends SugarRecord<Course> implements Comparable<Course> {
 
     public void setName_en(String name_en) {
         this.name_en = name_en;
-    }
-
-    public String getCourse_reg() {
-        return course_reg;
-    }
-
-    public void setCourse_reg(String course_reg) {
-        this.course_reg = course_reg;
     }
 
     public String getSyllabus_sv() {
