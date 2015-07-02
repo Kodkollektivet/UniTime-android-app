@@ -9,4 +9,5 @@
     <string name="delete">Delete</string>
     <string name="selected_days_events">Selected days events</string>
     <string name="delete_deletebtn">Delete</string>
+    <string name="todays_events">Todays events</string>
 </resources>

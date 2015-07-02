@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="250dp"
-    android:layout_height="180dp" android:background="@drawable/appwidget_bg">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@drawable/appwidget_bg">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/lightturcoise"
         android:gravity="center"
-        android:text="Todays events"
+        android:background="@color/lightturcoise"
+        android:text="@string/todays_events"
         android:textSize="22sp"
         android:textColor="@color/grey" />
 
@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/widget_listview"
+        android:clickable="false"
         />
 
 
