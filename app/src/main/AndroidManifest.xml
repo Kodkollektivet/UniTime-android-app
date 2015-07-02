@@ -29,6 +29,21 @@
                         <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name="com.jotto.unitime.widget.WidgetProvider" >
+            <intent-filter>
+
+                <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <!-- linking up xml file of appwidget-provider to AppWidgetProvider -->
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/unitime_widget" />
+        </receiver>
+
+        <service
+            android:name="com.jotto.unitime.widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

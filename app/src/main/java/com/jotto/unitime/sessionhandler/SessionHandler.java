@@ -46,6 +46,7 @@ public class SessionHandler {
 
         URL url;
         StringBuilder response = new StringBuilder();
+        BufferedReader br = null;
         try {
             Course[] courseList;
             ObjectMapper mapper = new ObjectMapper();
@@ -71,7 +72,7 @@ public class SessionHandler {
             String line;
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 while ((line=br.readLine()) != null) {
                     response.append(line);
                 }
@@ -82,7 +83,7 @@ public class SessionHandler {
                 return "true";
             }
             else if (responseCode == HttpsURLConnection.HTTP_NOT_ACCEPTABLE) {
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
                 while ((line=br.readLine()) != null) {
                     response.append(line);
                 }
@@ -95,6 +96,10 @@ public class SessionHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            if(br != null) try { br.close(); } catch (Exception fe) {
+                fe.printStackTrace();
+            }
         }
         // Should not be able to reach this state
         return "false";
@@ -103,14 +108,14 @@ public class SessionHandler {
     public void getEventsFromCourse(String courseCode) {
 
         HttpClient httpClient = new DefaultHttpClient();
+        String urlName = ServerConstants.SERVER_REST_URL+ServerConstants.EVENT_PATH;
+        HttpPost request = new HttpPost(urlName);
 
         try {
             Event[] eventList;
-            String urlName = ServerConstants.SERVER_REST_URL+ServerConstants.EVENT_PATH;
+
             ObjectMapper mapper = new ObjectMapper();
             String params = "course=" + courseCode;
-
-            HttpPost request = new HttpPost(urlName);
 
             request.addHeader("User-Agent", "UniTime-Android-Client");
             request.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
@@ -134,6 +139,8 @@ public class SessionHandler {
             }
         } catch (IOException ev) {
             ev.printStackTrace();
+        }finally {
+            request.abort();
         }
 
 
@@ -141,6 +148,7 @@ public class SessionHandler {
 
     public void getDataForAutocomplete() {
 
+        HttpURLConnection conn = null;
         URL url;
         StringBuilder response = new StringBuilder();
         try {
@@ -148,7 +156,7 @@ public class SessionHandler {
             ObjectMapper mapper = new ObjectMapper();
             url = new URL(ServerConstants.SERVER_REST_URL+ServerConstants.COURSE_PATH);
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("GET");
@@ -169,6 +177,10 @@ public class SessionHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
     }
 

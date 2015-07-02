@@ -2,7 +2,10 @@ package com.jotto.unitime.models;
 
 import com.orm.SugarRecord;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 /**
  * Created by otto on 2015-06-19.
@@ -108,6 +111,14 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
 
     @Override
     public int compareTo(Event event) {
-        return LocalDate.parse(this.startdate).compareTo(LocalDate.parse(event.startdate));
+        int value = LocalDate.parse(this.startdate).compareTo(LocalDate.parse(event.startdate));
+        if (value == 0) {
+            DateTime current = new LocalDate(this.startdate).toDateTime(new LocalTime(this.getStarttime()));
+            DateTime compare = new LocalDate(event.startdate).toDateTime(new LocalTime(event.getStarttime()));
+            return current.compareTo(compare);
+        }
+        else {
+            return value;
+        }
     }
 }

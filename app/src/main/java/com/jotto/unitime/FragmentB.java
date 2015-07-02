@@ -173,12 +173,8 @@ public class FragmentB extends Fragment {
         t.commit();
 
         getEventsFromDatabase();
-
-        /*
-        else {
-            new GetCourseInfoTask().execute("1BD105");
-        }*/
     }
+
     private class MyListAdapter extends ArrayAdapter<Event> {
 
 

@@ -4,8 +4,10 @@ package com.jotto.unitime;
  * Created by johanrovala on 18/06/15.
  */
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import com.jotto.unitime.models.CourseDataAC;
 import com.jotto.unitime.models.Event;
 import com.jotto.unitime.models.Settings;
 import com.jotto.unitime.sessionhandler.SessionHandler;
+import com.jotto.unitime.widget.WidgetProvider;
 import com.orm.SugarApp;
 import com.orm.SugarCursorFactory;
 import com.orm.SugarDb;
@@ -39,6 +42,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +58,6 @@ public class FragmentA extends Fragment {
     ArrayList<Event> events;
     EventDateAdapter adapter;
     private Settings settings;
-
     private FragmentActivity myContext;
 
     @Override
@@ -89,7 +92,11 @@ public class FragmentA extends Fragment {
         else if (LocalDate.now().isAfter(LocalDate.parse(settings.getDate()))) {
             new GetHeadinfo().execute();
             new RefreshEvents().execute();
+            settings.setDate(LocalDate.now().toString());
+            settings.save();
+            updateWidget();
         }
+
     }
 
     public void getEventsForCourse(String courseCode) {
@@ -100,6 +107,7 @@ public class FragmentA extends Fragment {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
             events.clear();
+            Collections.sort(retrievedEvents);
             events.addAll(retrievedEvents);
         }
     }
@@ -145,7 +153,7 @@ public class FragmentA extends Fragment {
             roomText.setText(event.getRoom().length() == 0 ? "No room" : event.getRoom());
 
             TextView infoText = (TextView) itemView.findViewById(R.id.event_info);
-            infoText.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo() + "( " + event.getDesc() + " )");
+            infoText.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo() + " (" + event.getDesc() + ")");
 
             TextView timeText = (TextView) itemView.findViewById(R.id.event_time);
             timeText.setText(event.getStarttime() + "-" + event.getEndtime());
@@ -284,5 +292,11 @@ public class FragmentA extends Fragment {
         adapter.clear();
         adapter.addAll(events);
         adapter.notifyDataSetChanged();
+    }
+
+    private void updateWidget() {
+        Intent intent = new Intent(myContext, WidgetProvider.class);
+        intent.setAction(WidgetProvider.UPDATE_ACTION);
+        myContext.sendBroadcast(intent);
     }
 }

@@ -15,7 +15,7 @@ public class MyPageAdapter extends FragmentPagerAdapter{
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
-            return "Course List";
+            return "Courses";
         }
         else if (position == 1) {
             return "Schedule";

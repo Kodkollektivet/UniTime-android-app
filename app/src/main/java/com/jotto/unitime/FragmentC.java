@@ -124,24 +124,24 @@ public class FragmentC extends Fragment {
                 }
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (selectedCourse == null) {
-                    selectedCourse = courses.get(position);
-                    adapter.notifyDataSetChanged();
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (selectedCourse == null) {
+                        selectedCourse = courses.get(position);
+                        adapter.notifyDataSetChanged();
+                    } else if (selectedCourse == courses.get(position)) {
+                        selectedCourse = null;
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        selectedCourse = courses.get(position);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
-                else if(selectedCourse == courses.get(position)) {
-                    selectedCourse = null;
-                    adapter.notifyDataSetChanged();
-                }
-                else {
-                    selectedCourse = courses.get(position);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
-    }
+
+            });
+        }
 
     private void populateListView() {
         listView = (ListView) myContext.findViewById(R.id.listView);
