@@ -42,6 +42,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -87,6 +88,7 @@ public class FragmentB extends Fragment {
         final View inflatedView = layoutInflater.inflate(R.layout.calendar_popup, null,false);
 
         ListView listView = (ListView)inflatedView.findViewById(R.id.popup_listview);
+        Collections.sort(currentDateList);
         MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
         listView.setAdapter(myListAdapter);
 
