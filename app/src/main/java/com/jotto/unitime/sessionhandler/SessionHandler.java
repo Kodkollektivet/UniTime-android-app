@@ -134,7 +134,6 @@ public class SessionHandler {
 
             for (Event e : eventList) {
                 e.setCourse_code(courseCode.toUpperCase());
-                e.setCourse_name(course.getName_sv());
                 e.save();
             }
         } catch (IOException ev) {
