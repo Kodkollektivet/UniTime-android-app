@@ -18,14 +18,14 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
     private String room;
     private String teacher;
     private String course_code;
-    private String course_name;
+    private String name_en;
+    private String name_sv;
     private String desc;
 
     public Event() {
     }
 
-    public Event(String startdate, String starttime, String endtime, String info, String room,
-                 String teacher, String course_code, String course_name, String desc) {
+    public Event(String startdate, String starttime, String endtime, String info, String room, String teacher, String course_code, String name_en, String name_sv, String desc) {
         this.startdate = startdate;
         this.starttime = starttime;
         this.endtime = endtime;
@@ -33,7 +33,8 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
         this.room = room;
         this.teacher = teacher;
         this.course_code = course_code;
-        this.course_name = course_name;
+        this.name_en = name_en;
+        this.name_sv = name_sv;
         this.desc = desc;
     }
 
@@ -61,14 +62,6 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
         this.endtime = endtime;
     }
 
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
-
     public String getInfo() {
         return info;
     }
@@ -85,6 +78,14 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
         this.room = room;
     }
 
+    public String getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
+
     public String getCourse_code() {
         return course_code;
     }
@@ -93,12 +94,20 @@ public class Event extends SugarRecord<Event> implements Comparable<Event> {
         this.course_code = course_code;
     }
 
-    public String getCourse_name() {
-        return course_name;
+    public String getName_en() {
+        return name_en;
     }
 
-    public void setCourse_name(String course_name) {
-        this.course_name = course_name;
+    public void setName_en(String name_en) {
+        this.name_en = name_en;
+    }
+
+    public String getName_sv() {
+        return name_sv;
+    }
+
+    public void setName_sv(String name_sv) {
+        this.name_sv = name_sv;
     }
 
     public String getDesc() {
