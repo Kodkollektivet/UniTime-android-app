@@ -71,7 +71,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
 
         //Log.d("Loading", widgetList.get(position));
         Event event = widgetList.get(position);
-        remoteView.setTextViewText(R.id.event_course_widget, event.getCourse_name());
+        remoteView.setTextViewText(R.id.event_course_widget, event.getName_sv());
         remoteView.setTextViewText(R.id.event_room_widget, event.getRoom());
         remoteView.setTextViewText(R.id.event_info_widget, event.getInfo());
         remoteView.setTextViewText(R.id.event_time_widget, event.getStarttime() + "-" + event.getEndtime());
