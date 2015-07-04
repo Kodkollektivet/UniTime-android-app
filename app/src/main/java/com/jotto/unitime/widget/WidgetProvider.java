@@ -1,5 +1,6 @@
 package com.jotto.unitime.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
+import com.jotto.unitime.MainActivity;
 import com.jotto.unitime.R;
 import com.jotto.unitime.widget.WidgetService;
 
@@ -62,6 +64,13 @@ public class WidgetProvider extends AppWidgetProvider {
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
             rv.setRemoteAdapter(R.id.widget_listview, intent);
+            rv.setEmptyView(R.layout.event_view_widget, R.layout.empty_event_view_widget);
+
+            //set on click on view open app activity
+            Intent configIntent = new Intent(context, com.jotto.unitime.MainActivity.class);
+
+            PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, 0);
+            rv.setOnClickPendingIntent(R.id.widget_layout, configPendingIntent);
 
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_listview);
             appWidgetManager.updateAppWidget(appWidgetId, rv);

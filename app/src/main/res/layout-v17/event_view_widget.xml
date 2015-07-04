@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="60dp"
-    android:id="@+id/event_view" android:focusable="false" android:focusableInTouchMode="false"
-    android:clickable="false">
+    android:id="@+id/event_view" >
 
     <ImageView
         android:layout_width="wrap_content"
@@ -17,10 +16,8 @@
         android:minHeight="20dp"
         android:minWidth="20dp"
         android:adjustViewBounds="true"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:layout_marginLeft="0dp"
-        android:layout_marginStart="-10dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="0dp" />
 
     <TextView
@@ -34,8 +31,6 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="6dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:layout_marginTop="4dp"
         android:layout_marginLeft="0dp"
         android:layout_marginStart="-5dp"
@@ -54,8 +49,6 @@
         android:text="Room"
         android:id="@+id/event_room_widget"
         android:textSize="14sp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:layout_alignRight="@+id/event_time_widget"
         android:layout_alignEnd="@+id/event_time_widget"
         android:layout_alignBottom="@+id/event_info_widget"
@@ -68,8 +61,6 @@
         android:text="Info"
         android:id="@+id/event_info_widget"
         android:textSize="14sp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="15dp"
         android:layout_marginRight="15dp"
@@ -90,8 +81,6 @@
         android:layout_alignTop="@+id/event_course_widget"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:layout_marginRight="5dp"
         android:textColor="@color/grey" />
 
