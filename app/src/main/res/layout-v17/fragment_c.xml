@@ -17,59 +17,14 @@
         android:paddingStart="20dp"
         android:singleLine="true" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/grid_for_btns"
-        android:layout_below="@+id/course_code_text"
-        android:layout_marginTop="6dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:id="@+id/get_course_btn"
-            android:text="@string/add_course"
-            android:background="@drawable/button"
-            android:textColor="@color/white"
-            android:focusable="false"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"/>
-        <Button
-            android:layout_height="match_parent"
-            android:text="@string/delete_deletebtn"
-            android:id="@+id/delete_course_btn"
-            android:textColor="@color/white"
-            android:background="@drawable/button1"
-            android:focusable="false"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/course_header"
-        android:layout_below="@+id/grid_for_btns"
-        android:background="@color/lightturcoise"
-        android:text="Added courses"
-        android:gravity="center"
-        android:textColor="@color/grey"
-        android:textSize="25sp"
-        android:layout_marginTop="10dp" />
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/course_header"
+        android:layout_below="@+id/course_code_text"
         android:id="@+id/listView"
         android:childDivider="#FFBDBDBD"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>
 

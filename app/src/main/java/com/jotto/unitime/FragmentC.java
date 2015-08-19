@@ -83,22 +83,6 @@ public class FragmentC extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
-        courseBtn = (Button) myContext.findViewById(R.id.get_course_btn);
-        courseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                courseBtn.setEnabled(false);
-                String courseCode = editText.getText().toString();
-                if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
-                    new GetCourseTask().execute(courseCode);
-                } else {
-                    Toast.makeText(myContext, "Course already added!", Toast.LENGTH_SHORT).show();
-                    courseBtn.setEnabled(true);
-                }
-                editText.setText("");
-                adapter.notifyDataSetChanged();
-            }
-        });
 
         editText.addTextChangedListener(new TextWatcher() {
 
@@ -128,21 +112,6 @@ public class FragmentC extends Fragment {
         getCoursesFromDatabase();
         populateListView();
 
-        final Button deleteBtn = (Button) myContext.findViewById(R.id.delete_course_btn);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedCourse != null) {
-                    FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
-                    selectedCourse.delete();
-                    courses.remove(selectedCourse);
-                    adapter.notifyDataSetChanged();
-                    //adapter.oldView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
-                } else {
-                    Toast.makeText(myContext, "Course is null!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
             /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
