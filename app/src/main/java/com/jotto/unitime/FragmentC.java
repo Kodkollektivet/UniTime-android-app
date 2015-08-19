@@ -12,6 +12,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -26,6 +28,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -33,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jotto.unitime.models.Course;
+import com.jotto.unitime.models.CourseDataAC;
 import com.jotto.unitime.models.Event;
 import com.jotto.unitime.sessionhandler.SessionHandler;
 import com.orm.StringUtil;
@@ -59,7 +64,7 @@ public class FragmentC extends Fragment {
     private ListView listView;
     private CourseAdapter adapter;
     private FragmentActivity myContext;
-    private ArrayList<Course> courses;
+    private ArrayList<CourseDataAC> courses;
     private Button courseBtn;
     private Course selectedCourse;
 
@@ -94,7 +99,21 @@ public class FragmentC extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        editText.setOnKeyListener(new View.OnKeyListener() {
+
+        editText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                adapter.getFilter().filter(s.toString());
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
+        /*editText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     courseBtn.performClick();
@@ -104,7 +123,7 @@ public class FragmentC extends Fragment {
                 }
                 return false;
             }
-        });
+        });*/
         courses = new ArrayList<>();
         getCoursesFromDatabase();
         populateListView();
@@ -125,7 +144,7 @@ public class FragmentC extends Fragment {
             }
         });
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if (selectedCourse == null) {
@@ -140,13 +159,14 @@ public class FragmentC extends Fragment {
                     }
                 }
 
-            });
+            });*/
         }
 
     private void populateListView() {
         listView = (ListView) myContext.findViewById(R.id.listView);
         adapter = new CourseAdapter(courses);
         listView.setAdapter(adapter);
+        listView.setTextFilterEnabled(true);
         //listView.setChildDivider(getResources().getDrawable(R.drawable.child_divider));
     }
 
@@ -184,23 +204,38 @@ public class FragmentC extends Fragment {
 
     private void getCoursesFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
-            List<Course> retrievedEvents = Course.listAll(Course.class);
+            List<CourseDataAC> retrievedEvents = CourseDataAC.listAll(CourseDataAC.class);
             courses.clear();
             courses.addAll(retrievedEvents);
         }
     }
 
-    private class CourseAdapter extends ArrayAdapter<Course> {
+    private class CourseAdapter extends ArrayAdapter<CourseDataAC> implements Filterable {
 
-        public CourseAdapter(ArrayList<Course> list) {
+        private ArrayList<CourseDataAC> originalList;
+        private ArrayList<CourseDataAC> courseDataACList;
+        private CourseFilter filter;
+        public CourseAdapter(ArrayList<CourseDataAC> list) {
             super(myContext, R.layout.course_view, list);
+            this.courseDataACList = new ArrayList<CourseDataAC>();
+            this.courseDataACList.addAll(courses);
+            this.originalList = new ArrayList<CourseDataAC>();
+            this.originalList.addAll(courseDataACList);
+        }
+
+        @Override
+        public Filter getFilter() {
+            if (filter == null){
+                filter  = new CourseFilter();
+            }
+            return filter;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Make sure we have a view to work with (may have been given null)
 
-            Course course = this.getItem(position);
+            CourseDataAC course = this.getItem(position);
             View itemView = convertView;
             if (itemView == null) {
                 LayoutInflater inflater = (LayoutInflater) myContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -217,15 +252,55 @@ public class FragmentC extends Fragment {
             codeText.setText(course.getCourse_code());
 
             TextView semesterText = (TextView) itemView.findViewById(R.id.course_semester);
-            semesterText.setText(course.getSemester() + "-" + course.getYear());
+            semesterText.setText(course.getName_en());
 
-            if (course == selectedCourse) {
-                itemView.setBackgroundColor(getResources().getColor(R.color.darkerlightgrey));
-            }
-            else {
-                itemView.setBackgroundColor(getResources().getColor(R.color.caldroid_transparent));
-            }
             return itemView;
+        }
+
+        private class CourseFilter extends Filter
+        {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                FilterResults result = new FilterResults();
+                if(constraint != null && constraint.toString().length() > 0)
+                {
+                    ArrayList<CourseDataAC> filteredItems = new ArrayList<CourseDataAC>();
+
+                    for (final CourseDataAC g : originalList) {
+                        if (g.getName_en().toLowerCase().contains(constraint.toString().toLowerCase()) ||
+                                g.getName_sv().toLowerCase().contains(constraint.toString().toLowerCase()) ||
+                                g.getCourse_code().toLowerCase().contains(constraint.toString().toLowerCase()))
+                            filteredItems.add(g);
+                    }
+                    result.count = filteredItems.size();
+                    result.values = filteredItems;
+                }
+                else
+                {
+                    synchronized(this)
+                    {
+                        result.values = originalList;
+                        result.count = originalList.size();
+                    }
+                }
+                return result;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint,
+                                          FilterResults results) {
+                if (results.count > 0) {
+                    courses.clear();
+                    courses.addAll((ArrayList<CourseDataAC>) results.values);
+                    adapter.notifyDataSetChanged();
+                }
+                else if (results.count == 0){
+                    adapter.notifyDataSetInvalidated();
+                }
+            }
         }
 
     }
