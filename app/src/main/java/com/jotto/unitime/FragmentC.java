@@ -3,6 +3,8 @@ package com.jotto.unitime;
 /**
  * Created by johanrovala on 18/06/15.
  */
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -53,6 +55,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,11 +69,17 @@ public class FragmentC extends Fragment {
     private FragmentActivity myContext;
     private ArrayList<CourseDataAC> courses;
     private Button courseBtn;
-    private Course selectedCourse;
+    private CourseDataAC selectedCourse;
+    private PopupWindow popupWindowAddCourse;
+    private Button okButton;
+    private Button noButton;
+    View longClickedView;
+    View inflatedView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_c, container, false);
+
     }
 
     @Override
@@ -83,6 +92,8 @@ public class FragmentC extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
+        final int translateFrom = getResources().getColor(R.color.white);
+        final int translateTo = getResources().getColor(R.color.blue);
 
         editText.addTextChangedListener(new TextWatcher() {
 
@@ -129,6 +140,30 @@ public class FragmentC extends Fragment {
                 }
 
             });*/
+
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
+                    final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), translateFrom, translateTo);
+                    longClickedView = view;
+                    colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animator) {
+                            view.setBackgroundColor((Integer) animator.getAnimatedValue());
+                        }
+
+                    });
+                    colorAnimation.setDuration(1000);
+                    colorAnimation.start();
+
+                    selectedCourse = courses.get(position);
+                    adapter.notifyDataSetChanged();
+                    onShowPopup(view);
+
+                    return false;
+                }
+            });
         }
 
     private void populateListView() {
@@ -151,7 +186,6 @@ public class FragmentC extends Fragment {
             else {
                 Toast.makeText(myContext, (String) o[0], Toast.LENGTH_SHORT).show();
             }
-            courseBtn.setEnabled(true);
         }
 
         @Override
@@ -273,5 +307,55 @@ public class FragmentC extends Fragment {
         }
 
     }
+    /*
+    PopupWindow to show information of events.
+     */
+    public void onShowPopup(View v) {
+
+        LayoutInflater layoutInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // inflate the custom popup layout
+        inflatedView = layoutInflater.inflate(R.layout.add_course_popup, null,false);
+
+        // get device size
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        final Point size = new Point();
+        display.getSize(size);
+
+
+        // set height depends on the device size
+        popupWindowAddCourse = new PopupWindow(inflatedView, size.x - 100 ,size.y / 4, true );
+        // set a background drawable with rounders corners
+        popupWindowAddCourse.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background_textview));
+        // make it focusable to show the keyboard to enter in `EditText`
+        popupWindowAddCourse.setFocusable(true);
+        // make it outside touchable to dismiss the popup window
+        popupWindowAddCourse.setOutsideTouchable(false);
+
+        popupWindowAddCourse.setAnimationStyle(R.style.PopupAnimation);
+
+        // show the popup at bottom of the screen and set some margin at bottom ie,
+        popupWindowAddCourse.showAtLocation(v, Gravity.CENTER, 0, 100);
+
+        okButton = (Button) inflatedView.findViewById(R.id.doItButton);
+
+        okButton.setOnClickListener(new AdapterView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String courseCode = selectedCourse.getCourse_code().toUpperCase();
+                popupWindowAddCourse.dismiss();
+                longClickedView.setBackgroundResource(R.color.white);
+                System.out.println(StringUtil.toSQLName("course_code"));
+                if (CourseDataAC.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
+                    new GetCourseTask().execute(courseCode);
+                } else {
+                    Toast.makeText(myContext, "Course is already added!", Toast.LENGTH_SHORT).show();
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
 
 }

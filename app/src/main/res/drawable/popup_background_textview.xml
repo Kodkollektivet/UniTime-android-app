@@ -2,7 +2,7 @@
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:drawable="@android:drawable/dialog_holo_light_frame" />
-    <item android:drawable="@color/lightturcoise" />
+    <item android:drawable="@color/lightgrey" />
     <item android:drawable="@drawable/popup_background"
         android:top="40dp"/>
 </layer-list>

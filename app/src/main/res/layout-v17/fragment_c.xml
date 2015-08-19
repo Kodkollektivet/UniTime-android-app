@@ -23,8 +23,11 @@
         android:layout_below="@+id/course_code_text"
         android:id="@+id/listView"
         android:childDivider="#FFBDBDBD"
-        android:dividerHeight="1dp"
-        android:layout_marginTop="10dp" />
+        android:background="@color/white"
+        android:dividerHeight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
 
 </RelativeLayout>
 

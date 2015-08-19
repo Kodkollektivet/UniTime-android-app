@@ -24,6 +24,7 @@
         android:id="@+id/grid_for_btns"
         android:layout_below="@+id/course_code_text"
         android:layout_marginTop="6dp"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:weightSum="2">
 
