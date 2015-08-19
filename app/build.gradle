@@ -17,6 +17,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets{
+        main {
+            java {
+                srcDir 'src/java'
+            }
+            resources {
+                srcDir 'src/res'
+            }
+        }
+    }
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
