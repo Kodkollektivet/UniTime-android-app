@@ -191,16 +191,16 @@ public class FragmentA extends Fragment {
             else if (localDate.equals(LocalDate.now().plusDays(1))) {
                 dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
                 dateText.setText("Tomorrow");
-                headerView.setBackgroundColor(getResources().getColor(R.color.lightturcoise));
+                headerView.setBackgroundColor(getResources().getColor(R.color.white));
                 dayText.setTextColor(getResources().getColor(R.color.grey));
                 dateText.setTextColor((getResources().getColor(R.color.grey)));
             }
             else {
                 dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
                 dateText.setText(dtf.print(localDate));
-                headerView.setBackgroundColor(getResources().getColor(R.color.lightturcoise));
-                dayText.setTextColor(getResources().getColor(R.color.grey));
-                dateText.setTextColor((getResources().getColor(R.color.grey)));
+                headerView.setBackgroundColor(getResources().getColor(R.color.white));
+                dayText.setTextColor(getResources().getColor(R.color.testBlue));
+                dateText.setTextColor((getResources().getColor(R.color.testBlue)));
             }
             return headerView;
         }

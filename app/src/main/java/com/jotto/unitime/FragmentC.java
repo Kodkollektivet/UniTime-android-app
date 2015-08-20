@@ -93,7 +93,7 @@ public class FragmentC extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
         final int translateFrom = getResources().getColor(R.color.white);
-        final int translateTo = getResources().getColor(R.color.blue);
+        final int translateTo = getResources().getColor(R.color.fadeInColor);
 
         editText.addTextChangedListener(new TextWatcher() {
 
@@ -331,6 +331,13 @@ public class FragmentC extends Fragment {
         popupWindowAddCourse.setFocusable(true);
         // make it outside touchable to dismiss the popup window
         popupWindowAddCourse.setOutsideTouchable(false);
+        // reset the view background color on outside touch
+        popupWindowAddCourse.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                longClickedView.setBackgroundResource(R.color.white);
+            }
+        });
 
         popupWindowAddCourse.setAnimationStyle(R.style.PopupAnimation);
 
@@ -338,6 +345,7 @@ public class FragmentC extends Fragment {
         popupWindowAddCourse.showAtLocation(v, Gravity.CENTER, 0, 100);
 
         okButton = (Button) inflatedView.findViewById(R.id.doItButton);
+        noButton = (Button) inflatedView.findViewById(R.id.noThanskButton);
 
         okButton.setOnClickListener(new AdapterView.OnClickListener() {
             @Override
@@ -352,6 +360,13 @@ public class FragmentC extends Fragment {
                     Toast.makeText(myContext, "Course is already added!", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
+            }
+        });
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                longClickedView.setBackgroundResource(R.color.white);
+                popupWindowAddCourse.dismiss();
             }
         });
 

@@ -22,6 +22,13 @@
     <item name="grey" type="color">#FF565656</item>
     <item name="dividergrey" type="color">#ffeeeeee</item>
     <item name="todayblue" type="color">#FF7E88A4</item>
+    <item name="testBlue" type="color">#27A6EB</item>
+    <item name="testBlueHeader" type="color">#44BDFF</item>
+    <item name="testBackgroundBlue" type="color">#f0f0f0</item>
+    <item name="fadeInColor" type="color">#A7DBDB</item>
+    <item name="calendarNormal" type="color">#e8b71a</item>
+    <item name="calendarUrgent" type="color">#DB3340</item>
+
 
     <integer-array name="androidcolors">
         <item>@color/blue</item>

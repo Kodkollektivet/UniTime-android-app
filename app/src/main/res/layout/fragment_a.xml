@@ -2,18 +2,18 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent" android:layout_height="match_parent"
-android:background="@android:color/transparent">
+android:background="@android:color/white">
 
 <ExpandableListView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/listView2"
-    android:dividerHeight="1dp"
-    android:divider="@color/dividergrey"
-    android:childDivider="@color/dividergrey"
+    android:dividerHeight="0dp"
+    android:divider="@color/testBackgroundBlue"
+    android:childDivider="@color/testBackgroundBlue"
     android:footerDividersEnabled="false"
     android:headerDividersEnabled="false"
-    android:groupIndicator="@null"/>
+    android:groupIndicator="@null" />
 
 
 </RelativeLayout>

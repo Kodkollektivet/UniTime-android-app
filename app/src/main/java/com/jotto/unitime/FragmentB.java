@@ -18,14 +18,18 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,8 @@ import com.roomorama.caldroid.CaldroidListener;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,6 +51,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class FragmentB extends Fragment {
@@ -57,10 +64,12 @@ public class FragmentB extends Fragment {
     private Date date1;
     private Date clickedDate;
     private PopupWindow popupWindow;
+    private TextView selectedDateTextView;
     ArrayList<Event> events;
     ArrayAdapter<Event> adapter;
     private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen"));
     CaldroidFragment calDroid;
+    FrameLayout layout_MainMenu;
 
     // i dont know how to describe what this does yet
     @Override
@@ -92,6 +101,7 @@ public class FragmentB extends Fragment {
         MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
         listView.setAdapter(myListAdapter);
 
+
         // get device size
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         final Point size = new Point();
@@ -102,6 +112,12 @@ public class FragmentB extends Fragment {
         popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 2, true );
         // set a background drawable with rounders corners
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background_textview));
+        // get the date of the selected date
+        LocalDate selectedLocalDate = new LocalDate(clickedDate);
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE d/M").withLocale(Locale.US);
+        selectedDateTextView = (TextView) inflatedView.findViewById(R.id.popup_textview);
+        selectedDateTextView.setText(dtf.print(selectedLocalDate));
+
         // make it focusable to show the keyboard to enter in `EditText`
         popupWindow.setFocusable(true);
         // make it outside touchable to dismiss the popup window
@@ -109,8 +125,19 @@ public class FragmentB extends Fragment {
 
         popupWindow.setAnimationStyle(R.style.PopupAnimation);
 
+
+        // On action events
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                layout_MainMenu.getForeground().setAlpha(0);
+            }
+        });
+
+
         // show the popup at bottom of the screen and set some margin at bottom ie,
         popupWindow.showAtLocation(v, Gravity.CENTER, 0, 100);
+        layout_MainMenu.getForeground().setAlpha(150);
 
     }
 
@@ -137,6 +164,7 @@ public class FragmentB extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_b, container, false);
+
     }
 
     private void getDate(Date date){
@@ -146,6 +174,8 @@ public class FragmentB extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        layout_MainMenu = (FrameLayout) myContext.findViewById(R.id.relative_layout_b);
+        layout_MainMenu.getForeground().setAlpha(0);
 
         fragmentB = this;
         calDroid = new CaldroidFragment();
@@ -156,6 +186,7 @@ public class FragmentB extends Fragment {
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY);
+        args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidUnitime);
         calDroid.setArguments(args);
         
         // testing cell touch
@@ -236,13 +267,10 @@ public class FragmentB extends Fragment {
                 DateTime dateTime = new DateTime(e.getStartdate());
                 LocalDate today = LocalDate.now();
                 if (importantEvents.contains(e.getInfo())) {
-                    calDroid.setBackgroundResourceForDate(R.color.red, dateTime.toDate());
-                }
-                else if (today.equals(dateTime.toLocalDate())) {
-                    calDroid.setBackgroundResourceForDate(R.color.todaygreen, dateTime.toDate());
+                    calDroid.setBackgroundResourceForDate(R.color.calendarUrgent, dateTime.toDate());
                 }
                 else {
-                    calDroid.setBackgroundResourceForDate(R.color.lightturcoise, dateTime.toDate());
+                    calDroid.setBackgroundResourceForDate(R.color.calendarNormal, dateTime.toDate());
                 }
             }
         }

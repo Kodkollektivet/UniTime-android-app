@@ -9,8 +9,8 @@
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
 
-        <item name="android:background">@color/darkturcoise</item>
-        <item name="background">@color/darkturcoise</item>
+        <item name="android:background">@color/testBlue</item>
+        <item name="background">@color/testBlue</item>
     </style>
 
     <style name="CaldroidDefaultCustom" parent="CaldroidDefault">
@@ -18,7 +18,7 @@
     </style>
 
     <style name="CaldroidDefaultCustomArrowButton" parent="CaldroidDefaultArrowButton">
-        <item name="android:background">@color/darkturcoise</item>
+        <item name="android:background">@color/testBlue</item>
     </style>
 
     <style name="PopupAnimation" parent="android:Animation" mce_bogus="1">

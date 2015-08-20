@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="45dp"
-    android:background="@color/lightturcoise"
+    android:background="@color/testBlueHeader"
     android:id="@+id/header_view"
     android:minHeight="100dp"
     android:focusableInTouchMode="false"
@@ -35,4 +35,9 @@
         android:layout_marginStart="300dp"
         android:focusable="false"
         android:focusableInTouchMode="false"/>
+
+    <View android:layout_width="fill_parent"
+        android:layout_height="3dip"
+        android:background="@color/testBackgroundBlue" />
+
 </RelativeLayout>
