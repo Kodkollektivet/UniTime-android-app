@@ -13,6 +13,8 @@ import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 public class MyPageAdapter extends FragmentPagerAdapter implements IconTabProvider {
 
     private int tabIcons[] = {R.mipmap.ic_action_search, R.mipmap.ic_action_view_as_list, R.mipmap.ic_action_event};
+    private int currentPageSelected = 0;
+
 
     public MyPageAdapter(FragmentManager fm) {
         super(fm);

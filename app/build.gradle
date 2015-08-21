@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+        }
     }
     sourceSets{
         main {
@@ -52,4 +55,5 @@ dependencies {
     compile 'com.roomorama:caldroid:2.0.0'
     compile 'com.jaysoyer.lib:advanced-adapters:15.3'
     compile 'com.github.markushi:circlebutton:1.1'
+    compile 'com.akexorcist:RoundCornerProgressBar:1.2.2'
 }
