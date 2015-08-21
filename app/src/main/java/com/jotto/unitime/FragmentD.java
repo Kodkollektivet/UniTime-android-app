@@ -134,7 +134,7 @@ public class FragmentD extends Fragment {
             }
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-            imageView.setImageResource(R.drawable.ic_action_view_as_list);
+            imageView.setImageResource(R.drawable.ic_list_icon);
 
             TextView nameText = (TextView) itemView.findViewById(R.id.course_name);
             nameText.setText(course.getName_sv());

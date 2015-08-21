@@ -227,7 +227,7 @@ public class FragmentB extends Fragment {
             }
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-            imageView.setImageResource(R.drawable.ic_action_view_as_list);
+            imageView.setImageResource(R.drawable.ic_list_icon);
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
             teacherText.setText(currentEvent.getTeacher().length() == 0 ? "No teacher" : currentEvent.getTeacher());

@@ -144,7 +144,7 @@ public class FragmentA extends Fragment {
             Event event = getChild(groupPosition, childPosition);
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-            imageView.setImageResource(R.drawable.ic_action_view_as_list);
+            imageView.setImageResource(R.drawable.ic_list_icon);
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
             teacherText.setText(event.getTeacher().length() == 0 ? "No teacher" : event.getTeacher());

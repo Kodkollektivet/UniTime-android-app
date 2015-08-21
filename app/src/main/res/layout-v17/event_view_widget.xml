@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/ic_action_view_as_list"
+        android:src="@drawable/ic_list_icon"
         android:maxHeight="60dp"
         android:maxWidth="60dp"
         android:minHeight="20dp"
