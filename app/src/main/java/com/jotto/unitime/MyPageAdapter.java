@@ -12,9 +12,7 @@ import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
  */
 public class MyPageAdapter extends FragmentPagerAdapter implements IconTabProvider {
 
-    private int tabIcons[] = {R.mipmap.ic_action_search, R.mipmap.ic_action_view_as_list, R.mipmap.ic_action_event};
-    private int currentPageSelected = 0;
-
+    private int tabIcons[] = {R.mipmap.ic_action_search, R.mipmap.ic_action_view_as_list, R.mipmap.ic_action_event, R.mipmap.ic_action_person};
 
     public MyPageAdapter(FragmentManager fm) {
         super(fm);
@@ -22,7 +20,7 @@ public class MyPageAdapter extends FragmentPagerAdapter implements IconTabProvid
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
     @Override
     public Fragment getItem(int position) {
@@ -32,8 +30,11 @@ public class MyPageAdapter extends FragmentPagerAdapter implements IconTabProvid
         else if (position == 1) {
             return new FragmentA();
         }
-        else {
+        else if (position == 2){
             return new FragmentB();
+        }
+        else {
+            return new FragmentD();
         }
     }
 

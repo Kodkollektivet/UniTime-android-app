@@ -182,6 +182,7 @@ public class FragmentC extends Fragment {
                 getCoursesFromDatabase();
                 adapter.notifyDataSetChanged();
                 FragmentA.fragmentA.getEventsForCourse((String) o[1]);
+                FragmentD.fragmentD.refreshAdapter();
             }
             else {
                 Toast.makeText(myContext, (String) o[0], Toast.LENGTH_SHORT).show();

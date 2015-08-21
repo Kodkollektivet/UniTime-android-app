@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
         tabs.setIndicatorColor(Color.argb(-17, 40, 171, 227));
         tabs.setUnderlineColor(Color.argb(-17, 40, 171, 227));
         tabs.setViewPager(pager);
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(4);
         pager.setCurrentItem(1);
     }
 
