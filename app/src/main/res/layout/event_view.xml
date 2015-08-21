@@ -78,7 +78,10 @@
         android:focusableInTouchMode="false"
         android:layout_alignBottom="@+id/event_teacher"
         android:layout_alignRight="@+id/event_time"
-        android:layout_alignEnd="@+id/event_time" />
+        android:layout_alignEnd="@+id/event_time"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:maxWidth="70dp" />
 
     <TextView
         android:layout_width="fill_parent"

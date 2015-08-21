@@ -31,10 +31,11 @@
         android:layout_centerVertical="true"
         android:textColor="@color/grey"
         android:textSize="20sp"
-        android:layout_marginLeft="300dp"
-        android:layout_marginStart="300dp"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp" />
 
     <View android:layout_width="fill_parent"
         android:layout_height="3dip"

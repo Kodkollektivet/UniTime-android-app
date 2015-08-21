@@ -178,25 +178,27 @@ public class FragmentA extends Fragment {
             LocalDate localDate = getGroup(groupPosition);
 
             //Fill view with date data
-            DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE").withLocale(Locale.US);
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE - d/M").withLocale(Locale.US);
+            DateTimeFormatter dtf2 = DateTimeFormat.forPattern(" - d/M").withLocale(Locale.US);
+            DateTimeFormatter dtfWeek = DateTimeFormat.forPattern("'Week 'w").withLocale(Locale.US);
             TextView dateText = (TextView) headerView.findViewById(R.id.event_date);
             TextView dayText = (TextView) headerView.findViewById(R.id.event_date_day);
             if (localDate.equals(LocalDate.now())) {
-                dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
-                dateText.setText("Today");
+                dayText.setText(dtfWeek.print(localDate));
+                dateText.setText("Today" + dtf2.print(localDate));
                 headerView.setBackgroundColor(getResources().getColor(R.color.todaygreen));
                 dayText.setTextColor(getResources().getColor(R.color.grey));
                 dateText.setTextColor((getResources().getColor(R.color.grey)));
             }
             else if (localDate.equals(LocalDate.now().plusDays(1))) {
-                dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
-                dateText.setText("Tomorrow");
+                dayText.setText(dtfWeek.print(localDate));
+                dateText.setText("Tomorrow" + dtf2.print(localDate));
                 headerView.setBackgroundColor(getResources().getColor(R.color.white));
                 dayText.setTextColor(getResources().getColor(R.color.grey));
                 dateText.setTextColor((getResources().getColor(R.color.grey)));
             }
             else {
-                dayText.setText(localDate.getDayOfMonth() + "/" + localDate.getMonthOfYear());
+                dayText.setText(dtfWeek.print(localDate));
                 dateText.setText(dtf.print(localDate));
                 headerView.setBackgroundColor(getResources().getColor(R.color.white));
                 dayText.setTextColor(getResources().getColor(R.color.testBlue));
