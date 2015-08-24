@@ -6,8 +6,11 @@ package com.jotto.unitime;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -68,12 +71,8 @@ public class FragmentC extends Fragment {
     public static FragmentC fragmentC;
     private FragmentActivity myContext;
     private ArrayList<CourseDataAC> courses;
-    private ArrayList<CourseDataAC> originalList = new ArrayList<CourseDataAC>();
-    private Button courseBtn;
+    private ArrayList<CourseDataAC> originalList = new ArrayList<>();
     private CourseDataAC selectedCourse;
-    private PopupWindow popupWindowAddCourse;
-    private Button okButton;
-    private Button noButton;
     View longClickedView;
     View inflatedView;
     Network network = new Network();
@@ -111,38 +110,10 @@ public class FragmentC extends Fragment {
 
             }
         });
-        /*editText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    courseBtn.performClick();
-                    InputMethodManager imm = (InputMethodManager) myContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                    return true;
-                }
-                return false;
-            }
-        });*/
+
         courses = new ArrayList<>();
         getCoursesFromDatabase();
         populateListView();
-
-
-            /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (selectedCourse == null) {
-                        selectedCourse = courses.get(position);
-                        adapter.notifyDataSetChanged();
-                    } else if (selectedCourse == courses.get(position)) {
-                        selectedCourse = null;
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        selectedCourse = courses.get(position);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-
-            });*/
 
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
@@ -162,7 +133,7 @@ public class FragmentC extends Fragment {
 
                     selectedCourse = courses.get(position);
                     adapter.notifyDataSetChanged();
-                    onShowPopup(view);
+                    onShowDialog();
 
                     return false;
                 }
@@ -174,7 +145,6 @@ public class FragmentC extends Fragment {
         adapter = new CourseAdapter(courses);
         listView.setAdapter(adapter);
         listView.setTextFilterEnabled(true);
-        //listView.setChildDivider(getResources().getDrawable(R.drawable.child_divider));
     }
 
     private class GetCourseTask extends AsyncTask<String, Object[], Object[]> {
@@ -312,55 +282,26 @@ public class FragmentC extends Fragment {
     /*
     PopupWindow to show information of events.
      */
-    public void onShowPopup(View v) {
+    public void onShowDialog() {
 
         LayoutInflater layoutInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // inflate the custom popup layout
         inflatedView = layoutInflater.inflate(R.layout.add_course_popup, null,false);
 
-        // get device size
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        final Point size = new Point();
-        display.getSize(size);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-
-        // set height depends on the device size
-        popupWindowAddCourse = new PopupWindow(inflatedView, size.x - 100 ,size.y / 4, true );
-        // set a background drawable with rounders corners
-        popupWindowAddCourse.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background_textview));
-        // make it focusable to show the keyboard to enter in `EditText`
-        popupWindowAddCourse.setFocusable(true);
-        // make it outside touchable to dismiss the popup window
-        popupWindowAddCourse.setOutsideTouchable(false);
-        // reset the view background color on outside touch
-        popupWindowAddCourse.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        builder.setTitle("Add Course");
+        builder.setPositiveButton("I'll do it!", new DialogInterface.OnClickListener() {
             @Override
-            public void onDismiss() {
-                longClickedView.setBackgroundResource(R.color.white);
-            }
-        });
-
-        popupWindowAddCourse.setAnimationStyle(R.style.PopupAnimation);
-
-        // show the popup at bottom of the screen and set some margin at bottom ie,
-        popupWindowAddCourse.showAtLocation(v, Gravity.CENTER, 0, 100);
-
-        okButton = (Button) inflatedView.findViewById(R.id.doItButton);
-        noButton = (Button) inflatedView.findViewById(R.id.noThanskButton);
-
-        okButton.setOnClickListener(new AdapterView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int which) {
                 String courseCode = selectedCourse.getCourse_code().toUpperCase();
-                popupWindowAddCourse.dismiss();
                 longClickedView.setBackgroundResource(R.color.white);
-                System.out.println(StringUtil.toSQLName("course_code"));
+                dialog.dismiss();
                 if (CourseDataAC.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
                     if (network.isOnline(myContext)) {
                         new GetCourseTask().execute(courseCode);
-                    }
-                    else {
+                    } else {
                         Toast.makeText(myContext, "No internet connection found.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -369,14 +310,25 @@ public class FragmentC extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        noButton.setOnClickListener(new View.OnClickListener() {
+
+        builder.setNegativeButton("No thanks!", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int which) {
                 longClickedView.setBackgroundResource(R.color.white);
-                popupWindowAddCourse.dismiss();
+                dialog.dismiss();
             }
         });
 
+        final AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                longClickedView.setBackgroundResource(R.color.white);
+            }
+        });
+
+        alertDialog.show();
     }
 
     public void refreshAdapter() {
