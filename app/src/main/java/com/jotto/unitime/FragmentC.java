@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -288,9 +289,9 @@ public class FragmentC extends Fragment {
 
         // inflate the custom popup layout
         inflatedView = layoutInflater.inflate(R.layout.add_course_popup, null,false);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
+        builder.setMessage("apowdkapowkd");
         builder.setTitle("Add Course");
         builder.setPositiveButton("I'll do it!", new DialogInterface.OnClickListener() {
             @Override
@@ -318,13 +319,19 @@ public class FragmentC extends Fragment {
                 dialog.dismiss();
             }
         });
-
         final AlertDialog alertDialog = builder.create();
 
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 longClickedView.setBackgroundResource(R.color.white);
+            }
+        });
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
             }
         });
 
