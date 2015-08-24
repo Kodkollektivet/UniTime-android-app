@@ -120,7 +120,6 @@ public class WidgetProvider extends AppWidgetProvider {
             final AppWidgetManager manager = AppWidgetManager.getInstance
                     (context);
             onUpdate(context, manager, manager.getAppWidgetIds(new ComponentName(context, WidgetProvider.class)));
-            System.out.println("YOLO");
         }
 
         @Override

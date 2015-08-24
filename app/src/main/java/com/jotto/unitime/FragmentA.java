@@ -4,6 +4,7 @@ package com.jotto.unitime;
  * Created by johanrovala on 18/06/15.
  */
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,6 +55,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Delayed;
 import java.util.concurrent.RunnableFuture;
 
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
@@ -75,6 +78,7 @@ public class FragmentA extends Fragment {
     private FragmentActivity myContext;
     PtrClassicFrameLayout mPtrFrame;
     Network network = new Network();
+    static ProgressDialog dialog;
 
 
 
@@ -155,6 +159,7 @@ public class FragmentA extends Fragment {
                 settings.save();
                 new GetHeadinfo().execute();
                 new RefreshEvents().execute();
+                showProgressDialog();
             } else if (LocalDate.now().isAfter(LocalDate.parse(settings.getDate()))) {
                 new GetHeadinfo().execute();
                 new RefreshEvents().execute();
@@ -389,5 +394,26 @@ public class FragmentA extends Fragment {
 
     private void notifyPTR() {
         mPtrFrame.refreshComplete();
+    }
+
+    private void showProgressDialog() {
+        dialog = new ProgressDialog(myContext);
+        dialog.setCancelable(true);
+        dialog.setMessage(myContext.getString(R.string.update_courses));
+        // set the progress to be horizontal
+        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        // reset the bar to the default value of 0
+        dialog.setProgress(0);
+        // set the maximum value
+        dialog.setMax(1457);
+        // display the progressbar
+        dialog.show();
+    }
+
+    public static void updateProgressBar(int progress) {
+        dialog.setProgress(progress);
+        if (progress == dialog.getMax()) {
+            dialog.dismiss();
+        }
     }
 }

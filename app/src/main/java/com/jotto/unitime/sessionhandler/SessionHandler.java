@@ -3,6 +3,7 @@ package com.jotto.unitime.sessionhandler;
 import android.content.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jotto.unitime.FragmentA;
 import com.jotto.unitime.models.*;
 import com.jotto.unitime.util.ServerConstants;
 
@@ -37,6 +38,8 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by otto on 2015-06-19.
  */
 public class SessionHandler {
+
+    int coursesLoaded = 0;
 
     // Empty contructor
     public SessionHandler() {
@@ -172,6 +175,8 @@ public class SessionHandler {
                 courseDataList = mapper.readValue(response.toString(), CourseDataAC[].class);
                 for (CourseDataAC cda : courseDataList) {
                     cda.save();
+                    coursesLoaded++;
+                    FragmentA.updateProgressBar(coursesLoaded);
                 }
             }
         } catch (Exception e) {

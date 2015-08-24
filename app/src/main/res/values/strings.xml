@@ -9,5 +9,6 @@
     <string name="delete">Delete</string>
     <string name="selected_days_events">Selected days events</string>
     <string name="delete_deletebtn">Delete</string>
-    <string name="todays_events">Todays events</string>
+    <string name="todays_events">Today\'s events</string>
+    <string name="update_courses">Updating Courses…</string>
 </resources>
