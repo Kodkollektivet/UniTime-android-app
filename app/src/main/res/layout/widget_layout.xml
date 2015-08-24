@@ -8,19 +8,31 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center"
-        android:background="@color/lightturcoise"
+        android:background="@color/testBlueHeader"
         android:text="@string/todays_events"
         android:textSize="22sp"
-        android:textColor="@color/grey" />
+        android:textColor="@color/white" />
+
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="3dip"
+        android:id="@+id/widget_divider"
+        android:background="@color/testBackgroundBlue" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/widget_listview"
-        />
+        android:background="@color/white" />
 
-
-
-
+    <!-- Empty view is show if list items are empty -->
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="You have no events today."
+        android:textSize="18sp"
+        android:textColor="@color/grey"
+        android:visibility="gone" />
 
 </LinearLayout>

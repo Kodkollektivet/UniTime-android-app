@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,14 +20,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jotto.unitime.models.Course;
 import com.jotto.unitime.models.CourseDataAC;
 import com.jotto.unitime.models.Event;
 import com.jotto.unitime.models.Settings;
 import com.jotto.unitime.sessionhandler.SessionHandler;
+import com.jotto.unitime.util.Network;
 import com.jotto.unitime.widget.WidgetProvider;
 import com.orm.SugarApp;
 import com.orm.SugarCursorFactory;
@@ -47,6 +53,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.RunnableFuture;
+
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.PtrUIHandler;
+import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
 /**
  * Created by johanrovala on 18/06/15.
@@ -59,6 +73,10 @@ public class FragmentA extends Fragment {
     EventDateAdapter adapter;
     private Settings settings;
     private FragmentActivity myContext;
+    PtrClassicFrameLayout mPtrFrame;
+    Network network = new Network();
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,28 +97,85 @@ public class FragmentA extends Fragment {
         events = new ArrayList<>();
         getEventsFromDatabase();
         populateListView();
+
+        /*
+        Pull to refresh config
+         */
+        mPtrFrame = (PtrClassicFrameLayout) myContext.findViewById(R.id.ptr_frame);
+        ((TextView) myContext.findViewById(R.id.ptr_classic_header_rotate_view_header_title)).setTextSize(16);
+        ImageView iv = ((ImageView) myContext.findViewById(R.id.ptr_classic_header_rotate_view));
+        iv.setMaxHeight(100);
+        iv.setMaxWidth(100);
+        iv.setMinimumHeight(100);
+        iv.setMinimumWidth(100);
+        ProgressBar pb = (ProgressBar) myContext.findViewById(R.id.ptr_classic_header_rotate_view_progressbar);
+        pb.getLayoutParams().height = 60;
+        pb.getLayoutParams().width = 60;
+        mPtrFrame.setResistance(1.7f);
+        mPtrFrame.disableWhenHorizontalMove(true);
+        mPtrFrame.setRatioOfHeaderHeightToRefresh(1.0f);
+        mPtrFrame.setDurationToClose(200);
+        mPtrFrame.setDurationToCloseHeader(1000);
+        // default is false
+        mPtrFrame.setPullToRefresh(false);
+        // default is true
+        mPtrFrame.setKeepHeaderWhenRefresh(true);
+
+        mPtrFrame.setPtrHandler(new PtrHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                frame.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (network.isOnline(myContext)) {
+                            new RefreshEvents().execute();
+                        } else {
+                            Toast.makeText(myContext, "No internet connection found.", Toast.LENGTH_SHORT).show();
+                            mPtrFrame.refreshComplete();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+
+        });
+
+
         settings = Settings.findById(Settings.class, (long) 1);
 
-        if (settings == null) {
-            settings = new Settings();
-            settings.setDate(LocalDate.now().toString());
-            settings.setContentLength(0);
-            settings.save();
-            new GetHeadinfo().execute();
-            new RefreshEvents().execute();
+        if (network.isOnline(myContext)) {
+            if (settings == null) {
+                settings = new Settings();
+                settings.setDate(LocalDate.now().toString());
+                settings.setContentLength(0);
+                settings.save();
+                new GetHeadinfo().execute();
+                new RefreshEvents().execute();
+            } else if (LocalDate.now().isAfter(LocalDate.parse(settings.getDate()))) {
+                new GetHeadinfo().execute();
+                new RefreshEvents().execute();
+                settings.setDate(LocalDate.now().toString());
+                settings.save();
+                updateWidget();
+            }
         }
-        else if (LocalDate.now().isAfter(LocalDate.parse(settings.getDate()))) {
-            new GetHeadinfo().execute();
-            new RefreshEvents().execute();
-            settings.setDate(LocalDate.now().toString());
-            settings.save();
-            updateWidget();
+        else {
+            Toast.makeText(myContext, "No internet connection found.", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     public void getEventsForCourse(String courseCode) {
-        new GetCourseInfoTask().execute(courseCode);
+        if (network.isOnline(myContext)) {
+            new GetCourseInfoTask().execute(courseCode);
+        }
+        else {
+            Toast.makeText(myContext, "No internet connection found.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void getEventsFromDatabase() {
@@ -186,7 +261,7 @@ public class FragmentA extends Fragment {
             if (localDate.equals(LocalDate.now())) {
                 dayText.setText(dtfWeek.print(localDate));
                 dateText.setText("Today" + dtf2.print(localDate));
-                headerView.setBackgroundColor(getResources().getColor(R.color.todaygreen));
+                headerView.setBackgroundColor(getResources().getColor(R.color.white));
                 dayText.setTextColor(getResources().getColor(R.color.grey));
                 dateText.setTextColor((getResources().getColor(R.color.grey)));
             }
@@ -250,6 +325,7 @@ public class FragmentA extends Fragment {
 
         @Override
         protected void onPostExecute(Object o) {
+            FragmentC.fragmentC.refreshAdapter();
         }
 
         @Override
@@ -264,7 +340,14 @@ public class FragmentA extends Fragment {
 
         @Override
         protected void onPostExecute(Object o) {
-            getEventsFromDatabase();
+            refreshAdapter();
+            expandableListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyPTR();
+                }
+            });
+
         }
 
         @Override
@@ -302,5 +385,9 @@ public class FragmentA extends Fragment {
         Intent intent = new Intent(myContext, WidgetProvider.class);
         intent.setAction(WidgetProvider.UPDATE_ACTION);
         myContext.sendBroadcast(intent);
+    }
+
+    private void notifyPTR() {
+        mPtrFrame.refreshComplete();
     }
 }

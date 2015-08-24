@@ -8,5 +8,12 @@
         sha1="5509056e62637a6348a4842012faa13762707ae8">
         <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-9be66c1fd807f8b2dfa9575fedda82a2b65b38c8.jar" />
     </item>
+    <item
+        jar="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/exploded-aar/in.srain.cube/ultra-ptr/1.0.10/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="f7aa9a64408679b54260b859ae8eb723b69ecd30">
+        <dex dex="/home/otto/AndroidStudioProjects/UniTime/app/build/intermediates/pre-dexed/debug/classes-0758f450fd8f84b70493a92402d1d2349683adb8.jar" />
+    </item>
 
 </items>

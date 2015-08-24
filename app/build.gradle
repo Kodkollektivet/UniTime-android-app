@@ -56,4 +56,5 @@ dependencies {
     compile 'com.jaysoyer.lib:advanced-adapters:15.3'
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.akexorcist:RoundCornerProgressBar:1.2.2'
+    compile 'in.srain.cube:ultra-ptr:1.0.10'
 }

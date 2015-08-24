@@ -33,7 +33,7 @@
         android:textSize="20sp"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp" />
 

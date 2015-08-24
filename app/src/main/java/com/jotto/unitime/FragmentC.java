@@ -42,6 +42,7 @@ import com.jotto.unitime.models.Course;
 import com.jotto.unitime.models.CourseDataAC;
 import com.jotto.unitime.models.Event;
 import com.jotto.unitime.sessionhandler.SessionHandler;
+import com.jotto.unitime.util.Network;
 import com.orm.StringUtil;
 import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
 import com.sawyer.advadapters.widget.PatchedExpandableListAdapter;
@@ -59,15 +60,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by johanrovala on 18/06/15.
- */
+
 public class FragmentC extends Fragment {
 
     private ListView listView;
     private CourseAdapter adapter;
+    public static FragmentC fragmentC;
     private FragmentActivity myContext;
     private ArrayList<CourseDataAC> courses;
+    private ArrayList<CourseDataAC> originalList = new ArrayList<CourseDataAC>();
     private Button courseBtn;
     private CourseDataAC selectedCourse;
     private PopupWindow popupWindowAddCourse;
@@ -75,6 +76,7 @@ public class FragmentC extends Fragment {
     private Button noButton;
     View longClickedView;
     View inflatedView;
+    Network network = new Network();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,9 +93,10 @@ public class FragmentC extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
+        EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
         final int translateFrom = getResources().getColor(R.color.white);
         final int translateTo = getResources().getColor(R.color.fadeInColor);
+        fragmentC = this;
 
         editText.addTextChangedListener(new TextWatcher() {
 
@@ -183,6 +186,7 @@ public class FragmentC extends Fragment {
                 adapter.notifyDataSetChanged();
                 FragmentA.fragmentA.getEventsForCourse((String) o[1]);
                 FragmentD.fragmentD.refreshAdapter();
+
             }
             else {
                 Toast.makeText(myContext, (String) o[0], Toast.LENGTH_SHORT).show();
@@ -210,21 +214,18 @@ public class FragmentC extends Fragment {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<CourseDataAC> retrievedEvents = CourseDataAC.listAll(CourseDataAC.class);
             courses.clear();
+            originalList.clear();
             courses.addAll(retrievedEvents);
+            originalList.addAll(retrievedEvents);
         }
     }
 
     private class CourseAdapter extends ArrayAdapter<CourseDataAC> implements Filterable {
 
-        private ArrayList<CourseDataAC> originalList;
-        private ArrayList<CourseDataAC> courseDataACList;
         private CourseFilter filter;
         public CourseAdapter(ArrayList<CourseDataAC> list) {
             super(myContext, R.layout.course_view, list);
-            this.courseDataACList = new ArrayList<CourseDataAC>();
-            this.courseDataACList.addAll(courses);
-            this.originalList = new ArrayList<CourseDataAC>();
-            this.originalList.addAll(courseDataACList);
+            originalList.addAll(courses);
         }
 
         @Override
@@ -356,7 +357,12 @@ public class FragmentC extends Fragment {
                 longClickedView.setBackgroundResource(R.color.white);
                 System.out.println(StringUtil.toSQLName("course_code"));
                 if (CourseDataAC.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
-                    new GetCourseTask().execute(courseCode);
+                    if (network.isOnline(myContext)) {
+                        new GetCourseTask().execute(courseCode);
+                    }
+                    else {
+                        Toast.makeText(myContext, "No internet connection found.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(myContext, "Course is already added!", Toast.LENGTH_SHORT).show();
                 }
@@ -371,6 +377,11 @@ public class FragmentC extends Fragment {
             }
         });
 
+    }
+
+    public void refreshAdapter() {
+        getCoursesFromDatabase();
+        adapter.notifyDataSetChanged();
     }
 
 

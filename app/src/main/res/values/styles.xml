@@ -11,6 +11,8 @@
 
         <item name="android:background">@color/testBlue</item>
         <item name="background">@color/testBlue</item>
+        <item name="logo">@mipmap/ut_logo</item>
+        <item name="displayOptions">useLogo|showHome|showTitle</item>
     </style>
 
     <style name="CaldroidDefaultCustom" parent="CaldroidDefault">

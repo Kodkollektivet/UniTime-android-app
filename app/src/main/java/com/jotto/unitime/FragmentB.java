@@ -7,6 +7,7 @@ package com.jotto.unitime;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -174,6 +175,7 @@ public class FragmentB extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         layout_MainMenu = (FrameLayout) myContext.findViewById(R.id.relative_layout_b);
         layout_MainMenu.getForeground().setAlpha(0);
 

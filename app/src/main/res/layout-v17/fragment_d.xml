@@ -11,17 +11,27 @@
         android:text="My Courses"
         android:id="@+id/myCoursesHeaderText"
         android:gravity="center"
-        android:background="@color/lightturcoise"
+        android:background="@color/white"
         android:layout_alignParentTop="false"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/testBlueHeader"
+        android:layout_marginTop="3dip" />
+
+    <View android:layout_width="fill_parent"
+        android:layout_height="3dip"
+        android:id="@+id/frag_d_divider"
+        android:background="@color/testBackgroundBlue"
+        android:layout_below="@+id/myCoursesHeaderText"/>
 
     <ListView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/listViewMyCourses"
         android:childDivider="#FFBDBDBD"
-        android:dividerHeight="1dp"
-        android:layout_below="@+id/myCoursesHeaderText"
+        android:dividerHeight="5dp"
+        android:layout_below="@+id/frag_d_divider"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@color/white" />

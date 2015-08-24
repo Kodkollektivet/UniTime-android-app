@@ -36,9 +36,6 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
 
     private void updateWidgetListView()
     {
-        //String[] widgetFruitsArray = dbhelper.retrieveFruitsList();
-        //List<String> convertedToList = new ArrayList<String>(Arrays.asList(widgetFruitsArray));
-        //this.widgetList = convertedToList;
         this.widgetList = Event.find(Event.class, "STARTDATE = ?", LocalDate.now().toString());
         Collections.sort(this.widgetList);
     }
@@ -75,7 +72,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
         remoteView.setTextViewText(R.id.event_room_widget, event.getRoom());
         remoteView.setTextViewText(R.id.event_info_widget, event.getInfo());
         remoteView.setTextViewText(R.id.event_time_widget, event.getStarttime() + "-" + event.getEndtime());
-        remoteView.setImageViewResource(R.id.image_icon_widget, R.drawable.ic_action_view_as_list);
+        remoteView.setImageViewResource(R.id.image_icon_widget, R.drawable.ic_list_icon);
 
         return remoteView;
     }
