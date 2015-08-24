@@ -19,7 +19,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -319,8 +318,8 @@ public class FragmentC extends Fragment {
                 dialog.dismiss();
             }
         });
-        final AlertDialog alertDialog = builder.create();
 
+        final AlertDialog alertDialog = builder.create();
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -334,7 +333,6 @@ public class FragmentC extends Fragment {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
             }
         });
-
         alertDialog.show();
     }
 
