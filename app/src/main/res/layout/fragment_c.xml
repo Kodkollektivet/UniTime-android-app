@@ -16,7 +16,7 @@
         android:layout_marginRight="10dp"
         android:paddingLeft="20dp"
         android:singleLine="true"
-        android:imeOptions="actionDone"/>
+        android:imeOptions="actionDone" />
 
     <ListView
         android:layout_width="match_parent"

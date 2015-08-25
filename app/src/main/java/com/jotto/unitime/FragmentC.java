@@ -7,13 +7,11 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.graphics.Point;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,47 +20,28 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jotto.unitime.models.Course;
 import com.jotto.unitime.models.CourseDataAC;
-import com.jotto.unitime.models.Event;
 import com.jotto.unitime.sessionhandler.SessionHandler;
 import com.jotto.unitime.util.Network;
 import com.orm.StringUtil;
-import com.sawyer.advadapters.widget.NFRolodexArrayAdapter;
-import com.sawyer.advadapters.widget.PatchedExpandableListAdapter;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,8 +56,9 @@ public class FragmentC extends Fragment {
     private ArrayList<CourseDataAC> originalList = new ArrayList<>();
     private CourseDataAC selectedCourse;
     View longClickedView;
-    View inflatedView;
     Network network = new Network();
+    EditText editText;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,7 +75,7 @@ public class FragmentC extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
+        editText = (EditText) myContext.findViewById(R.id.course_code_text);
         final int translateFrom = getResources().getColor(R.color.white);
         final int translateTo = getResources().getColor(R.color.grey);
         fragmentC = this;
@@ -308,7 +288,9 @@ public class FragmentC extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String courseCode = selectedCourse.getCourse_code().toUpperCase();
                 longClickedView.setBackgroundResource(R.color.white);
+                editText.setText("Search...");
                 dialog.dismiss();
+
                 if (CourseDataAC.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
                     if (network.isOnline(myContext)) {
                         new GetCourseTask().execute(courseCode);
