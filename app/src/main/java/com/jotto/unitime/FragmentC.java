@@ -95,7 +95,7 @@ public class FragmentC extends Fragment {
         super.onActivityCreated(savedInstanceState);
         EditText editText = (EditText) myContext.findViewById(R.id.course_code_text);
         final int translateFrom = getResources().getColor(R.color.white);
-        final int translateTo = getResources().getColor(R.color.fadeInColor);
+        final int translateTo = getResources().getColor(R.color.grey);
         fragmentC = this;
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -116,29 +116,27 @@ public class FragmentC extends Fragment {
         getCoursesFromDatabase();
         populateListView();
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
-                    final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), translateFrom, translateTo);
-                    longClickedView = view;
-                    colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), translateFrom, translateTo);
+                longClickedView = view;
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animator) {
-                            view.setBackgroundColor((Integer) animator.getAnimatedValue());
-                        }
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        view.setBackgroundColor((Integer) animator.getAnimatedValue());
+                    }
 
-                    });
-                    colorAnimation.setDuration(1000);
-                    colorAnimation.start();
+                });
+                colorAnimation.setDuration(300);
+                colorAnimation.start();
 
-                    selectedCourse = courses.get(position);
-                    adapter.notifyDataSetChanged();
-                    onShowDialog();
-
-                    return false;
-                }
-            });
+                selectedCourse = courses.get(position);
+                adapter.notifyDataSetChanged();
+                onShowDialog();
+            }
+        });
         }
 
     private void populateListView() {

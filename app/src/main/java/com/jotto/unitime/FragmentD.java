@@ -6,8 +6,10 @@ package com.jotto.unitime;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,8 +26,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jotto.unitime.models.Course;
+import com.jotto.unitime.models.CourseDataAC;
+import com.orm.StringUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,36 +69,33 @@ public class FragmentD extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final int translateFrom = getResources().getColor(R.color.white);
-        final int translateTo = getResources().getColor(R.color.blue);
+        final int translateTo = getResources().getColor(R.color.grey);
         fragmentD = this;
         courses = new ArrayList<>();
         getCoursesFromDatabase();
         populateListView();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), translateFrom, translateTo);
+                longClickedView = view;
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
-                    final ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), translateFrom, translateTo);
-                    longClickedView = view;
-                    colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        view.setBackgroundColor((Integer) animator.getAnimatedValue());
+                    }
 
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animator) {
-                            view.setBackgroundColor((Integer) animator.getAnimatedValue());
-                        }
+                });
+                colorAnimation.setDuration(300);
+                colorAnimation.start();
 
-                    });
-                    colorAnimation.setDuration(1000);
-                    colorAnimation.start();
-
-                    selectedCourse = courses.get(position);
-                    adapter.notifyDataSetChanged();
-                    onShowPopup(view);
-
-                    return false;
-                }
-            });
+                selectedCourse = courses.get(position);
+                adapter.notifyDataSetChanged();
+                onShowDialog();
+            }
+        });
         }
 
     private void populateListView() {
@@ -151,50 +153,58 @@ public class FragmentD extends Fragment {
     /*
     PopupWindow to show information of events.
      */
-    public void onShowPopup(View v) {
+
+
+    public void refreshAdapter() {
+        getCoursesFromDatabase();
+        adapter.notifyDataSetChanged();
+    }
+    public void onShowDialog() {
 
         LayoutInflater layoutInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // inflate the custom popup layout
         inflatedView = layoutInflater.inflate(R.layout.add_course_popup, null,false);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
 
-        // get device size
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        final Point size = new Point();
-        display.getSize(size);
-
-
-        // set height depends on the device size
-        popupWindowDeleteCourse = new PopupWindow(inflatedView, size.x - 100 ,size.y / 4, true );
-        // set a background drawable with rounders corners
-        popupWindowDeleteCourse.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background_textview));
-        // make it focusable to show the keyboard to enter in `EditText`
-        popupWindowDeleteCourse.setFocusable(true);
-        // make it outside touchable to dismiss the popup windowpopupWindowAddCourse.setOutsideTouchable(false);
-
-        popupWindowDeleteCourse.setAnimationStyle(R.style.PopupAnimation);
-
-        // show the popup at bottom of the screen and set some margin at bottom ie,
-        popupWindowDeleteCourse.showAtLocation(v, Gravity.CENTER, 0, 100);
-
-        okButton = (Button) inflatedView.findViewById(R.id.doItButton);
-
-        okButton.setOnClickListener(new AdapterView.OnClickListener() {
+        builder.setMessage("apowdkapowkd");
+        builder.setTitle("Remove Course");
+        builder.setPositiveButton("I'll do it!", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                popupWindowDeleteCourse.dismiss();
+            public void onClick(DialogInterface dialog, int which) {
                 longClickedView.setBackgroundResource(R.color.white);
+                dialog.dismiss();
                 FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
                 selectedCourse.delete();
                 courses.remove(selectedCourse);
                 adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         });
 
-    }
+        builder.setNegativeButton("No thanks!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                longClickedView.setBackgroundResource(R.color.white);
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog alertDialog = builder.create();
 
-    public void refreshAdapter() {
-        getCoursesFromDatabase();
-        adapter.notifyDataSetChanged();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                longClickedView.setBackgroundResource(R.color.white);
+            }
+        });
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
+            }
+        });
+
+        alertDialog.show();
     }
 }
