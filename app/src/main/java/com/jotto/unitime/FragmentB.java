@@ -5,6 +5,7 @@ package com.jotto.unitime;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Configuration;
@@ -68,7 +69,8 @@ public class FragmentB extends Fragment {
     private TextView selectedDateTextView;
     ArrayList<Event> events;
     ArrayAdapter<Event> adapter;
-    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen"));
+    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen",
+            "Examen", "Examination", "Tenta"));
     CaldroidFragment calDroid;
     FrameLayout layout_MainMenu;
 
@@ -97,48 +99,23 @@ public class FragmentB extends Fragment {
         // inflate the custom popup layout
         final View inflatedView = layoutInflater.inflate(R.layout.calendar_popup, null,false);
 
-        ListView listView = (ListView)inflatedView.findViewById(R.id.popup_listview);
-        Collections.sort(currentDateList);
-        MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
-        listView.setAdapter(myListAdapter);
-
-
-        // get device size
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        final Point size = new Point();
-        display.getSize(size);
-
-
-        // set height depends on the device size
-        popupWindow = new PopupWindow(inflatedView, size.x - 100 ,size.y / 2, true );
-        // set a background drawable with rounders corners
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_background_textview));
-        // get the date of the selected date
         LocalDate selectedLocalDate = new LocalDate(clickedDate);
         DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE d/M").withLocale(Locale.US);
         selectedDateTextView = (TextView) inflatedView.findViewById(R.id.popup_textview);
         selectedDateTextView.setText(dtf.print(selectedLocalDate));
 
-        // make it focusable to show the keyboard to enter in `EditText`
-        popupWindow.setFocusable(true);
-        // make it outside touchable to dismiss the popup window
-        popupWindow.setOutsideTouchable(false);
+        ListView listView = (ListView)inflatedView.findViewById(R.id.popup_listview);
+        Collections.sort(currentDateList);
+        MyListAdapter myListAdapter = new MyListAdapter(currentDateList);
+        listView.setAdapter(myListAdapter);
 
-        popupWindow.setAnimationStyle(R.style.PopupAnimation);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
 
+        builder.setView(inflatedView);
 
-        // On action events
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                layout_MainMenu.getForeground().setAlpha(0);
-            }
-        });
+        final AlertDialog alertDialog = builder.create();
 
-
-        // show the popup at bottom of the screen and set some margin at bottom ie,
-        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 100);
-        layout_MainMenu.getForeground().setAlpha(150);
+        alertDialog.show();
 
     }
 
@@ -229,7 +206,13 @@ public class FragmentB extends Fragment {
             }
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-            imageView.setImageResource(R.drawable.ic_list_icon);
+
+            if (importantEvents.contains(currentEvent.getInfo())) {
+                imageView.setImageResource(R.drawable.event_icon_important);
+            }
+            else {
+                imageView.setImageResource(R.drawable.event_icon);
+            }
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
             teacherText.setText(currentEvent.getTeacher().length() == 0 ? "No teacher" : currentEvent.getTeacher());
@@ -272,7 +255,7 @@ public class FragmentB extends Fragment {
                     calDroid.setBackgroundResourceForDate(R.color.calendarUrgent, dateTime.toDate());
                 }
                 else {
-                    calDroid.setBackgroundResourceForDate(R.color.calendarNormal, dateTime.toDate());
+                    calDroid.setBackgroundResourceForDate(R.color.testBlueHeader, dateTime.toDate());
                 }
             }
         }

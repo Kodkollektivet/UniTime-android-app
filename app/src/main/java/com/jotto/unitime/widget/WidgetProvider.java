@@ -99,7 +99,7 @@ public class WidgetProvider extends AppWidgetProvider {
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
             rv.setRemoteAdapter(R.id.widget_listview, intent);
-            rv.setEmptyView(R.id.widget_listview, R.id.empty_view);
+            rv.setEmptyView(R.id.widget_listview, R.id.empty_view_widget);
             //set on click on view open app activity
             Intent configIntent = new Intent(context, com.jotto.unitime.MainActivity.class);
 

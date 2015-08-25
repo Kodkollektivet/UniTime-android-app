@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<in.srain.cube.views.ptr.PtrClassicFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+<in.srain.cube.views.ptr.PtrClassicFrameLayout
 android:layout_width="match_parent" android:id="@+id/ptr_frame" android:layout_height="match_parent"
 android:background="@android:color/white">
 
@@ -16,5 +17,15 @@ android:background="@android:color/white">
     android:headerDividersEnabled="false"
     android:groupIndicator="@null" />
 
-
 </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+    <TextView
+        android:id="@+id/empty_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:text="@string/fragment_a_empty_text"
+        android:visibility="gone" />
+</RelativeLayout>

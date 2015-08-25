@@ -26,10 +26,11 @@
 
     <!-- Empty view is show if list items are empty -->
     <TextView
-        android:id="@+id/empty_view"
+        android:id="@+id/empty_view_widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:paddingBottom="30dp"
         android:text="You have no events today."
         android:textSize="18sp"
         android:textColor="@color/grey"

@@ -23,7 +23,8 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
     private Context context = null;
     private int appWidgetId;
     private List<Event> widgetList = new ArrayList<>();
-    //private DBHelper dbhelper;
+    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen",
+            "Examen", "Examination", "Tenta"));
 
     public ListProvider(Context context, Intent intent)
     {
@@ -72,7 +73,13 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
         remoteView.setTextViewText(R.id.event_room_widget, event.getRoom());
         remoteView.setTextViewText(R.id.event_info_widget, event.getInfo());
         remoteView.setTextViewText(R.id.event_time_widget, event.getStarttime() + "-" + event.getEndtime());
-        remoteView.setImageViewResource(R.id.image_icon_widget, R.drawable.ic_list_icon);
+
+        if (importantEvents.contains(event.getInfo())) {
+            remoteView.setImageViewResource(R.id.image_icon_widget, R.drawable.event_icon_important);
+        }
+        else {
+            remoteView.setImageViewResource(R.id.image_icon_widget, R.drawable.event_icon);
+        }
 
         return remoteView;
     }

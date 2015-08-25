@@ -49,6 +49,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -65,9 +66,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
-/**
- * Created by johanrovala on 18/06/15.
- */
+
 public class FragmentA extends Fragment {
 
     public static FragmentA fragmentA;
@@ -79,6 +78,9 @@ public class FragmentA extends Fragment {
     PtrClassicFrameLayout mPtrFrame;
     Network network = new Network();
     static ProgressDialog dialog;
+    boolean isRefreshing = false;
+    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen",
+            "Examen", "Examination", "Tenta"));
 
 
 
@@ -113,8 +115,8 @@ public class FragmentA extends Fragment {
         iv.setMinimumHeight(100);
         iv.setMinimumWidth(100);
         ProgressBar pb = (ProgressBar) myContext.findViewById(R.id.ptr_classic_header_rotate_view_progressbar);
-        pb.getLayoutParams().height = 60;
-        pb.getLayoutParams().width = 60;
+        pb.getLayoutParams().height = 45;
+        pb.getLayoutParams().width = 45;
         mPtrFrame.setResistance(1.7f);
         mPtrFrame.disableWhenHorizontalMove(true);
         mPtrFrame.setRatioOfHeaderHeightToRefresh(1.0f);
@@ -143,7 +145,7 @@ public class FragmentA extends Fragment {
 
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header) && !isRefreshing && !events.isEmpty();
             }
 
         });
@@ -195,6 +197,8 @@ public class FragmentA extends Fragment {
     private void populateListView() {
         expandableListView = (ExpandableListView) myContext.findViewById(R.id.listView2);
         adapter = new EventDateAdapter(myContext, events);
+
+        expandableListView.setEmptyView(myContext.findViewById(R.id.empty_list_item));
         expandableListView.setAdapter(adapter);
     }
 
@@ -222,9 +226,14 @@ public class FragmentA extends Fragment {
 
             //Gets the Event data for this view
             Event event = getChild(groupPosition, childPosition);
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.image_icon);
 
-            ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-            imageView.setImageResource(R.drawable.ic_list_icon);
+            if (importantEvents.contains(event.getInfo())) {
+                imageView.setImageResource(R.drawable.event_icon_important);
+            }
+            else {
+                imageView.setImageResource(R.drawable.event_icon);
+            }
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
             teacherText.setText(event.getTeacher().length() == 0 ? "No teacher" : event.getTeacher());
@@ -240,7 +249,6 @@ public class FragmentA extends Fragment {
 
             TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
             courseText.setText(event.getName_sv());
-
 
             return itemView;
         }
@@ -267,15 +275,15 @@ public class FragmentA extends Fragment {
                 dayText.setText(dtfWeek.print(localDate));
                 dateText.setText("Today" + dtf2.print(localDate));
                 headerView.setBackgroundColor(getResources().getColor(R.color.white));
-                dayText.setTextColor(getResources().getColor(R.color.grey));
-                dateText.setTextColor((getResources().getColor(R.color.grey)));
+                dayText.setTextColor(getResources().getColor(R.color.testBlue));
+                dateText.setTextColor((getResources().getColor(R.color.testBlue)));
             }
             else if (localDate.equals(LocalDate.now().plusDays(1))) {
                 dayText.setText(dtfWeek.print(localDate));
                 dateText.setText("Tomorrow" + dtf2.print(localDate));
                 headerView.setBackgroundColor(getResources().getColor(R.color.white));
-                dayText.setTextColor(getResources().getColor(R.color.grey));
-                dateText.setTextColor((getResources().getColor(R.color.grey)));
+                dayText.setTextColor(getResources().getColor(R.color.testBlue));
+                dateText.setTextColor((getResources().getColor(R.color.testBlue)));
             }
             else {
                 dayText.setText(dtfWeek.print(localDate));
@@ -284,6 +292,7 @@ public class FragmentA extends Fragment {
                 dayText.setTextColor(getResources().getColor(R.color.testBlue));
                 dateText.setTextColor((getResources().getColor(R.color.testBlue)));
             }
+
             return headerView;
         }
 
@@ -342,25 +351,29 @@ public class FragmentA extends Fragment {
     }
 
     private class RefreshEvents extends AsyncTask {
-
+        SessionHandler sessionHandler = new SessionHandler();
         @Override
         protected void onPostExecute(Object o) {
             refreshAdapter();
+            updateWidget();
+            FragmentB.fragmentB.updateList();
             expandableListView.post(new Runnable() {
                 @Override
                 public void run() {
                     notifyPTR();
                 }
             });
+            isRefreshing = false;
 
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
+            isRefreshing = true;
             Event.deleteAll(Event.class);
             List<Course> addedCourses = Course.listAll(Course.class);
             for (Course course : addedCourses) {
-                getEventsForCourse(course.getCourse_code().toUpperCase());
+                sessionHandler.getEventsFromCourse(course.getCourse_code().toUpperCase());
             }
             return true;
         }
@@ -405,7 +418,6 @@ public class FragmentA extends Fragment {
         // reset the bar to the default value of 0
         dialog.setProgress(0);
         // set the maximum value
-        dialog.setMax(1457);
         // display the progressbar
         dialog.show();
     }
@@ -415,5 +427,9 @@ public class FragmentA extends Fragment {
         if (progress == dialog.getMax()) {
             dialog.dismiss();
         }
+    }
+
+    public static void setProgressBarMax(int max) {
+        dialog.setMax(max);
     }
 }

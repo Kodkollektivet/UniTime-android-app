@@ -11,8 +11,8 @@
 
         <item name="android:background">@color/testBlue</item>
         <item name="background">@color/testBlue</item>
-        <item name="logo">@mipmap/ut_logo</item>
-        <item name="displayOptions">useLogo|showHome|showTitle</item>
+        <item name="logo">@mipmap/unitime_logotype</item>
+        <item name="displayOptions">useLogo|showHome</item>
     </style>
 
     <style name="CaldroidDefaultCustom" parent="CaldroidDefault">
@@ -27,4 +27,5 @@
         <item name="android:windowEnterAnimation">@anim/popup_anim_in</item>
         <item name="android:windowExitAnimation">@anim/popup_anim_out</item>
     </style>
+
 </resources>

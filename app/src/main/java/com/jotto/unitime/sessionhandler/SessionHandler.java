@@ -131,8 +131,6 @@ public class SessionHandler {
             //String content = EntityUtils.toString(entity);
             //System.out.println(content);
 
-            Course course = Course.find(Course.class, "COURSECODE = ?", courseCode.toUpperCase()).get(0);
-
             eventList = mapper.readValue(content, Event[].class);
 
             for (Event e : eventList) {
@@ -173,6 +171,7 @@ public class SessionHandler {
                     response.append(line);
                 }
                 courseDataList = mapper.readValue(response.toString(), CourseDataAC[].class);
+                FragmentA.setProgressBarMax(courseDataList.length);
                 for (CourseDataAC cda : courseDataList) {
                     cda.save();
                     coursesLoaded++;

@@ -10,12 +10,12 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/ic_list_icon"
-        android:maxHeight="60dp"
-        android:maxWidth="60dp"
-        android:minHeight="30dp"
-        android:minWidth="30dp"
-        android:adjustViewBounds="true"
+        android:src="@drawable/course_icon"
+        android:maxHeight="100dp"
+        android:maxWidth="100dp"
+        android:minHeight="60dp"
+        android:minWidth="60dp"
+        android:adjustViewBounds="false"
         android:focusable="false"/>
 
     <TextView

@@ -12,13 +12,16 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -216,7 +219,7 @@ public class FragmentC extends Fragment {
             }
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
-            imageView.setImageResource(R.drawable.ic_list_icon);
+            imageView.setImageResource(R.drawable.course_icon);
 
             TextView nameText = (TextView) itemView.findViewById(R.id.course_name);
             nameText.setText(course.getName_sv());
@@ -282,14 +285,24 @@ public class FragmentC extends Fragment {
      */
     public void onShowDialog() {
 
-        LayoutInflater layoutInflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         // inflate the custom popup layout
-        inflatedView = layoutInflater.inflate(R.layout.add_course_popup, null,false);
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
 
-        builder.setMessage("apowdkapowkd");
-        builder.setTitle("Add Course");
+        //Title for alertDialog
+        TextView myTitle = new TextView(myContext);
+        myTitle.setText("Add course");
+        myTitle.setGravity(Gravity.CENTER);
+        myTitle.setTextSize(20);
+        int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+        myTitle.setHeight(pixels);
+        myTitle.setTypeface(null, Typeface.BOLD);
+        myTitle.setTextColor(getResources().getColor(R.color.testBlueHeader));
+
+        builder.setCustomTitle(myTitle);
+
+        builder.setMessage(Html.fromHtml("<font color='#565656'>Do you want to add this course?</font>"));
+
+
         builder.setPositiveButton("I'll do it!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -329,6 +342,8 @@ public class FragmentC extends Fragment {
             public void onShow(DialogInterface dialog) {
                 alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTypeface(null, Typeface.BOLD);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTypeface(null, Typeface.BOLD);
             }
         });
         alertDialog.show();

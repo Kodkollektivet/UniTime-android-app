@@ -1,15 +1,22 @@
 package com.jotto.unitime;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -87,10 +94,51 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_info) {
+            onShowDialog();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onShowDialog() {
+
+        Context context = this;
+        // inflate the custom popup layout
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_LIGHT);
+
+        //Title for alertDialog
+        TextView myTitle = new TextView(context);
+        myTitle.setText("UniTime");
+        myTitle.setGravity(Gravity.CENTER);
+        myTitle.setTextSize(20);
+        int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+        myTitle.setHeight(pixels);
+        myTitle.setTypeface(null, Typeface.BOLD);
+        myTitle.setTextColor(getResources().getColor(R.color.testBlueHeader));
+
+        builder.setCustomTitle(myTitle);
+
+        builder.setMessage(Html.fromHtml("<font color='#565656'>A service by Kodkollektivet.</font>"));
+
+
+        builder.setPositiveButton("Got it!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        final AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTypeface(null, Typeface.BOLD);
+            }
+        });
+
+        alertDialog.show();
     }
 }
