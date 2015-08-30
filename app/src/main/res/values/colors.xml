@@ -8,6 +8,7 @@
     <item name="green_click" type="color">#d93fba3a</item>
     <item name="orange" type="color">#FFFFBB33</item>
     <item name="red" type="color">#d3dc645c</item>
+    <item name="writeBlack" type="color">#443e54</item>
     <item name="red_click" type="color">#fff36e67</item>
     <item name="darkturcoise" type="color">#FF0099CC</item>
     <item name="lightturcoise" type="color">#FFA0CAD8</item>

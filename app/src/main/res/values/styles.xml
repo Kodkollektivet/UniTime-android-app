@@ -4,7 +4,7 @@
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
-        <item name="android:textColorPrimary">@color/lightgrey</item>
+        <item name="android:textColorPrimary">@color/grey</item>
     </style>
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">

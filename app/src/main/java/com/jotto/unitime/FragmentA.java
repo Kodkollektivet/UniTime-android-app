@@ -387,6 +387,7 @@ public class FragmentA extends Fragment {
         dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         // reset the bar to the default value of 0
         dialog.setProgress(0);
+        dialog.setCanceledOnTouchOutside(false);
         // set the maximum value
         // display the progressbar
         dialog.show();

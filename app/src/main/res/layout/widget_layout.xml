@@ -33,7 +33,7 @@
         android:paddingBottom="30dp"
         android:text="You have no events today."
         android:textSize="18sp"
-        android:textColor="@color/grey"
+        android:textColor="@color/writeBlack"
         android:visibility="gone" />
 
 </LinearLayout>

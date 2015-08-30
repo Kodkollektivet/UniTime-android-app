@@ -11,7 +11,7 @@
         android:enabled="true"
         android:hint="@string/course_code"
         android:background="@drawable/search_field"
-        android:textColor="@color/grey"
+        android:textColor="@color/writeBlack"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:paddingStart="20dp"
