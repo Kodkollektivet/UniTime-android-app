@@ -31,6 +31,7 @@ import com.jotto.unitime.models.Course;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Delayed;
 
 /**
  * Created by johanrovala on 18/06/15.
@@ -183,13 +184,16 @@ public class FragmentD extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 longClickedView.setBackgroundResource(R.color.white);
                 dialog.dismiss();
-                FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
+                /*
                 Course.deleteAll(Course.class);
                 Course.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'COURSE'");
-                courses.remove(selectedCourse);
                 for (Course course: courses) {
                     course.save();
                 }
+                */
+                selectedCourse.delete();
+                courses.remove(selectedCourse);
+                FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -221,4 +225,5 @@ public class FragmentD extends Fragment {
 
         alertDialog.show();
     }
+
 }
