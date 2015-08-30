@@ -130,7 +130,7 @@ public class FragmentC extends Fragment {
                 onShowDialog();
             }
         });
-        }
+    }
 
     private void populateListView() {
         listView = (ListView) myContext.findViewById(R.id.listView);
@@ -319,6 +319,7 @@ public class FragmentC extends Fragment {
                 editText.setText("");
                 KeyboardUtil.hideSoftKeyboard(myContext, editText);
                 adapter.notifyDataSetChanged();
+
             }
         });
 

@@ -125,6 +125,7 @@ public class WidgetProvider extends AppWidgetProvider {
         @Override
         protected Object doInBackground(Object[] params) {
             Event.deleteAll(Event.class);
+            Event.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'EVENT'");
             List<Course> addedCourses = Course.listAll(Course.class);
             for (Course course : addedCourses) {
                 sessionHandler.getEventsFromCourse(course.getCourse_code().toUpperCase(), course.getCourse_location());
