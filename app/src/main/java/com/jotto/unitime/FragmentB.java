@@ -97,7 +97,7 @@ public class FragmentB extends Fragment {
         builder.setView(inflatedView);
 
         final AlertDialog alertDialog = builder.create();
-
+        alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
 
     }
