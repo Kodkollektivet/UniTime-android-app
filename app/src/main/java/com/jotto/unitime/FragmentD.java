@@ -184,15 +184,13 @@ public class FragmentD extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 longClickedView.setBackgroundResource(R.color.white);
                 dialog.dismiss();
-                /*
                 Course.deleteAll(Course.class);
                 Course.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'COURSE'");
-                for (Course course: courses) {
+                courses.remove(selectedCourse);
+                for (Course course : courses) {
+                    course.setId(null);
                     course.save();
                 }
-                */
-                selectedCourse.delete();
-                courses.remove(selectedCourse);
                 FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
                 adapter.notifyDataSetChanged();
             }
