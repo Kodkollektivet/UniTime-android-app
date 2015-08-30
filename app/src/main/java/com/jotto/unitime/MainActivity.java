@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTypeface(null, Typeface.BOLD);
             }
         });
-
+        alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
     }
 }
