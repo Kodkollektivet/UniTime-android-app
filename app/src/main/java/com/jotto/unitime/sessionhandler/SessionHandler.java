@@ -1,5 +1,6 @@
 package com.jotto.unitime.sessionhandler;
 
+import android.app.Fragment;
 import android.content.Context;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -204,6 +205,7 @@ public class SessionHandler {
                     return -1;
                 }
                 else {
+                    FragmentA.fragmentA.showProgressDialogWindow();
                     settings.setContentLength(length);
                     settings.save();
                     getDataForAutocomplete();

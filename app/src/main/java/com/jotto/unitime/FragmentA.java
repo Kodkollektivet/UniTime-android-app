@@ -144,7 +144,6 @@ public class FragmentA extends Fragment {
                 new RefreshEvents().execute();
                 settings.setDate(LocalDate.now().toString());
                 settings.save();
-                showProgressDialog();
                 updateWidget();
             }
         }
@@ -402,5 +401,9 @@ public class FragmentA extends Fragment {
 
     public static void setProgressBarMax(int max) {
         dialog.setMax(max);
+    }
+
+    public void showProgressDialogWindow() {
+        showProgressDialog();
     }
 }
