@@ -21,9 +21,11 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -37,9 +39,9 @@ import android.widget.Toast;
 import com.jotto.unitime.models.Course;
 import com.jotto.unitime.models.CourseDataAC;
 import com.jotto.unitime.sessionhandler.SessionHandler;
+import com.jotto.unitime.util.KeyboardUtil;
 import com.jotto.unitime.util.Network;
 import com.orm.StringUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +81,15 @@ public class FragmentC extends Fragment {
         final int translateFrom = getResources().getColor(R.color.white);
         final int translateTo = getResources().getColor(R.color.grey);
         fragmentC = this;
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId== EditorInfo.IME_ACTION_DONE){
+                    KeyboardUtil.hideSoftKeyboard(myContext, editText);
+                }
+                return false;
+            }
+        });
 
         editText.addTextChangedListener(new TextWatcher() {
 
@@ -135,7 +146,7 @@ public class FragmentC extends Fragment {
             if (o[0].equals("true")) {
                 getCoursesFromDatabase();
                 adapter.notifyDataSetChanged();
-                FragmentA.fragmentA.getEventsForCourse((String) o[1]);
+                FragmentA.fragmentA.getEventsForCourse((String) o[1], (String) o[2]);
                 FragmentD.fragmentD.refreshAdapter();
 
             }
@@ -150,7 +161,7 @@ public class FragmentC extends Fragment {
             HashMap<String, String> map = new HashMap<>();
             map.put("course", params[0]);
             String message = sessionHandler.getCourse(map);
-            return new Object[]{ message, params[0] };
+            return new Object[]{ message, params[0], params[1] };
         }
     }
 
@@ -176,7 +187,6 @@ public class FragmentC extends Fragment {
         private CourseFilter filter;
         public CourseAdapter(ArrayList<CourseDataAC> list) {
             super(myContext, R.layout.course_view, list);
-            originalList.addAll(courses);
         }
 
         @Override
@@ -202,13 +212,16 @@ public class FragmentC extends Fragment {
             imageView.setImageResource(R.drawable.course_icon);
 
             TextView nameText = (TextView) itemView.findViewById(R.id.course_name);
-            nameText.setText(course.getName_sv());
+            nameText.setText(course.getName_en());
 
             TextView codeText = (TextView) itemView.findViewById(R.id.course_code);
             codeText.setText(course.getCourse_code());
 
             TextView semesterText = (TextView) itemView.findViewById(R.id.course_semester);
-            semesterText.setText(course.getName_en());
+            semesterText.setText(course.getName_sv());
+
+            TextView locationText = (TextView) itemView.findViewById(R.id.course_location);
+            locationText.setText(course.getLocation());
 
             return itemView;
         }
@@ -227,8 +240,9 @@ public class FragmentC extends Fragment {
                     for (final CourseDataAC g : originalList) {
                         if (g.getName_en().toLowerCase().contains(constraint.toString().toLowerCase()) ||
                                 g.getName_sv().toLowerCase().contains(constraint.toString().toLowerCase()) ||
-                                g.getCourse_code().toLowerCase().contains(constraint.toString().toLowerCase()))
+                                g.getCourse_code().toLowerCase().contains(constraint.toString().toLowerCase())) {
                             filteredItems.add(g);
+                        }
                     }
                     result.count = filteredItems.size();
                     result.values = filteredItems;
@@ -287,19 +301,23 @@ public class FragmentC extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String courseCode = selectedCourse.getCourse_code().toUpperCase();
+                String location = selectedCourse.getLocation();
                 longClickedView.setBackgroundResource(R.color.white);
                 editText.setText("Search...");
                 dialog.dismiss();
 
-                if (CourseDataAC.find(Course.class, StringUtil.toSQLName("course_code") + " = ?", courseCode.toUpperCase()).isEmpty()) {
+                if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ? and " +
+                        StringUtil.toSQLName("course_location") + " = ?", courseCode, location).isEmpty()) {
                     if (network.isOnline(myContext)) {
-                        new GetCourseTask().execute(courseCode);
+                        new GetCourseTask().execute(courseCode, location);
                     } else {
                         Toast.makeText(myContext, "No internet connection found.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(myContext, "Course is already added!", Toast.LENGTH_SHORT).show();
                 }
+                editText.setText("");
+                KeyboardUtil.hideSoftKeyboard(myContext, editText);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -308,6 +326,7 @@ public class FragmentC extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 longClickedView.setBackgroundResource(R.color.white);
+                KeyboardUtil.hideSoftKeyboard(myContext, editText);
                 dialog.dismiss();
             }
         });

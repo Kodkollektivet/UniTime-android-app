@@ -13,14 +13,17 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.jotto.unitime.util.KeyboardUtil;
 
 
 public class MainActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int i) {
             //set the previous selected page to state_selected = false
+            if (i != 0 && previousPage == 0) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(tabStrip.getApplicationWindowToken(), 0);
+                //KeyboardUtil.toggleSoftKeyboard(getApplicationContext(), editText);
+            }
             ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(previousPage).setSelected(false);
             //set the selected page to state_selected = true
             ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(i).setSelected(true);

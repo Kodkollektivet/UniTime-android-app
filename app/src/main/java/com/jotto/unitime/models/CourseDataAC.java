@@ -9,6 +9,7 @@ public class CourseDataAC extends SugarRecord<CourseDataAC>{
     private String course_code;
     private String name_sv;
     private String name_en;
+    private String location;
 
     public String getCourse_code() {
         return course_code;
@@ -32,5 +33,13 @@ public class CourseDataAC extends SugarRecord<CourseDataAC>{
 
     public void setName_en(String name_en) {
         this.name_en = name_en;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

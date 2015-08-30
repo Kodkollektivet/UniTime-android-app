@@ -24,7 +24,7 @@
         android:layout_marginLeft="3dp" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Teacher"
@@ -36,12 +36,8 @@
         android:layout_alignLeft="@+id/event_course"
         android:layout_alignStart="@+id/event_course"
         android:layout_marginTop="1dp"
-        android:layout_toStartOf="@+id/event_room"
-        android:layout_toLeftOf="@+id/event_room"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
         android:singleLine="true"
-        android:ellipsize="end"/>
+        android:ellipsize="end" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,7 +63,7 @@
         android:ellipsize="end"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Room"
@@ -80,7 +76,10 @@
         android:layout_alignEnd="@+id/event_time"
         android:ellipsize="end"
         android:singleLine="true"
-        android:maxWidth="70dp" />
+        android:layout_toRightOf="@+id/event_teacher"
+        android:layout_toEndOf="@+id/event_teacher"
+        android:gravity="right"
+        android:layout_marginLeft="15dp" />
 
     <TextView
         android:layout_width="fill_parent"

@@ -10,7 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/ic_list_icon"
+        android:src="@drawable/event_icon"
         android:maxHeight="60dp"
         android:maxWidth="60dp"
         android:minHeight="20dp"
@@ -18,7 +18,7 @@
         android:adjustViewBounds="true"
         android:layout_marginLeft="0dp"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp" />
+        android:layout_marginTop="4dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
         android:textColor="@color/grey" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Room"
@@ -52,7 +52,10 @@
         android:layout_alignRight="@+id/event_time_widget"
         android:layout_alignEnd="@+id/event_time_widget"
         android:layout_alignBottom="@+id/event_info_widget"
-        android:textColor="@color/grey" />
+        android:textColor="@color/grey"
+        android:gravity="right"
+        android:singleLine="true"
+        android:ellipsize="end"/>
 
     <TextView
         android:layout_width="fill_parent"
@@ -82,7 +85,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="5dp"
-        android:textColor="@color/grey" />
+        android:textColor="@color/grey"
+        android:singleLine="true"
+        android:ellipsize="end"/>
 
 
 

@@ -23,8 +23,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
     private Context context = null;
     private int appWidgetId;
     private List<Event> widgetList = new ArrayList<>();
-    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen",
-            "Examen", "Examination", "Tenta"));
+    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline";
 
     public ListProvider(Context context, Intent intent)
     {
@@ -69,12 +68,12 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
 
         //Log.d("Loading", widgetList.get(position));
         Event event = widgetList.get(position);
-        remoteView.setTextViewText(R.id.event_course_widget, event.getName_sv());
+        remoteView.setTextViewText(R.id.event_course_widget, event.getName_en());
         remoteView.setTextViewText(R.id.event_room_widget, event.getRoom());
         remoteView.setTextViewText(R.id.event_info_widget, event.getInfo());
         remoteView.setTextViewText(R.id.event_time_widget, event.getStarttime() + "-" + event.getEndtime());
 
-        if (importantEvents.contains(event.getInfo())) {
+        if (importantEvents.contains(event.getInfo().toLowerCase())) {
             remoteView.setImageViewResource(R.id.image_icon_widget, R.drawable.event_icon_important);
         }
         else {

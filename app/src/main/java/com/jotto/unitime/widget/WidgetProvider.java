@@ -127,7 +127,7 @@ public class WidgetProvider extends AppWidgetProvider {
             Event.deleteAll(Event.class);
             List<Course> addedCourses = Course.listAll(Course.class);
             for (Course course : addedCourses) {
-                sessionHandler.getEventsFromCourse(course.getCourse_code().toUpperCase());
+                sessionHandler.getEventsFromCourse(course.getCourse_code().toUpperCase(), course.getCourse_location());
             }
             return true;
         }

@@ -53,8 +53,7 @@ public class FragmentB extends Fragment {
     private TextView selectedDateTextView;
     ArrayList<Event> events;
     ArrayAdapter<Event> adapter;
-    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen",
-            "Examen", "Examination", "Tenta"));
+    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline";
     CaldroidFragment calDroid;
     FrameLayout layout_MainMenu;
 
@@ -191,7 +190,7 @@ public class FragmentB extends Fragment {
 
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
 
-            if (importantEvents.contains(currentEvent.getInfo())) {
+            if (importantEvents.contains(currentEvent.getInfo().toLowerCase())) {
                 imageView.setImageResource(R.drawable.event_icon_important);
             }
             else {
@@ -212,7 +211,7 @@ public class FragmentB extends Fragment {
             timeText.setText(currentEvent.getStarttime() + "-" + currentEvent.getEndtime());
 
             TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
-            courseText.setText(currentEvent.getName_sv());
+            courseText.setText(currentEvent.getName_en());
 
             return itemView;
         }
@@ -235,7 +234,7 @@ public class FragmentB extends Fragment {
             for (Event e : events){
                 DateTime dateTime = new DateTime(e.getStartdate());
                 LocalDate today = LocalDate.now();
-                if (importantEvents.contains(e.getInfo())) {
+                if (importantEvents.contains(e.getInfo().toLowerCase())) {
                     calDroid.setBackgroundResourceForDate(R.color.calendarUrgent, dateTime.toDate());
                 }
                 else {

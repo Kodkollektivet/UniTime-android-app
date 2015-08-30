@@ -56,8 +56,7 @@ public class FragmentA extends Fragment {
     Network network = new Network();
     static ProgressDialog dialog;
     boolean isRefreshing = false;
-    private ArrayList<String> importantEvents = new ArrayList<String>(Arrays.asList("Redovisning", "Tentamen", "Omtentamen",
-            "Examen", "Examination", "Tenta"));
+    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline";
 
 
 
@@ -138,12 +137,14 @@ public class FragmentA extends Fragment {
                 settings.save();
                 new GetHeadinfo().execute();
                 new RefreshEvents().execute();
+                updateWidget();
                 showProgressDialog();
             } else if (LocalDate.now().isAfter(LocalDate.parse(settings.getDate()))) {
                 new GetHeadinfo().execute();
                 new RefreshEvents().execute();
                 settings.setDate(LocalDate.now().toString());
                 settings.save();
+                showProgressDialog();
                 updateWidget();
             }
         }
@@ -153,9 +154,9 @@ public class FragmentA extends Fragment {
 
     }
 
-    public void getEventsForCourse(String courseCode) {
+    public void getEventsForCourse(String courseCode, String location) {
         if (network.isOnline(myContext)) {
-            new GetCourseInfoTask().execute(courseCode);
+            new GetCourseInfoTask().execute(courseCode, location);
         }
         else {
             Toast.makeText(myContext, "No internet connection found.", Toast.LENGTH_SHORT).show();
@@ -205,7 +206,7 @@ public class FragmentA extends Fragment {
             Event event = getChild(groupPosition, childPosition);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.image_icon);
 
-            if (importantEvents.contains(event.getInfo())) {
+            if (importantEvents.contains(event.getInfo().toLowerCase())) {
                 imageView.setImageResource(R.drawable.event_icon_important);
             }
             else {
@@ -225,7 +226,7 @@ public class FragmentA extends Fragment {
             timeText.setText(event.getStarttime() + "-" + event.getEndtime());
 
             TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
-            courseText.setText(event.getName_sv());
+            courseText.setText(event.getName_en());
 
             return itemView;
         }
@@ -307,7 +308,7 @@ public class FragmentA extends Fragment {
         @Override
         protected Object doInBackground(Object[] params) {
             SessionHandler sessionHandler = new SessionHandler();
-            sessionHandler.getEventsFromCourse(params[0].toString());
+            sessionHandler.getEventsFromCourse(params[0].toString(), params[1].toString());
             return null;
         }
     }
@@ -348,25 +349,17 @@ public class FragmentA extends Fragment {
         protected Object doInBackground(Object[] params) {
             isRefreshing = true;
             Event.deleteAll(Event.class);
+            Event.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'EVENT'");
             List<Course> addedCourses = Course.listAll(Course.class);
             for (Course course : addedCourses) {
-                sessionHandler.getEventsFromCourse(course.getCourse_code().toUpperCase());
+                sessionHandler.getEventsFromCourse(course.getCourse_code().toUpperCase(), course.getCourse_location());
             }
             return true;
         }
     }
 
     public void deleteEventsCourseRemoved(Course course){
-        for (Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
-            Event event = iterator.next();
-            if (event.getCourse_code().equals(course.getCourse_code())) {
-                event.delete();
-                iterator.remove();
-            }
-        }
-        refreshAdapter();
-        updateWidget();
-        FragmentB.fragmentB.updateList();
+        new RefreshEvents().execute();
     }
 
     private void refreshAdapter() {

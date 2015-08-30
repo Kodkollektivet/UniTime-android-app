@@ -135,13 +135,16 @@ public class FragmentD extends Fragment {
             imageView.setImageResource(R.drawable.course_icon);
 
             TextView nameText = (TextView) itemView.findViewById(R.id.course_name);
-            nameText.setText(course.getName_sv());
+            nameText.setText(course.getName_en());
 
             TextView codeText = (TextView) itemView.findViewById(R.id.course_code);
             codeText.setText(course.getCourse_code());
 
             TextView semesterText = (TextView) itemView.findViewById(R.id.course_semester);
-            semesterText.setText(course.getName_en());
+            semesterText.setText(course.getName_sv());
+
+            TextView locationText = (TextView) itemView.findViewById(R.id.course_location);
+            locationText.setText(course.getCourse_location());
 
             return itemView;
         }
@@ -181,8 +184,12 @@ public class FragmentD extends Fragment {
                 longClickedView.setBackgroundResource(R.color.white);
                 dialog.dismiss();
                 FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
-                selectedCourse.delete();
+                Course.deleteAll(Course.class);
+                Course.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'COURSE'");
                 courses.remove(selectedCourse);
+                for (Course course: courses) {
+                    course.save();
+                }
                 adapter.notifyDataSetChanged();
             }
         });

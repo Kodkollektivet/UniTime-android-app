@@ -108,7 +108,7 @@ public class SessionHandler {
         return "false";
     }
 
-    public void getEventsFromCourse(String courseCode) {
+    public void getEventsFromCourse(String courseCode, String location) {
 
         HttpClient httpClient = new DefaultHttpClient();
         String urlName = ServerConstants.SERVER_REST_URL+ServerConstants.EVENT_PATH;
@@ -118,7 +118,7 @@ public class SessionHandler {
             Event[] eventList;
 
             ObjectMapper mapper = new ObjectMapper();
-            String params = "course=" + courseCode;
+            String params = "course=" + courseCode + "&location=" + location;
 
             request.addHeader("User-Agent", "UniTime-Android-Client");
             request.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
@@ -171,6 +171,8 @@ public class SessionHandler {
                     response.append(line);
                 }
                 courseDataList = mapper.readValue(response.toString(), CourseDataAC[].class);
+                CourseDataAC.deleteAll(CourseDataAC.class);
+                CourseDataAC.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'COURSE_DATA_AC'");
                 FragmentA.setProgressBarMax(courseDataList.length);
                 for (CourseDataAC cda : courseDataList) {
                     cda.save();
