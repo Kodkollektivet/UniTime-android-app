@@ -220,7 +220,7 @@ public class FragmentD extends Fragment {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTypeface(null, Typeface.BOLD);
             }
         });
-
+        alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
     }
 
