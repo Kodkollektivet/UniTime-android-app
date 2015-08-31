@@ -51,7 +51,7 @@ public class FragmentA extends Fragment {
     ArrayList<Event> events;
     EventDateAdapter adapter;
     private Settings settings;
-    private FragmentActivity myContext;
+    private static FragmentActivity myContext;
     PtrClassicFrameLayout mPtrFrame;
     Network network = new Network();
     static ProgressDialog dialog;
@@ -138,7 +138,6 @@ public class FragmentA extends Fragment {
                 new GetHeadinfo().execute();
                 new RefreshEvents().execute();
                 updateWidget();
-                showProgressDialog();
             } else if (LocalDate.now().isAfter(LocalDate.parse(settings.getDate()))) {
                 new GetHeadinfo().execute();
                 new RefreshEvents().execute();
@@ -378,7 +377,7 @@ public class FragmentA extends Fragment {
         mPtrFrame.refreshComplete();
     }
 
-    private void showProgressDialog() {
+    private static void showProgressDialog() {
         dialog = new ProgressDialog(myContext);
         dialog.setCancelable(true);
         dialog.setMessage(myContext.getString(R.string.update_courses));
@@ -403,7 +402,11 @@ public class FragmentA extends Fragment {
         dialog.setMax(max);
     }
 
-    public void showProgressDialogWindow() {
-        showProgressDialog();
+    public static void showProgressDialogWindow() {
+        myContext.runOnUiThread(new Runnable() {
+            public void run() {
+                showProgressDialog();
+            }
+        });
     }
 }
