@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -445,8 +446,10 @@ public class FragmentA extends Fragment {
         popupTeacher.setText(event.getTeacher());
 
         TextView popupInfo = (TextView) view.findViewById(R.id.event_info_popup_info);
-        popupInfo.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo() + " (" + event.getDesc() + ")");
-
+        //popupInfo.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo() + " (" + event.getDesc() + ")");
+        popupInfo.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in volutpat ex, quis tincidunt justo. Morbi tempus nunc sit amet magna cursus tincidunt. Integer varius accumsan sapien, eu facilisis massa aliquet eu. Nam diam justo, mattis ultricies elit sed, dictum eleifend odio. Morbi elementum leo in magna eleifend posuere. Mauris ut ipsum vitae orci ultricies bibendum sit amet in sem. Aenean id turpis ac leo scelerisque interdum. Aenean fermentum sagittis mauris vitae vestibulum. Etiam consectetur venenatis mi quis eleifend. Fusce elit turpis, ullamcorper eget sem at, mattis dignissim metus. Suspendisse potenti. Integer augue justo, sodales a consequat et, rutrum et augue. Maecenas quis ex ultrices, pellentesque tortor et, molestie sapien.\n" +
+                "\n" +
+                "Proin id nisl ipsum. Pellentesque vel metus sit amet lacus commodo interdum. Integer vel efficitur metus, at dapibus nibh. Duis ac pharetra odio, sed finibus ligula. Nam ex orci, semper in suscipit vitae, dapibus a nisi. Etiam finibus laoreet neque, ut condimentum mi dictum vitae. Curabitur arcu velit, consequat dapibus lorem id, suscipit pellentesque magna. Vestibulum vulputate purus ornare urna lacinia euismod. Vivamus venenatis tellus est, nec mollis risus commodo a. Pellentesque dapibus augue at aliquet porttitor. Nam euismod mauris in nisi bibendum fringilla. Aliquam sodales libero sed urna maximus.");
         //Title for popup
         TextView myTitle = new TextView(myContext);
         myTitle.setText("Event Info");
@@ -478,6 +481,10 @@ public class FragmentA extends Fragment {
         });
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.show();
-        alertDialog.getWindow().setLayout(1000, 1300);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        int pixelsInfo = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 415, getResources().getDisplayMetrics());
+        lp.copyFrom(alertDialog.getWindow().getAttributes());
+        lp.height = pixelsInfo;
+        alertDialog.getWindow().setAttributes(lp);
     }
 }
