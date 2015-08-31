@@ -206,7 +206,7 @@ public class SessionHandler {
                     return -1;
                 }
                 else {
-                    FragmentA.showProgressDialogWindow();
+                    FragmentA.fragmentA.showProgressDialogWindow();
                     settings.setContentLength(length);
                     settings.save();
                     getDataForAutocomplete();
