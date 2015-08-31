@@ -4,14 +4,19 @@ package com.jotto.unitime;
  * Created by johanrovala on 18/06/15.
  */
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,6 +199,7 @@ public class FragmentA extends Fragment {
         public View getChildView(LayoutInflater inflater, int groupPosition, int childPosition,
                                  boolean isLastChild, View convertView, ViewGroup parent) {
             //Inflate your view
+            final int position = childPosition;
             View itemView = convertView;
             if (itemView == null) {
                 inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -201,7 +207,7 @@ public class FragmentA extends Fragment {
             }
 
             //Gets the Event data for this view
-            Event event = getChild(groupPosition, childPosition);
+            final Event event = getChild(groupPosition, childPosition);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.image_icon);
 
             if (importantEvents.contains(event.getInfo().toLowerCase())) {
@@ -225,6 +231,13 @@ public class FragmentA extends Fragment {
 
             TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
             courseText.setText(event.getName_en());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onShowEventInfoDialog(event);
+                }
+            });
 
             return itemView;
         }
@@ -284,9 +297,6 @@ public class FragmentA extends Fragment {
             //This prevents a user from seeing any touch feedback when a group (header) is clicked.
             return false;
         }
-
-
-
     }
 
     private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
@@ -408,5 +418,66 @@ public class FragmentA extends Fragment {
                 showProgressDialog();
             }
         });
+    }
+
+    public void onShowEventInfoDialog(Event event) {
+
+        // inflate the custom popup layout
+        final AlertDialog.Builder builder = new AlertDialog.Builder(myContext, AlertDialog.THEME_HOLO_LIGHT);
+
+        LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View view = inflater.inflate(R.layout.event_info_popup, null);
+
+        TextView popupName_en = (TextView) view.findViewById(R.id.event_info_popup_name_en);
+        popupName_en.setText(event.getName_en());
+
+        TextView popupName_sv = (TextView) view.findViewById(R.id.event_info_popup_name_sv);
+        popupName_sv.setText(event.getName_sv());
+
+        TextView popupTime = (TextView) view.findViewById(R.id.event_info_popup_time);
+        popupTime.setText(event.getStarttime() + "-" + event.getEndtime());
+
+        TextView popupRoom = (TextView) view.findViewById(R.id.event_info_popup_room);
+        popupRoom.setText(event.getRoom());
+
+        TextView popupTeacher = (TextView) view.findViewById(R.id.event_info_popup_teacher);
+        popupTeacher.setText(event.getTeacher());
+
+        TextView popupInfo = (TextView) view.findViewById(R.id.event_info_popup_info);
+        popupInfo.setText(event.getDesc().length() < 2 ? event.getInfo() : event.getInfo() + " (" + event.getDesc() + ")");
+
+        //Title for popup
+        TextView myTitle = new TextView(myContext);
+        myTitle.setText("Event Info");
+        myTitle.setGravity(Gravity.CENTER);
+        myTitle.setTextSize(20);
+        int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+        myTitle.setHeight(pixels);
+        myTitle.setTypeface(null, Typeface.BOLD);
+        myTitle.setTextColor(getResources().getColor(R.color.testBlueHeader));
+
+        builder.setCustomTitle(myTitle);
+        builder.setView(view);
+
+        builder.setPositiveButton("Got it!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        final AlertDialog alertDialog = builder.create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.testBlueHeader));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTypeface(null, Typeface.BOLD);
+            }
+        });
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.show();
+        alertDialog.getWindow().setLayout(1000, 1300);
     }
 }
