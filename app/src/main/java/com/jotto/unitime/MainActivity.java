@@ -30,10 +30,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
+        Add viewpager to the main window.
+         */
         final ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new MyPageAdapter(getSupportFragmentManager()));
 
-        // Bind the tabs to the ViewPager
+        /*
+        Bind the tabs to the ViewPager and sets up the style
+         */
         final PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setShouldExpand(true);
         tabs.setIndicatorColor(Color.argb(-17, 40, 171, 227));
@@ -47,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+    Implementation of tabs, to make the icons change color aswell as the indicator moving.
+     */
     private class CustomOnPageChangeListener implements ViewPager.OnPageChangeListener{
 
         private PagerSlidingTabStrip tabStrip;
@@ -63,13 +71,15 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        /*
+        Hide soft keyboard when switching away from fragment C
+         */
         @Override
         public void onPageSelected(int i) {
             //set the previous selected page to state_selected = false
             if (i != 0 && previousPage == 0) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(tabStrip.getApplicationWindowToken(), 0);
-                //KeyboardUtil.toggleSoftKeyboard(getApplicationContext(), editText);
             }
             ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(previousPage).setSelected(false);
             //set the selected page to state_selected = true
@@ -99,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //If click on info show info dialog
         if (id == R.id.action_info) {
             onShowDialog();
         }
@@ -107,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    Show dialog with info about creators of the app
+     */
     public void onShowDialog() {
 
         Context context = this;

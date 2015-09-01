@@ -81,6 +81,9 @@ public class FragmentC extends Fragment {
         final int translateFrom = getResources().getColor(R.color.white);
         final int translateTo = getResources().getColor(R.color.grey);
         fragmentC = this;
+        /*
+        Close the keyboard if the done button is hit.
+         */
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -91,6 +94,9 @@ public class FragmentC extends Fragment {
             }
         });
 
+        /*
+        Apply filter when text in the edittext window has changed.
+         */
         editText.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -109,6 +115,9 @@ public class FragmentC extends Fragment {
         getCoursesFromDatabase();
         populateListView();
 
+        /*
+        Add course dialog popup when course is clicked.
+         */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -132,6 +141,9 @@ public class FragmentC extends Fragment {
         });
     }
 
+    /*
+    Sets the adapter for the listview and set textfilter to true.
+     */
     private void populateListView() {
         listView = (ListView) myContext.findViewById(R.id.listView);
         adapter = new CourseAdapter(courses);
@@ -139,6 +151,10 @@ public class FragmentC extends Fragment {
         listView.setTextFilterEnabled(true);
     }
 
+    /*
+    Gets the course, updates listview and tells fragment A to get events for that course.
+    Also tells Fragment D to add the course to its listview.
+     */
     private class GetCourseTask extends AsyncTask<String, Object[], Object[]> {
 
         @Override
@@ -167,11 +183,18 @@ public class FragmentC extends Fragment {
 
 
 
+    /*
+    Checks if the database exists.
+     */
     private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
         File dbFile = context.getDatabasePath(dbName);
         return dbFile.exists();
     }
 
+    /*
+    Gets all the data for CourseDataAC from the database and adds it to the list and updates
+    listview.
+     */
     private void getCoursesFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<CourseDataAC> retrievedEvents = CourseDataAC.listAll(CourseDataAC.class);
@@ -182,6 +205,9 @@ public class FragmentC extends Fragment {
         }
     }
 
+    /*
+    Adapter implementation for the listview with custom coursefilter.
+     */
     private class CourseAdapter extends ArrayAdapter<CourseDataAC> implements Filterable {
 
         private CourseFilter filter;
@@ -208,6 +234,9 @@ public class FragmentC extends Fragment {
                 itemView = inflater.inflate(R.layout.course_view, parent, false);
             }
 
+            /*
+            Sets the texts for the course view
+             */
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
             imageView.setImageResource(R.drawable.course_icon);
 
@@ -228,7 +257,9 @@ public class FragmentC extends Fragment {
 
         private class CourseFilter extends Filter
         {
-
+            /*
+            Filters the letters recieved, checks course codes, English names and Swedish names.
+             */
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
 
@@ -258,6 +289,9 @@ public class FragmentC extends Fragment {
                 return result;
             }
 
+            /*
+            Sets listview items to the filtered lists and updates the list.
+             */
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint,
@@ -297,6 +331,10 @@ public class FragmentC extends Fragment {
         builder.setMessage(Html.fromHtml("<font color='#565656'>Do you want to add this course?</font>"));
 
 
+        /*
+        Set up the buttons and adds the course if it has not been added before and exists in the
+        database. If positive button is pressed also clear the edittext window of text.
+         */
         builder.setPositiveButton("I'll do it!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -352,6 +390,9 @@ public class FragmentC extends Fragment {
         alertDialog.show();
     }
 
+    /*
+    Refreshes the adapter.
+     */
     public void refreshAdapter() {
         getCoursesFromDatabase();
         adapter.notifyDataSetChanged();

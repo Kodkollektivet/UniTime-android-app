@@ -20,6 +20,9 @@ import java.util.List;
 
 public class WidgetProvider extends AppWidgetProvider {
 
+    /*
+    Strings for separating the different update methods
+     */
     public static String UPDATE_ACTION = "UPDATE_ACTION";
     public static String UPDATE_ACTION_ALARM = "unitime.widget.UPDATE_ALARM";
     Network network = new Network();
@@ -48,9 +51,11 @@ public class WidgetProvider extends AppWidgetProvider {
 
         this.context = context;
         String action = intent.getAction();
-        System.out.println(action);
 
-        //init widget
+        /*
+        Init the widget, create update via alarmmanager every 3 hours and respond to the appropriate
+        action string.
+         */
         if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
 
             final AppWidgetManager manager = AppWidgetManager.getInstance
@@ -73,7 +78,9 @@ public class WidgetProvider extends AppWidgetProvider {
                 new RefreshEvents().execute();
             }
         }
-        //stop clock tick
+        /*
+        Cancel the alarmmanager
+         */
         else if (action.equals(AppWidgetManager.ACTION_APPWIDGET_DISABLED)) {
             Intent updateIntent = new Intent(UPDATE_ACTION_ALARM);
             PendingIntent pendingUpdateIntent = PendingIntent.getBroadcast(context, 0, updateIntent, 0);
@@ -89,6 +96,10 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds)
     {
+        /*
+        Update, set up the adapter for the widget listview, set the empty view and set open app
+        on click.
+         */
         for (int appWidgetId : appWidgetIds) {
             RemoteViews rv = new RemoteViews(context.getPackageName(),
                     R.layout.widget_layout);
@@ -112,6 +123,10 @@ public class WidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
+    /*
+    Removes all events and event ids from the database, gets new ones from sessionhandler and
+    send update action to widget
+     */
     private class RefreshEvents extends AsyncTask {
         SessionHandler sessionHandler = new SessionHandler();
 

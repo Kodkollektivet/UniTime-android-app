@@ -72,6 +72,9 @@ public class FragmentD extends Fragment {
         getCoursesFromDatabase();
         populateListView();
 
+        /*
+        Show delete course popup on click.
+         */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -95,17 +98,26 @@ public class FragmentD extends Fragment {
         });
         }
 
+    /*
+    Set up the adapter for the listview.
+     */
     private void populateListView() {
         listView = (ListView) myContext.findViewById(R.id.listViewMyCourses);
         adapter = new MyCoursesAdapter(courses);
         listView.setAdapter(adapter);
     }
 
+    /*
+    Checks if database exists.
+     */
     private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
         File dbFile = context.getDatabasePath(dbName);
         return dbFile.exists();
     }
 
+    /*
+    Get all added courses from the database and add them to the list.
+     */
     private void getCoursesFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Course> retrievedCourses = Course.listAll(Course.class);
@@ -114,6 +126,9 @@ public class FragmentD extends Fragment {
         }
     }
 
+    /*
+    Adapter implementation for the added courses listview.
+     */
     private class MyCoursesAdapter extends ArrayAdapter<Course> {
 
         public MyCoursesAdapter(ArrayList<Course> list) {
@@ -132,6 +147,9 @@ public class FragmentD extends Fragment {
                 itemView = inflater.inflate(R.layout.course_view, parent, false);
             }
 
+            /*
+            Sets up the text and icons for the course views
+             */
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
             imageView.setImageResource(R.drawable.course_icon);
 
@@ -150,15 +168,18 @@ public class FragmentD extends Fragment {
             return itemView;
         }
     }
+
     /*
-    PopupWindow to show information of events.
+    Refreshes the adapter.
      */
-
-
     public void refreshAdapter() {
         getCoursesFromDatabase();
         adapter.notifyDataSetChanged();
     }
+
+    /*
+    Set up and show the delete course popup dialog
+     */
     public void onShowDialog() {
 
         // inflate the custom popup layout
@@ -178,7 +199,9 @@ public class FragmentD extends Fragment {
 
         builder.setMessage(Html.fromHtml("<font color='#565656'>Do you want to delete this course?</font>"));
 
-
+        /*
+        Delete the course on positive button click.
+         */
         builder.setPositiveButton("I'll do it!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

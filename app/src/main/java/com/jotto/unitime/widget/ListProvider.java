@@ -23,7 +23,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
     private Context context = null;
     private int appWidgetId;
     private List<Event> widgetList = new ArrayList<>();
-    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline";
+    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline|reexamination|reexam";
 
     public ListProvider(Context context, Intent intent)
     {
@@ -34,12 +34,14 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
         //dbhelper = new DBHelper(this.context);
     }
 
+    // Gets the events from the database that is for today, sorts them and then add them to the list
     private void updateWidgetListView()
     {
         this.widgetList = Event.find(Event.class, "STARTDATE = ?", LocalDate.now().toString());
         Collections.sort(this.widgetList);
     }
 
+    //Returns the size of the list of events
     @Override
     public int getCount()
     {
@@ -55,24 +57,28 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public RemoteViews getLoadingView()
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public RemoteViews getViewAt(int position)
     {
-        //Log.d("WidgetCreatingView", "WidgetCreatingView");
+        //Gets the view
         RemoteViews remoteView = new RemoteViews(context.getPackageName(),
                 R.layout.event_view_widget);
 
-        //Log.d("Loading", widgetList.get(position));
+        /*
+        Gets the event from the list and sets the appropriate texts
+         */
         Event event = widgetList.get(position);
         remoteView.setTextViewText(R.id.event_course_widget, event.getName_en());
         remoteView.setTextViewText(R.id.event_room_widget, event.getRoom());
         remoteView.setTextViewText(R.id.event_info_widget, event.getInfo());
         remoteView.setTextViewText(R.id.event_time_widget, event.getStarttime() + "-" + event.getEndtime());
 
+        /*
+        If the event is important change the icon to the important icon
+         */
         if (importantEvents.contains(event.getInfo().toLowerCase())) {
             remoteView.setImageViewResource(R.id.image_icon_widget, R.drawable.event_icon_important);
         }
@@ -86,36 +92,30 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public int getViewTypeCount()
     {
-        // TODO Auto-generated method stub
         return 1;
     }
 
     @Override
     public boolean hasStableIds()
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void onCreate()
     {
-        // TODO Auto-generated method stub
         updateWidgetListView();
     }
 
     @Override
     public void onDataSetChanged()
     {
-        // TODO Auto-generated method stub
         updateWidgetListView();
     }
 
     @Override
     public void onDestroy()
     {
-        // TODO Auto-generated method stub
         widgetList.clear();
-        //dbhelper.close();
     }
 }

@@ -13,7 +13,7 @@ import android.view.inputmethod.InputMethodManager;
  */
 public class KeyboardUtil {
     /**
-     * Toggles the soft keyboard
+     * Hides the soft keyboard
      */
     public static void hideSoftKeyboard(Context context, View view) {
         InputMethodManager imm = (InputMethodManager)

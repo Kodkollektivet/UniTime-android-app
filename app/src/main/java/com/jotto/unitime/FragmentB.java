@@ -53,7 +53,7 @@ public class FragmentB extends Fragment {
     private TextView selectedDateTextView;
     ArrayList<Event> events;
     ArrayAdapter<Event> adapter;
-    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline";
+    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline|reexam|reexamination";
     CaldroidFragment calDroid;
     FrameLayout layout_MainMenu;
 
@@ -102,11 +102,12 @@ public class FragmentB extends Fragment {
 
     }
 
-
-    // If there is a database, fetch all of the events stored in event objects and add to arraylist
-    // At first glance this method does a lot more than just getting events from the database
-    // It first colors ALL events blue, then it iterates over the events again to check if any
-    // Event includes info matching any string in importantEvents[]. In that case it colors it red.
+    /*
+    If there is a database, fetch all of the events stored in event objects and add to arraylist
+    At first glance this method does a lot more than just getting events from the database
+    It first colors ALL events blue, then it iterates over the events again to check if any
+    Event includes info matching any string in importantEvents[]. In that case it colors it red.
+    */
     private void getEventsFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
@@ -139,6 +140,9 @@ public class FragmentB extends Fragment {
         layout_MainMenu = (FrameLayout) myContext.findViewById(R.id.relative_layout_b);
         layout_MainMenu.getForeground().setAlpha(0);
 
+        /*
+        Settings for caldroid calendar.
+         */
         fragmentB = this;
         calDroid = new CaldroidFragment();
         Bundle args = new Bundle();
@@ -170,6 +174,9 @@ public class FragmentB extends Fragment {
         getEventsFromDatabase();
     }
 
+    /*
+    Adapter for the listview within the popup that appears when clicking a date in the calendar.
+     */
     private class MyListAdapter extends ArrayAdapter<Event> {
 
 
@@ -188,6 +195,9 @@ public class FragmentB extends Fragment {
                 itemView = inflater.inflate(R.layout.event_view, parent, false);
             }
 
+            /*
+            Setting up the texts and icons in the listview.
+             */
             ImageView imageView = (ImageView)itemView.findViewById(R.id.image_icon);
 
             if (importantEvents.contains(currentEvent.getInfo().toLowerCase())) {
@@ -223,17 +233,22 @@ public class FragmentB extends Fragment {
 
     }
 
+    /*
+    Method for updating and recoloring the events in the calendar.
+     */
     public void updateList() {
         calDroid.getBackgroundForDateTimeMap().clear();
         getEventsFromDatabase();
         recolorCalendar();
     }
 
+    /*
+    Method that handles the actual coloring of the calendar cells.
+     */
     private void recolorCalendar() {
         if(!events.isEmpty()){
             for (Event e : events){
                 DateTime dateTime = new DateTime(e.getStartdate());
-                LocalDate today = LocalDate.now();
                 if (importantEvents.contains(e.getInfo().toLowerCase())) {
                     calDroid.setBackgroundResourceForDate(R.color.calendarUrgent, dateTime.toDate());
                 }

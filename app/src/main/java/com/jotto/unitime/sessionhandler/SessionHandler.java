@@ -39,6 +39,10 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by otto on 2015-06-19.
  */
+
+/**
+ * SessionHandler class, used for making http requests for the course's and event's.
+ */
 public class SessionHandler {
 
     int coursesLoaded = 0;
@@ -47,6 +51,11 @@ public class SessionHandler {
     public SessionHandler() {
     }
 
+    /**
+     * Gets the course specified by course code and location of the course in the parameters.
+     * @param postDataParams Course code and location
+     * @return True or error message
+     */
     public String getCourse(HashMap<String, String> postDataParams) {
 
         URL url;
@@ -110,6 +119,11 @@ public class SessionHandler {
         return "false";
     }
 
+    /**
+     * Gets the event's for a specific course.
+     * @param courseCode Course's course code
+     * @param location Course's location
+     */
     public void getEventsFromCourse(String courseCode, String location) {
 
         HttpClient httpClient = new DefaultHttpClient();
@@ -148,6 +162,9 @@ public class SessionHandler {
 
     }
 
+    /**
+     * Gets the data for the CourseDataAC model and saves them to the database.
+     */
     public void getDataForAutocomplete() {
 
         HttpURLConnection conn = null;
@@ -191,6 +208,12 @@ public class SessionHandler {
         }
     }
 
+    /**
+     * Sends head request to server to check if any new course's for CourseDataAC has been added,
+     * if it has it updates CourseDataAC in the database. Returns -1 if it can't connect to the
+     * server.
+     * @return HTTP Content Length
+     */
     public int getHeadInfo() {
         HttpURLConnection urlConnection = null;
         System.setProperty("http.keepAlive", "false");
@@ -223,6 +246,12 @@ public class SessionHandler {
         return -1;
     }
 
+    /**
+     * Helper class that Transforms the url.
+     * @param params HashMap of course code and location
+     * @return The Transformed HashMap
+     * @throws UnsupportedEncodingException
+     */
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;

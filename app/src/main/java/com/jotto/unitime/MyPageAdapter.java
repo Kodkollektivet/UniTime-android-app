@@ -12,6 +12,9 @@ import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
  */
 public class MyPageAdapter extends FragmentPagerAdapter implements IconTabProvider {
 
+    /*
+    Icons used for the tabs
+     */
     private int tabIcons[] = {R.drawable.search_tab_icon, R.drawable.list_tab_icon, R.drawable.event_tab_icon, R.drawable.person_tab_icon};
 
     public MyPageAdapter(FragmentManager fm) {

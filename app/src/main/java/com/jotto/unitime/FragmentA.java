@@ -62,7 +62,7 @@ public class FragmentA extends Fragment {
     Network network = new Network();
     static ProgressDialog dialog;
     boolean isRefreshing = false;
-    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline";
+    private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline|reexam|reexamination";
 
 
 
@@ -132,7 +132,11 @@ public class FragmentA extends Fragment {
 
         });
 
-
+        /*
+        Get settings from database, if network is active then send head request and refresh the
+        events. Save settings and update the widget. If no internet connection is found,
+        print it out in a toast window.
+         */
         settings = Settings.findById(Settings.class, (long) 1);
 
         if (network.isOnline(myContext)) {
@@ -158,6 +162,9 @@ public class FragmentA extends Fragment {
 
     }
 
+    /*
+    Checks internet connection and gets events for course
+     */
     public void getEventsForCourse(String courseCode, String location) {
         if (network.isOnline(myContext)) {
             new GetCourseInfoTask().execute(courseCode, location);
@@ -167,6 +174,9 @@ public class FragmentA extends Fragment {
         }
     }
 
+    /*
+    Checks if database exists and gets the events from the database and add them to the events list.
+     */
     private void getEventsFromDatabase() {
         if (doesDatabaseExist(myContext, "unitime.db")) {
             List<Event> retrievedEvents = Event.listAll(Event.class);
@@ -176,6 +186,9 @@ public class FragmentA extends Fragment {
         }
     }
 
+    /*
+    Adds the adapter to the expandable listview and sets an empty view.
+     */
     private void populateListView() {
         expandableListView = (ExpandableListView) myContext.findViewById(R.id.listView2);
         adapter = new EventDateAdapter(myContext, events);
@@ -184,6 +197,9 @@ public class FragmentA extends Fragment {
         expandableListView.setAdapter(adapter);
     }
 
+    /*
+    Adapter implementation for the events listview with group headers and a filter.
+     */
     private class EventDateAdapter extends NFRolodexArrayAdapter<LocalDate, Event> {
 
         public EventDateAdapter(Context activity, Collection<Event> items) {
@@ -211,6 +227,9 @@ public class FragmentA extends Fragment {
             final Event event = getChild(groupPosition, childPosition);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.image_icon);
 
+            /*
+            Sets up the texts and icons for the event view
+             */
             if (importantEvents.contains(event.getInfo().toLowerCase())) {
                 imageView.setImageResource(R.drawable.event_icon_important);
             }
@@ -233,6 +252,9 @@ public class FragmentA extends Fragment {
             TextView courseText = (TextView) itemView.findViewById(R.id.event_course);
             courseText.setText(event.getName_en());
 
+            /*
+            Show event info in a popup on click
+             */
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -252,10 +274,15 @@ public class FragmentA extends Fragment {
                 inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 headerView = inflater.inflate(R.layout.header_view, parent, false);
             }
-            //Gets the Date for this view
+            /*
+            Gets the Date for this view
+            */
             LocalDate localDate = getGroup(groupPosition);
 
-            //Fill view with date data
+
+            /*
+            Fill view with formatted date data
+             */
             DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE - d/M").withLocale(Locale.US);
             DateTimeFormatter dtf2 = DateTimeFormat.forPattern(" - d/M").withLocale(Locale.US);
             DateTimeFormatter dtfWeek = DateTimeFormat.forPattern("'Week 'w").withLocale(Locale.US);
@@ -300,11 +327,18 @@ public class FragmentA extends Fragment {
         }
     }
 
+    /*
+    Method to check if database exists.
+     */
     private static boolean doesDatabaseExist(ContextWrapper context, String dbName) {
         File dbFile = context.getDatabasePath(dbName);
         return dbFile.exists();
     }
 
+    /*
+    Gets events for a course from the sessionhandler and refreshes the adapter, widget and calendar
+    afterwards.
+     */
     private class GetCourseInfoTask extends AsyncTask {
 
         @Override
@@ -322,6 +356,9 @@ public class FragmentA extends Fragment {
         }
     }
 
+    /*
+    Sends a headrequest from sessionhandler and updates courselist after.
+     */
     private class GetHeadinfo extends AsyncTask {
 
         @Override
@@ -337,6 +374,10 @@ public class FragmentA extends Fragment {
         }
     }
 
+    /*
+    Updates events for added courses and notifys adapter, widget and calendar after aswell as
+    notifying the pull to refresh that it has completed.
+     */
     private class RefreshEvents extends AsyncTask {
         SessionHandler sessionHandler = new SessionHandler();
         @Override
@@ -367,10 +408,16 @@ public class FragmentA extends Fragment {
         }
     }
 
+    /*
+    Calls refresh events after a course has been removed.
+     */
     public void deleteEventsCourseRemoved(Course course){
         new RefreshEvents().execute();
     }
 
+    /*
+    Method for easier updating the adapter.
+     */
     private void refreshAdapter() {
         getEventsFromDatabase();
         adapter.clear();
@@ -378,16 +425,25 @@ public class FragmentA extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    /*
+    Method for updating the widget with the use of an intent.
+     */
     private void updateWidget() {
         Intent intent = new Intent(myContext, WidgetProvider.class);
         intent.setAction(WidgetProvider.UPDATE_ACTION);
         myContext.sendBroadcast(intent);
     }
 
+    /*
+    Method for notifying the pull to refresh.
+     */
     private void notifyPTR() {
         mPtrFrame.refreshComplete();
     }
 
+    /*
+    Set up and show the progress dialog when updating courses for the CourseDataAC list.
+     */
     private void showProgressDialog() {
         dialog = new ProgressDialog(myContext);
         dialog.setCancelable(true);
@@ -402,6 +458,9 @@ public class FragmentA extends Fragment {
         dialog.show();
     }
 
+    /*
+    Method for updating the progress for the progress dialog.
+     */
     public static void updateProgressBar(int progress) {
         dialog.setProgress(progress);
         if (progress == dialog.getMax()) {
@@ -409,10 +468,16 @@ public class FragmentA extends Fragment {
         }
     }
 
+    /*
+    Method for setting the max value for the progressbar dynamically.
+     */
     public static void setProgressBarMax(int max) {
         dialog.setMax(max);
     }
 
+    /*
+    Method to show the progressDialog from another thread.
+     */
     public void showProgressDialogWindow() {
         myContext.runOnUiThread(new Runnable() {
             public void run() {
@@ -421,6 +486,9 @@ public class FragmentA extends Fragment {
         });
     }
 
+    /*
+    Shows and inputs the correct data for the event info popup.
+     */
     public void onShowEventInfoDialog(Event event) {
 
         // inflate the custom popup layout
