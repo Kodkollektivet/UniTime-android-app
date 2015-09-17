@@ -18,17 +18,20 @@
     <item name="darkred" type="color">#FFCC0000</item>
     <item name="lightgrey" type="color">#ffeeeeee</item>
     <item name="darkerlightgrey" type="color">#ffb3b3b3</item>
+    <item name="darkergrey" type="color">#767676</item>
     <item name="darkblue" type="color">#FF0000FF</item>
     <item name="white" type="color">#FFFFFFFF</item>
-    <item name="grey" type="color">#a8a8a8</item>
+    <item name="grey" type="color">#e7f1f7</item>
     <item name="dividergrey" type="color">#ffeeeeee</item>
     <item name="todayblue" type="color">#FF7E88A4</item>
-    <item name="testBlue" type="color">#27A6EB</item>
-    <item name="testBlueHeader" type="color">#44BDFF</item>
+    <item name="testBlue" type="color">#16C5B4</item>
+    <item name="testBlueHeader" type="color">#16C5B4</item>
     <item name="testBackgroundBlue" type="color">#f0f0f0</item>
     <item name="fadeInColor" type="color">#A7DBDB</item>
     <item name="calendarNormal" type="color">#e8b71a</item>
     <item name="calendarUrgent" type="color">#DB3340</item>
+    <color name="custom_header_text">#a81800</color>
+    <item name="ui_red" type="color">#F75455</item>
 
 
     <integer-array name="androidcolors">
@@ -47,4 +50,4 @@
         <item>@color/red_click</item>
     </integer-array>
 
-</resources>
+ </resources>

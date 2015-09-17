@@ -40,7 +40,7 @@
         android:layout_marginEnd="10dp"
         android:singleLine="true"
         android:ellipsize="end"
-        android:textColor="@color/grey" />
+        android:textColor="@color/darkerlightgrey" />
 
     <TextView
         android:layout_width="100dp"
@@ -52,7 +52,7 @@
         android:layout_alignRight="@+id/event_time_widget"
         android:layout_alignEnd="@+id/event_time_widget"
         android:layout_alignBottom="@+id/event_info_widget"
-        android:textColor="@color/grey"
+        android:textColor="@color/darkerlightgrey"
         android:gravity="right"
         android:singleLine="true"
         android:ellipsize="end"/>
@@ -72,7 +72,7 @@
         android:layout_alignLeft="@+id/event_course_widget"
         android:layout_toLeftOf="@+id/event_room_widget"
         android:layout_alignStart="@+id/event_course_widget"
-        android:textColor="@color/grey" />
+        android:textColor="@color/darkerlightgrey" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -85,7 +85,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="5dp"
-        android:textColor="@color/grey"
+        android:textColor="@color/darkerlightgrey"
         android:singleLine="true"
         android:ellipsize="end"/>
 

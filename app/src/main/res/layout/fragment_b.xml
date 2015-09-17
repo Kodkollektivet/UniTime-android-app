@@ -5,15 +5,12 @@
     android:background="@color/testBackgroundBlue"
     android:id="@+id/relative_layout_b"
     android:padding="10dp"
-    android:paddingLeft="10dp"
-    android:foreground="@drawable/shape_window_dim">
+    android:paddingLeft="10dp">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:id="@+id/llCalendar">
-
-    </LinearLayout>
+    <com.squareup.timessquare.CalendarPickerView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </FrameLayout>

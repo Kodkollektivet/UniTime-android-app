@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -42,7 +43,7 @@ public class FragmentD extends Fragment {
     public static FragmentD fragmentD;
     private MyCoursesAdapter adapter;
     private FragmentActivity myContext;
-    private ArrayList<Course> courses;
+    public ArrayList<Course> courses;
     private Course selectedCourse;
     private PopupWindow popupWindowDeleteCourse;
     private Button okButton;
@@ -75,6 +76,7 @@ public class FragmentD extends Fragment {
         /*
         Show delete course popup on click.
          */
+        /*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -95,7 +97,7 @@ public class FragmentD extends Fragment {
                 adapter.notifyDataSetChanged();
                 onShowDialog();
             }
-        });
+        });*/
         }
 
     /*
@@ -137,14 +139,14 @@ public class FragmentD extends Fragment {
 
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             // Make sure we have a view to work with (may have been given null)
 
             Course course = this.getItem(position);
             View itemView = convertView;
             if (itemView == null) {
                 LayoutInflater inflater = (LayoutInflater) myContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-                itemView = inflater.inflate(R.layout.course_view, parent, false);
+                itemView = inflater.inflate(R.layout.my_courses_view, parent, false);
             }
 
             /*
@@ -164,6 +166,16 @@ public class FragmentD extends Fragment {
 
             TextView locationText = (TextView) itemView.findViewById(R.id.course_location);
             locationText.setText(course.getCourse_location());
+
+            ImageButton removeCourseButton = (ImageButton) itemView.findViewById(R.id.remove_icon);
+            removeCourseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectedCourse = courses.get(position);
+                    adapter.notifyDataSetChanged();
+                    onShowDialog();
+                }
+            });
 
             return itemView;
         }
@@ -205,7 +217,7 @@ public class FragmentD extends Fragment {
         builder.setPositiveButton("I'll do it!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                longClickedView.setBackgroundResource(R.color.white);
+               // longClickedView.setBackgroundResource(R.color.white);
                 dialog.dismiss();
                 Course.deleteAll(Course.class);
                 Course.executeQuery("DELETE FROM SQLITE_SEQUENCE WHERE NAME = 'COURSE'");
@@ -222,7 +234,7 @@ public class FragmentD extends Fragment {
         builder.setNegativeButton("No thanks!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                longClickedView.setBackgroundResource(R.color.white);
+               // longClickedView.setBackgroundResource(R.color.white);
                 dialog.dismiss();
             }
         });
@@ -231,7 +243,7 @@ public class FragmentD extends Fragment {
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                longClickedView.setBackgroundResource(R.color.white);
+                //longClickedView.setBackgroundResource(R.color.white);
             }
         });
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {

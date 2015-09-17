@@ -15,15 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jotto.unitime.models.Event;
 import com.roomorama.caldroid.CaldroidFragment;
-import com.roomorama.caldroid.CaldroidListener;
+import com.squareup.timessquare.CalendarCellDecorator;
+import com.squareup.timessquare.CalendarCellView;
+import com.squareup.timessquare.CalendarPickerView;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -32,7 +32,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -47,15 +46,15 @@ public class FragmentB extends Fragment {
     private FragmentActivity myContext;
     public static FragmentB fragmentB;
     private Calendar cal;
+    private ArrayList<Date> normalDates;
+    private ArrayList<Date> importantDates;
     private Date date1;
     private Date clickedDate;
-    private PopupWindow popupWindow;
+    CalendarPickerView calendar;
     private TextView selectedDateTextView;
     ArrayList<Event> events;
-    ArrayAdapter<Event> adapter;
     private String importantEvents = "redovisning|tentamen|omtentamen|exam|examination|tenta|deadline|reexam|reexamination";
     CaldroidFragment calDroid;
-    FrameLayout layout_MainMenu;
 
     // i dont know how to describe what this does yet
     @Override
@@ -68,11 +67,11 @@ public class FragmentB extends Fragment {
     /*
     PopupWindow to show information of events.
      */
-    public void onShowPopup(View v) {
+    public void onShowPopup(Date date) {
         ArrayList<Event> currentDateList = new ArrayList<>();
         for (Event e : events){
             DateTime dateTime = new DateTime(e.getStartdate());
-            if(dateTime.toDate().equals(clickedDate)){
+            if(dateTime.toDate().equals(date)){
                 currentDateList.add(e);
             }
         }
@@ -82,7 +81,7 @@ public class FragmentB extends Fragment {
         // inflate the custom popup layout
         final View inflatedView = layoutInflater.inflate(R.layout.calendar_popup, null,false);
 
-        LocalDate selectedLocalDate = new LocalDate(clickedDate);
+        LocalDate selectedLocalDate = new LocalDate(date);
         DateTimeFormatter dtf = DateTimeFormat.forPattern("EEEE d/M").withLocale(Locale.US);
         selectedDateTextView = (TextView) inflatedView.findViewById(R.id.popup_textview);
         selectedDateTextView.setText(dtf.print(selectedLocalDate));
@@ -129,47 +128,37 @@ public class FragmentB extends Fragment {
 
     }
 
-    private void getDate(Date date){
-        clickedDate = date;
-    }
-
-
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        layout_MainMenu = (FrameLayout) myContext.findViewById(R.id.relative_layout_b);
-        layout_MainMenu.getForeground().setAlpha(0);
 
         /*
-        Settings for caldroid calendar.
+        Settings for android square times calendar.
          */
         fragmentB = this;
-        calDroid = new CaldroidFragment();
-        Bundle args = new Bundle();
-        cal = Calendar.getInstance();
         date1 = new Date(System.currentTimeMillis());
-        calDroid.setMinDate(date1);
-        args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
-        args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
-        args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY);
-        args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidUnitime);
-        calDroid.setArguments(args);
-        
+
+        Calendar nextYear = Calendar.getInstance();
+        nextYear.add(Calendar.YEAR, 1);
+
+        calendar = (CalendarPickerView) myContext.findViewById(R.id.calendar_view);
+        Date today = new Date();
+        calendar.init(today, nextYear.getTime())
+                .withSelectedDate(today);
+        calendar.setBackgroundResource(R.color.caldroid_transparent);
+
         // testing cell touch
-        final CaldroidListener caldroidListener = new CaldroidListener() {
+        calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
-            public void onSelectDate(Date date, View view) {
-                if(doesDatabaseExist(myContext, "unitime.db")) {
-                    getDate(date);
-                    onShowPopup(view);
-                }
+            public void onDateSelected(Date date) {
+                onShowPopup(date);
             }
-        };
-        calDroid.setCaldroidListener(caldroidListener);
-        android.support.v4.app.FragmentTransaction t = myContext
-                .getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.llCalendar, calDroid);
-        t.commit();
+
+            @Override
+            public void onDateUnselected(Date date) {
+
+            }
+        });
 
         getEventsFromDatabase();
     }
@@ -237,27 +226,48 @@ public class FragmentB extends Fragment {
     Method for updating and recoloring the events in the calendar.
      */
     public void updateList() {
-        calDroid.getBackgroundForDateTimeMap().clear();
         getEventsFromDatabase();
         recolorCalendar();
     }
 
-    /*
-    Method that handles the actual coloring of the calendar cells.
-     */
     private void recolorCalendar() {
         if(!events.isEmpty()){
+            importantDates = new ArrayList<>();
+            normalDates = new ArrayList<>();
             for (Event e : events){
                 DateTime dateTime = new DateTime(e.getStartdate());
                 if (importantEvents.contains(e.getInfo().toLowerCase())) {
-                    calDroid.setBackgroundResourceForDate(R.color.calendarUrgent, dateTime.toDate());
+                    importantDates.add(dateTime.toDate());
                 }
                 else {
-                    calDroid.setBackgroundResourceForDate(R.color.testBlueHeader, dateTime.toDate());
+                    normalDates.add(dateTime.toDate());
                 }
             }
+            ArrayList<CalendarCellDecorator> decoratorList = new ArrayList<>();
+            decoratorList.add(new paintDates());
+            calendar.setDecorators(decoratorList);
         }
-        calDroid.refreshView();
+    }
+
+    /*
+    Private class to paint the CalendarCellViews of our current calendar.
+    CellViews with dates that are not included in our Eventlists are colored back to white.
+     */
+    private class paintDates implements CalendarCellDecorator{
+
+        @Override
+        public void decorate(CalendarCellView calendarCellView, Date date) {
+            if(importantDates.contains(date)){
+                calendarCellView.setBackgroundResource(R.color.ui_red);
+                calendarCellView.setTextColor(getResources().getColor(R.color.white));
+            }else if(normalDates.contains(date)){
+                calendarCellView.setBackgroundResource(R.color.testBlue);
+                calendarCellView.setTextColor(getResources().getColor(R.color.white));
+            }else{
+                calendarCellView.setBackgroundResource(R.color.white);
+                calendarCellView.setTextColor(getResources().getColor(R.color.darkergrey));
+            }
+        }
     }
 
 }

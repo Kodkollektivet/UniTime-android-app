@@ -28,9 +28,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,6 +60,7 @@ public class FragmentC extends Fragment {
     private ArrayList<CourseDataAC> originalList = new ArrayList<>();
     private CourseDataAC selectedCourse;
     View longClickedView;
+    int i = 0;
     Network network = new Network();
     EditText editText;
 
@@ -81,13 +84,14 @@ public class FragmentC extends Fragment {
         final int translateFrom = getResources().getColor(R.color.white);
         final int translateTo = getResources().getColor(R.color.grey);
         fragmentC = this;
+        System.out.println("system out funkar iaf??");
         /*
         Close the keyboard if the done button is hit.
          */
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId== EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     KeyboardUtil.hideSoftKeyboard(myContext, editText);
                 }
                 return false;
@@ -118,6 +122,7 @@ public class FragmentC extends Fragment {
         /*
         Add course dialog popup when course is clicked.
          */
+        /*
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -138,7 +143,7 @@ public class FragmentC extends Fragment {
                 adapter.notifyDataSetChanged();
                 onShowDialog();
             }
-        });
+        });*/
     }
 
     /*
@@ -224,7 +229,7 @@ public class FragmentC extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             // Make sure we have a view to work with (may have been given null)
 
             CourseDataAC course = this.getItem(position);
@@ -251,6 +256,26 @@ public class FragmentC extends Fragment {
 
             TextView locationText = (TextView) itemView.findViewById(R.id.course_location);
             locationText.setText(course.getLocation());
+
+            final ImageButton addCourseButton = (ImageButton) itemView.findViewById(R.id.plus_button);
+            addCourseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectedCourse = courses.get(position);
+                    adapter.notifyDataSetChanged();
+                    onShowDialog();
+                }
+            });
+            /*
+            System.out.println("In corusesList: "+FragmentD.fragmentD.courses.get(i).getCourse_code());
+            System.out.println("In our view: "+ codeText.getText());
+            if (FragmentD.fragmentD.courses.get(i).getCourse_code().equals(codeText.toString())){
+                addCourseButton.setClickable(false);
+            }
+            else{
+                addCourseButton.setClickable(true);
+            }
+            i++;*/
 
             return itemView;
         }
@@ -340,7 +365,6 @@ public class FragmentC extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String courseCode = selectedCourse.getCourse_code().toUpperCase();
                 String location = selectedCourse.getLocation();
-                longClickedView.setBackgroundResource(R.color.white);
                 editText.setText("Search...");
                 dialog.dismiss();
 
@@ -364,19 +388,12 @@ public class FragmentC extends Fragment {
         builder.setNegativeButton("No thanks!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                longClickedView.setBackgroundResource(R.color.white);
                 KeyboardUtil.hideSoftKeyboard(myContext, editText);
                 dialog.dismiss();
             }
         });
 
         final AlertDialog alertDialog = builder.create();
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                longClickedView.setBackgroundResource(R.color.white);
-            }
-        });
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -397,6 +414,5 @@ public class FragmentC extends Fragment {
         getCoursesFromDatabase();
         adapter.notifyDataSetChanged();
     }
-
 
 }

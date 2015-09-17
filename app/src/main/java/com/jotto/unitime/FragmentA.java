@@ -6,6 +6,7 @@ package com.jotto.unitime;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -518,7 +519,7 @@ public class FragmentA extends Fragment {
 
         //Title for popup
         TextView myTitle = new TextView(myContext);
-        myTitle.setText("Event Info");
+        //myTitle.setText("Event Info");
         myTitle.setGravity(Gravity.CENTER);
         myTitle.setTextSize(20);
         int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
@@ -526,7 +527,7 @@ public class FragmentA extends Fragment {
         myTitle.setTypeface(null, Typeface.BOLD);
         myTitle.setTextColor(getResources().getColor(R.color.testBlueHeader));
 
-        builder.setCustomTitle(myTitle);
+       // builder.setCustomTitle(myTitle);
         builder.setView(view);
 
         builder.setPositiveButton("Got it!", new DialogInterface.OnClickListener() {

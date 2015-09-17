@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setElevation(0);
 
         /*
         Add viewpager to the main window.
@@ -41,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
          */
         final PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setShouldExpand(true);
-        tabs.setIndicatorColor(Color.argb(-17, 40, 171, 227));
-        tabs.setUnderlineColor(Color.argb(-17, 40, 171, 227));
+        tabs.setIndicatorColor(Color.argb(-2, 255, 255, 255));
+        tabs.setUnderlineColor(Color.argb(255, 240, 240, 240));
+        tabs.setBackgroundResource(R.color.testBlueHeader);
         tabs.setViewPager(pager);
         pager.setOffscreenPageLimit(4);
         pager.setCurrentItem(1);
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
             ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(previousPage).setSelected(false);
             //set the selected page to state_selected = true
-            ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(i).setSelected(true);
+            ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(i).setSelected(false);
             //remember the current page
             previousPage=i;
         }

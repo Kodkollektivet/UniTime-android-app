@@ -23,8 +23,8 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/course_code_text"
         android:id="@+id/listView"
-        android:childDivider="#FFBDBDBD"
-        android:dividerHeight="5dp"
+        android:childDivider="@color/testBackgroundBlue"
+        android:dividerHeight="2dp"
         android:layout_marginTop="10dp" />
 
 </RelativeLayout>
