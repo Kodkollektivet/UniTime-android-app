@@ -34,9 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Delayed;
 
-/**
- * Created by johanrovala on 18/06/15.
- */
 public class FragmentD extends Fragment {
 
     private ListView listView;
@@ -229,6 +226,7 @@ public class FragmentD extends Fragment {
                     course.save();
                 }
                 FragmentA.fragmentA.deleteEventsCourseRemoved(selectedCourse);
+                FragmentC.fragmentC.updateAddedCoursesList();
                 adapter.notifyDataSetChanged();
             }
         });

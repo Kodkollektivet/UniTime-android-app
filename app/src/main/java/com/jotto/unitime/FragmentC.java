@@ -205,8 +205,7 @@ public class FragmentC extends Fragment {
             originalList.clear();
             courses.addAll(retrievedEvents);
             originalList.addAll(retrievedEvents);
-            addedCourses.clear();
-            addedCourses.addAll(Course.listAll(Course.class));
+
         }
     }
 
@@ -424,6 +423,11 @@ public class FragmentC extends Fragment {
     public void refreshAdapter() {
         getCoursesFromDatabase();
         adapter.notifyDataSetChanged();
+    }
+
+    public void updateAddedCoursesList() {
+        addedCourses.clear();
+        addedCourses.addAll(Course.listAll(Course.class));
     }
 
 }
