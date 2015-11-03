@@ -3,8 +3,6 @@ package com.jotto.unitime;
 /**
  * Created by johanrovala on 18/06/15.
  */
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,9 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -59,6 +55,7 @@ public class FragmentC extends Fragment {
     private ArrayList<CourseDataAC> courses;
     private ArrayList<CourseDataAC> originalList = new ArrayList<>();
     private CourseDataAC selectedCourse;
+    private ArrayList<Course> addedCourses = new ArrayList<>();
     View longClickedView;
     int i = 0;
     Network network = new Network();
@@ -84,6 +81,7 @@ public class FragmentC extends Fragment {
         final int translateFrom = getResources().getColor(R.color.white);
         final int translateTo = getResources().getColor(R.color.grey);
         fragmentC = this;
+        addedCourses.addAll(Course.listAll(Course.class));
         System.out.println("system out funkar iaf??");
         /*
         Close the keyboard if the done button is hit.
@@ -207,6 +205,8 @@ public class FragmentC extends Fragment {
             originalList.clear();
             courses.addAll(retrievedEvents);
             originalList.addAll(retrievedEvents);
+            addedCourses.clear();
+            addedCourses.addAll(Course.listAll(Course.class));
         }
     }
 
@@ -266,6 +266,18 @@ public class FragmentC extends Fragment {
                     onShowDialog();
                 }
             });
+            for (Course c : addedCourses) {
+                if (c.getCourse_code().equals(course.getCourse_code()) &&
+                        c.getCourse_location().equals(course.getLocation())) {
+                    addCourseButton.setClickable(false);
+                    addCourseButton.setAlpha(0.3f);
+                    break;
+                }
+                else {
+                    addCourseButton.setClickable(true);
+                    addCourseButton.setAlpha(1.0f);
+                }
+            }
             /*
             System.out.println("In corusesList: "+FragmentD.fragmentD.courses.get(i).getCourse_code());
             System.out.println("In our view: "+ codeText.getText());
@@ -365,7 +377,6 @@ public class FragmentC extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String courseCode = selectedCourse.getCourse_code().toUpperCase();
                 String location = selectedCourse.getLocation();
-                editText.setText("Search...");
                 dialog.dismiss();
 
                 if (Course.find(Course.class, StringUtil.toSQLName("course_code") + " = ? and " +

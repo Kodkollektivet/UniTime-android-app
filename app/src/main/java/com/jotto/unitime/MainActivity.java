@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setElevation(0);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setElevation(0);
+        }
 
         /*
         Add viewpager to the main window.
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
             ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(previousPage).setSelected(false);
             //set the selected page to state_selected = true
-            ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(i).setSelected(false);
+            ((LinearLayout)tabStrip.getChildAt(0)).getChildAt(i).setSelected(true);
             //remember the current page
             previousPage=i;
         }

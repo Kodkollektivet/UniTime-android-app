@@ -9,13 +9,6 @@ import com.jotto.unitime.MainActivity;
 import com.jotto.unitime.models.*;
 import com.jotto.unitime.util.ServerConstants;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.joda.time.LocalDate;
 import org.json.JSONObject;
 
@@ -126,38 +119,85 @@ public class SessionHandler {
      */
     public void getEventsFromCourse(String courseCode, String location) {
 
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpURLConnection conn = null;
         String urlName = ServerConstants.SERVER_REST_URL+ServerConstants.EVENT_PATH;
-        HttpPost request = new HttpPost(urlName);
-
+        StringBuilder response = new StringBuilder();
+        BufferedReader br = null;
         try {
             Event[] eventList;
-
             ObjectMapper mapper = new ObjectMapper();
+            URL url = new URL(urlName);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
             String params = "course=" + courseCode + "&location=" + location;
 
-            request.addHeader("User-Agent", "UniTime-Android-Client");
-            request.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            request.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.setEntity(new StringEntity(params));
-            HttpResponse response = httpClient.execute(request);
-            HttpEntity entity = response.getEntity();
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(params);
 
-            String content = EntityUtils.toString(entity);
-            //String content = EntityUtils.toString(entity);
-            //System.out.println(content);
+            writer.flush();
+            writer.close();
+            os.close();
 
-            eventList = mapper.readValue(content, Event[].class);
+            int responseCode=conn.getResponseCode();
+            String line;
 
-            for (Event e : eventList) {
-                e.setCourse_code(courseCode.toUpperCase());
-                e.save();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line=br.readLine()) != null) {
+                    response.append(line);
+                }
+                eventList = mapper.readValue(response.toString(), Event[].class);
+                for (Event e : eventList) {
+                    e.setCourse_code(courseCode.toUpperCase());
+                    e.save();
+                }
             }
-        } catch (IOException ev) {
-            ev.printStackTrace();
+            else if (responseCode == HttpsURLConnection.HTTP_NOT_ACCEPTABLE) {
+                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                while ((line=br.readLine()) != null) {
+                    response.append(line);
+                }
+                JSONObject error = new JSONObject(response.toString());
+                //return error.getString("message");
+            }
+            // Should not be able to reach this state
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }finally {
-            request.abort();
+            if(br != null) try { br.close(); } catch (Exception fe) {
+                fe.printStackTrace();
+            }
         }
+
+//            request.addHeader("User-Agent", "UniTime-Android-Client");
+//            request.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+//            request.addHeader("Content-Type", "application/x-www-form-urlencoded");
+//            request.setEntity(new StringEntity(params));
+//            HttpResponse response = httpClient.execute(request);
+//            HttpEntity entity = response.getEntity();
+//
+//            String content = EntityUtils.toString(entity);
+//            //String content = EntityUtils.toString(entity);
+//            //System.out.println(content);
+//
+//            eventList = mapper.readValue(content, Event[].class);
+//
+//            for (Event e : eventList) {
+//                e.setCourse_code(courseCode.toUpperCase());
+//                e.save();
+//            }
+//        } catch (IOException ev) {
+//            ev.printStackTrace();
+//        }finally {
+//            request.abort();
+//        }
 
 
     }

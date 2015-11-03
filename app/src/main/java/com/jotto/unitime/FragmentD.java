@@ -177,6 +177,8 @@ public class FragmentD extends Fragment {
                 }
             });
 
+            removeCourseButton.setAlpha(0.8f);
+
             return itemView;
         }
     }
