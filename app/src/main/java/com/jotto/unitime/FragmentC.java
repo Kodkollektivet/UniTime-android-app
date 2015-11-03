@@ -205,7 +205,7 @@ public class FragmentC extends Fragment {
             originalList.clear();
             courses.addAll(retrievedEvents);
             originalList.addAll(retrievedEvents);
-
+            updateAddedCoursesList();
         }
     }
 
