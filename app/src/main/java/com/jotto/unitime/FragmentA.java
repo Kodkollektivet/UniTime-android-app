@@ -232,10 +232,20 @@ public class FragmentA extends Fragment {
             Sets up the texts and icons for the event view
              */
             if (importantEvents.contains(event.getInfo().toLowerCase())) {
-                imageView.setImageResource(R.drawable.event_icon_important);
+                if (event.getTeacher().equals("Tobias Andersson-Gidlund")) {
+                    imageView.setImageResource(R.drawable.darthvader);
+                }
+                else {
+                    imageView.setImageResource(R.drawable.event_icon_important);
+                }
             }
             else {
-                imageView.setImageResource(R.drawable.event_icon);
+                if (event.getTeacher().equals("Tobias Andersson-Gidlund")) {
+                    imageView.setImageResource(R.drawable.yoda);
+                }
+                else {
+                    imageView.setImageResource(R.drawable.event_icon);
+                }
             }
 
             TextView teacherText = (TextView) itemView.findViewById(R.id.event_teacher);
