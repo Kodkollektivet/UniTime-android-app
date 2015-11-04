@@ -42,11 +42,7 @@ public class FragmentD extends Fragment {
     private FragmentActivity myContext;
     public ArrayList<Course> courses;
     private Course selectedCourse;
-    private PopupWindow popupWindowDeleteCourse;
-    private Button okButton;
-    private Button noButton;
-    View longClickedView;
-    View inflatedView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

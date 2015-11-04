@@ -56,8 +56,6 @@ public class FragmentC extends Fragment {
     private ArrayList<CourseDataAC> originalList = new ArrayList<>();
     private CourseDataAC selectedCourse;
     private ArrayList<Course> addedCourses = new ArrayList<>();
-    View longClickedView;
-    int i = 0;
     Network network = new Network();
     EditText editText;
 
@@ -82,7 +80,6 @@ public class FragmentC extends Fragment {
         final int translateTo = getResources().getColor(R.color.grey);
         fragmentC = this;
         addedCourses.addAll(Course.listAll(Course.class));
-        System.out.println("system out funkar iaf??");
         /*
         Close the keyboard if the done button is hit.
          */
@@ -265,17 +262,21 @@ public class FragmentC extends Fragment {
                     onShowDialog();
                 }
             });
-            for (Course c : addedCourses) {
-                if (c.getCourse_code().equals(course.getCourse_code()) &&
-                        c.getCourse_location().equals(course.getLocation())) {
-                    addCourseButton.setClickable(false);
-                    addCourseButton.setAlpha(0.3f);
-                    break;
+            if(addedCourses.size() != 0) {
+                for (Course c : addedCourses) {
+                    if (c.getCourse_code().equals(course.getCourse_code()) &&
+                            c.getCourse_location().equals(course.getLocation())) {
+                        addCourseButton.setClickable(false);
+                        addCourseButton.setAlpha(0.3f);
+                        break;
+                    } else {
+                        addCourseButton.setClickable(true);
+                        addCourseButton.setAlpha(1.0f);
+                    }
                 }
-                else {
-                    addCourseButton.setClickable(true);
-                    addCourseButton.setAlpha(1.0f);
-                }
+            }else{
+                addCourseButton.setClickable(true);
+                addCourseButton.setAlpha(1.0f);
             }
             /*
             System.out.println("In corusesList: "+FragmentD.fragmentD.courses.get(i).getCourse_code());
@@ -428,6 +429,9 @@ public class FragmentC extends Fragment {
     public void updateAddedCoursesList() {
         addedCourses.clear();
         addedCourses.addAll(Course.listAll(Course.class));
+        if(adapter != null){
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }
