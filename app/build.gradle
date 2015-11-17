@@ -10,8 +10,8 @@ def extension = android {
         applicationId "com.jotto.unitime"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 9
-        versionName "2.0"
+        versionCode 10
+        versionName "2.1"
     }
     buildTypes {
         release {
@@ -53,7 +53,7 @@ dependencies {
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.github.satyan:sugar:1.3'
     compile 'joda-time:joda-time:2.8.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0-rc2'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
     compile 'com.roomorama:caldroid:2.0.0'
     compile 'com.jaysoyer.lib:advanced-adapters:15.3'
     compile 'com.github.markushi:circlebutton:1.1'

@@ -3,6 +3,7 @@ package com.jotto.unitime.sessionhandler;
 import android.app.Fragment;
 import android.content.Context;
 
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jotto.unitime.FragmentA;
 import com.jotto.unitime.MainActivity;
@@ -56,7 +57,7 @@ public class SessionHandler {
         BufferedReader br = null;
         try {
             Course[] courseList;
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper().configure(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS, false);
             url = new URL(ServerConstants.SERVER_REST_URL+ServerConstants.COURSE_PATH);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -125,7 +126,7 @@ public class SessionHandler {
         BufferedReader br = null;
         try {
             Event[] eventList;
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper().configure(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS, false);
             URL url = new URL(urlName);
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
@@ -212,7 +213,7 @@ public class SessionHandler {
         StringBuilder response = new StringBuilder();
         try {
             CourseDataAC[] courseDataList;
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper().configure(MapperFeature.CAN_OVERRIDE_ACCESS_MODIFIERS, false);
             url = new URL(ServerConstants.SERVER_REST_URL+ServerConstants.COURSE_PATH);
 
             conn = (HttpURLConnection) url.openConnection();
